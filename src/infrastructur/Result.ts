@@ -17,3 +17,16 @@ export class ValidationError extends Error {
   }
 }
 
+export class NotFoundError extends Error {
+  constructor(entity: string) {
+    super(`${entity} not found`)
+    this.name = 'NotFoundError'
+  }
+}
+
+export class UnauthorizedError extends Error {
+  constructor(message = 'Unauthorized') {
+    super(message)
+    this.name = 'UnauthorizedError'
+  }
+}
