@@ -14,8 +14,9 @@ import { Input } from "@/ui/input"
 import { Label } from "@/ui/label"
 import { Separator } from "@/ui/separator"
 import { Eye, EyeOff } from "lucide-react"
-import GithubOAuthButton from "./GithubOAuthButton"
-import GoogleOAuthButton from "./GoogleOAuthButton"
+import GithubOAuthButton from "../component/GithubOAuthButton"
+import GoogleOAuthButton from "../component/GoogleOAuthButton"
+import Link from "next/link"
 
 interface AuthFormProps { 
   authPageType: "login" | "signup"
@@ -148,12 +149,12 @@ export function AuthForm({ authPageType }: AuthFormProps) {
       <CardFooter className="justify-center pb-6">
         <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
-          <a
-            href="#"
+          <Link
+            href={authPageType === "signup" ? "/auth/login" : "/auth/signup"}
             className="font-medium text-foreground underline underline-offset-4 transition-colors hover:text-foreground/80"
           >
-            Sign in
-          </a>
+            {authPageType === "signup" ? "Log in" : "Sign up"}
+          </Link>
         </p>
       </CardFooter>
     </Card>
