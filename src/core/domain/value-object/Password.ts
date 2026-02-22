@@ -1,8 +1,9 @@
+import { singleton } from 'tsyringe'
 import ValueObject from './ValueObject'
-import { Result, ValidationError } from '@/lib/Result'
-
+import { Result, ValidationError } from '@/infrastructur/Result'
+@singleton()
 export class Password extends ValueObject<string> {
-  private constructor(value: string) {
+  public constructor(value: string) {
     super(value)
   }
 
