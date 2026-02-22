@@ -11,7 +11,7 @@ interface IUserAdditionalData {
   surName?: string;
   age?: number;
 }
-interface IUserEntityConstructorProps {
+interface IUserConstructorProps {
   id: string;
   username: Username;
   email: Email;    
@@ -27,9 +27,14 @@ export default class User {
   private _additionalData: IUserAdditionalData = {};
   private _role: RoleEnum;
 
-    constructor(partial: IUserEntityConstructorProps) {
-    Object.assign(this, partial);
-    }
+    constructor(partial: IUserConstructorProps) {
+  this.id = partial.id;
+  this.email = partial.email.value; 
+  this._username = partial.username;
+  this._avatarUrl = partial.avatarUrl;
+  this._role = partial.role as RoleEnum;
+  this._additionalData = partial.additionalData ?? {};
+}
     public static create(
     id: string,
     email: Email,
@@ -110,3 +115,4 @@ export default class User {
   }
 
 }
+

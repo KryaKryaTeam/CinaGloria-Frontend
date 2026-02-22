@@ -1,3 +1,4 @@
+
 export default abstract class ValueObject<T> {
   protected constructor(protected readonly _value: T) {}
 
