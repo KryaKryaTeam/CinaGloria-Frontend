@@ -14,7 +14,7 @@ interface IUserAdditionalData {
 interface IUserConstructorProps {
   id: string;
   username: Username;
-  email: Email;    
+  email: Email;
   avatarUrl: AvatarURL;
   additionalData?: IUserAdditionalData;
   role: string;
@@ -27,15 +27,15 @@ export default class User {
   private _additionalData: IUserAdditionalData = {};
   private _role: RoleEnum;
 
-    constructor(partial: IUserConstructorProps) {
-  this.id = partial.id;
-  this.email = partial.email.value; 
-  this._username = partial.username;
-  this._avatarUrl = partial.avatarUrl;
-  this._role = partial.role as RoleEnum;
-  this._additionalData = partial.additionalData ?? {};
-}
-    public static create(
+  constructor(partial: IUserConstructorProps) {
+    this.id = partial.id;
+    this.email = partial.email.value;
+    this._username = partial.username;
+    this._avatarUrl = partial.avatarUrl;
+    this._role = partial.role as RoleEnum;
+    this._additionalData = partial.additionalData ?? {};
+  }
+  public static create(
     id: string,
     email: Email,
     username: Username,
@@ -51,25 +51,26 @@ export default class User {
 
     return ent;
   }
-    setRoleTo(requester: User, role: RoleEnum) {
+  setRoleTo(requester: User, role: RoleEnum) {
     if (!requester.hasRole(RoleEnum.ADMIN))
       throw new ValidationError("Only admins can change roles");
 
-    if (this.hasRole(role)) throw new ValidationError("User already has this role");
+    if (this.hasRole(role))
+      throw new ValidationError("User already has this role");
 
     this._role = role;
-    }
-     hasRole(role: RoleEnum) {
+  }
+  hasRole(role: RoleEnum) {
     return role == this._role;
   }
-    async changeUsername(
+  async changeUsername(
     username: string,
     checkUnique: (username: string) => Promise<boolean>,
   ) {
     if (username.length < 8 || username.length > 50)
       throw new ValidationError("Username must be between 8 and 50 characters");
 
-    if (username.startsWith('_'))
+    if (username.startsWith("_"))
       throw new ValidationError("Username cannot start with an underscore");
 
     if (!(await checkUnique(username)))
@@ -113,6 +114,4 @@ export default class User {
   public get additionalData() {
     return this._additionalData;
   }
-
 }
-
