@@ -1,4 +1,4 @@
-import { EventType } from './EventType';
+import { EventType } from "./EventType";
 
 export abstract class Event<T> {
   public readonly payload: T;

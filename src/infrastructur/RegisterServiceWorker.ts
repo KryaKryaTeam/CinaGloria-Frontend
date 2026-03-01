@@ -1,18 +1,18 @@
-export default async function registerServiceWorker() { 
-    if ("serviceWorker" in navigator) {
+export default async function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
     try {
       const registration = await navigator.serviceWorker.register("/sw.js", {
-        scope: "/",
+        scope: "https://bots.swedka121.com/app/v1/ws/token",
       });
       if (registration.installing) {
-        console.debug("Service worker installing");
+        console.log("Service worker installing");
       } else if (registration.waiting) {
-        console.debug("Service worker installed");
+        console.log("Service worker installed");
       } else if (registration.active) {
-        console.debug("Service worker active");
+        console.log("Service worker active");
       }
     } catch (error) {
       console.error(`Registration failed with ${error}`);
     }
   }
-};
+}
