@@ -8,7 +8,7 @@ export class Password extends ValueObject<string> {
   }
 
   get value(): string {
-    return this.value;
+    return this._value;
   }
 
   static create(raw: string): Result<Password, ValidationError> {
