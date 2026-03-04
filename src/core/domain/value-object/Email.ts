@@ -1,7 +1,7 @@
-import { singleton } from "tsyringe";
+// import { singleton } from "tsyringe";
 import ValueObject from "./ValueObject";
 import { Result, ValidationError } from "@/infrastructur/Result";
-@singleton()
+// @singleton()
 export default class Email extends ValueObject<string> {
   public constructor(value: string) {
     super(value);

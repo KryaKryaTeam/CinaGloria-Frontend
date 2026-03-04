@@ -1,18 +1,22 @@
 'use client'
-import NetworkUserRepository from "@/core/network/NetworkUserRepository";
+import Email from "@/core/domain/value-object/Email";
+import { Password } from "@/core/domain/value-object/Password";
+import JWTChangeRequest from "@/core/network/requests/JWTRequest";
 import { Button } from "@/ui/button";
 
 export default function TestPage() {
-    const service = new NetworkUserRepository()
-    const aboba = async() => await service.postLoginData("example@localhost.com", "123Ac&44")
-    const foo = async() => console.log(JSON.stringify(await service.getDataFromServiceWorker()));
-    
+    const service = new JWTChangeRequest();
+    const aboba = async() => await service.execute({
+        email: new Email("example@localhost.com"),
+        password: new Password("123Ac&44")
+    });
+
   return (
     <div>
       <h1>Test Page</h1>
       <p>This is a test page for development purposes.</p>
       <Button onClick={() => aboba()}>Login</Button>
-      <Button onClick={() => foo()}>Get Token from Service Worker</Button>
+      {/* <Button onClick={() => foo()}>Get Token from Service Worker</Button> */}
     </div>
   );
 }
