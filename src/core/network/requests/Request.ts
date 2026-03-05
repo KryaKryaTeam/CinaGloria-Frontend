@@ -1,4 +1,6 @@
+import URLAddValue from "@/infrastructur/URLAddKey";
 import URLEnum from "../URLEnum";
+import { HTTPMethod } from "./type";
 
 export interface ISubRequestData {
   init: RequestInit;
@@ -7,7 +9,7 @@ export interface ISubRequestData {
 
 export default abstract class Request<Data, Response, RequestOutput> {
   abstract withCSRF: boolean;
-  abstract method: "GET" | "POST" | "PUT" | "DELETE";
+  abstract method: HTTPMethod;
   async getCsrf(): Promise<string> {
     let csrfToken: string = "";
     try {
@@ -37,8 +39,7 @@ export default abstract class Request<Data, Response, RequestOutput> {
       };
 
       if (this.withCSRF)
-        mapped.url.searchParams.append("state", await this.getCsrf());
-
+        mapped.url = URLAddValue(mapped.url, "state", await this.getCsrf());
       return fetch(mapped.url, mapped.init)
         .then((res) => res.json())
         .then((json) => this.onSuccess(json));

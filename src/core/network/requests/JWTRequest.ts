@@ -2,6 +2,9 @@ import Email from "@/core/domain/value-object/Email";
 import Request, { ISubRequestData } from "./Request";
 import { Password } from "@/core/domain/value-object/Password";
 import URLEnum from "../URLEnum";
+import { HTTPMethod } from "./type";
+import { injectable } from "inversify";
+import container from "@/core/Container";
 
 interface IDataRequest {
   email: Email;
@@ -13,13 +16,14 @@ interface IRequestOutput {
   userExistsBefore: boolean;
 }
 
+@injectable()
 export default class JWTChangeRequest extends Request<
   IDataRequest,
   boolean,
   IRequestOutput
 > {
   withCSRF: boolean = true;
-  method: "GET" | "POST" | "PUT" | "DELETE" = "POST";
+  method: HTTPMethod = "POST";
 
   mapData(data: IDataRequest): ISubRequestData {
     return {
@@ -34,7 +38,6 @@ export default class JWTChangeRequest extends Request<
   }
 
   onSuccess(data: IRequestOutput): boolean | Promise<boolean> {
-    console.log(data);
     if (!this.checkCanable())
       throw new Error("Service worker is not initialized!");
 
@@ -54,3 +57,5 @@ export default class JWTChangeRequest extends Request<
     return true;
   }
 }
+
+container.bind(JWTChangeRequest).toSelf();

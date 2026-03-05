@@ -4,7 +4,7 @@ const EVENT_TYPE = {
 }
 
 const initCache = async () => await caches.open("v1");
-let jwt = "";
+let jwt = false;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(initCache());
@@ -13,12 +13,8 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   if (!jwt) return;
 
-  const modifiedRequest = new Request(event.request, {
-    headers: new Headers({
-      ...Object.fromEntries(event.request.headers.entries()),
-      "Authorization": `Bearer ${jwt}`
-    })
-  });
+  const modifiedRequest = event.request;
+  modifiedRequest = {...modifiedRequest.headers, "Authorization": `Bearer ${jwt}`}
 
   event.respondWith(fetch(modifiedRequest));
 });

@@ -1,8 +1,17 @@
-// import { io } from "socket.io-client";
-// var t;
+import { io } from "socket.io-client";
 
-// async() => {
-//     t = await fetch('https://bots.swedka121.com/app/v1/ws/token')
-//     console.log("Connected to Socket.IO server");
-// }
-// const socket = io("https://bots.swedka121.com/ws");
+
+async() => {
+
+class Socket {
+    async connect() {
+        const t = await fetch('https://bots.swedka121.com/app/v1/ws/token')
+        const socket = io("https://bots.swedka121.com/ws");
+        socket.auth = {token: t};
+        socket.connect()
+
+        socket.on("conect", (ev) => {
+            console.log(ev);
+        })
+    }
+}
