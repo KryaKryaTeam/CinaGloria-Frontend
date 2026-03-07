@@ -14,7 +14,7 @@ export default class AvatarURL extends ValueObject<string> {
     );
   }
   static create(raw: string): AvatarURL {
-    if (!raw.includes("http://") || !raw.includes("https://"))
+    if (!raw.startsWith("http://") && !raw.startsWith("https://"))
       throw new ValidationError("Invalid URL format");
 
     return new AvatarURL(raw);

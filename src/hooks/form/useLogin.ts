@@ -2,10 +2,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginData, loginSchema } from "./schema/AuthSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import container from "@/core/Container";
-import AuthService from "@/core/usecase/Auth/AuthService";
 import Email from "@/core/domain/value-object/Email";
 import Password from "@/core/domain/value-object/Password";
 import { UserState } from "@/state/UserState";
+import { inject } from "inversify";
+import JWTChangeRequest from "@/core/network/requests/JWTRequest";
+import RequestMe from "@/core/network/requests/RequestMe";
 
 export default function useLogin() {
   // rhf initialization hook
@@ -20,16 +22,18 @@ export default function useLogin() {
       password: "",
     },
   });
-  const serviceAuth = container.get(AuthService)
-  const userState = container.get(UserState)
-  // submit handler
+
+  const jwt_request = container.get(JWTChangeRequest);
+  const me_request = container.get(RequestMe);
+
   const onSubmit: SubmitHandler<LoginData> = async (data: LoginData) => {
     try {
-      const res = await serviceAuth.login(
-        Email.create(data.email),
-        Password.create(data.password)
-      );
-      userState.setUser(res)
+      await jwt_request.execute({
+        email: new Email(data.email),
+        password: new Password(data.password),
+      });
+
+      await me_request.execute();
     } catch (error) {
       console.error("Login failed:", error);
     }

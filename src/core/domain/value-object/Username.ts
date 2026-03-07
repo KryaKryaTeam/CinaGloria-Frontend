@@ -11,7 +11,7 @@ export default class Username extends ValueObject<string> {
   }
 
   static create(raw: string): Username {
-    if (!raw || raw.trim().length === 0 || !/^\w+(\s+\w+)*$/.test(raw))
+    if (!raw || raw.trim().length === 0)
       throw new ValidationError("Username is required");
     return new Username(raw.toLowerCase().trim());
   }

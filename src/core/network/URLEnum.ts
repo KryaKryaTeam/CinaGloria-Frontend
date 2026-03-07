@@ -4,6 +4,6 @@ enum URLEnum {
   CSRF = `${BASE_URL}/auth/csrf`,
   REFRESH = `${BASE_URL}/auth/refresh`,
   GET_WS_TOKEN = `${BASE_URL}/ws/token`,
-  ME = `${BASE_URL}/users/me`,
+  ME = `${BASE_URL}/user/me`,
 }
 export default URLEnum;

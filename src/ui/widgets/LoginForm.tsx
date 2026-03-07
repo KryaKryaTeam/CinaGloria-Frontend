@@ -47,10 +47,7 @@ export function LoginForm() {
           <Separator className="flex-1" />
         </div>
 
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={async() => await submit()}
-        >
+        <form className="flex flex-col gap-4" onSubmit={submit}>
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -101,7 +98,7 @@ export function LoginForm() {
 
       <CardFooter className="justify-center pb-6">
         <p className="text-sm text-muted-foreground">
-          Don't have an account?{" "}
+          Don`t have an account?{" "}
           <Link
             href="/auth/signup"
             className="font-medium text-foreground underline underline-offset-4 transition-colors hover:text-foreground/80"

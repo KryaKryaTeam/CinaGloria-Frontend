@@ -13,7 +13,7 @@ export interface ISubRequestData {
 export abstract class Request<Data, Response, RequestOutput> {
   constructor(
     @inject(UserState)
-    private readonly userState: UserState,
+    protected readonly userState: UserState,
   ) {}
   abstract withCSRF: boolean;
   abstract authorized: boolean;
@@ -67,7 +67,7 @@ export abstract class Request<Data, Response, RequestOutput> {
         headers.set("Authorization", `Bearer ${token}`);
         mapped.init.headers = headers;
       }
-      console.log(mapped)
+      console.log(mapped);
       return fetch(mapped.url, mapped.init)
         .then((res) => res.json())
         .then((json) => this.onSuccess(json));
