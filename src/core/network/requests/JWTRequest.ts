@@ -3,8 +3,8 @@ import Request, { ISubRequestData } from "./Request";
 import { Password } from "@/core/domain/value-object/Password";
 import URLEnum from "../URLEnum";
 import { HTTPMethod } from "./type";
-import { injectable } from "inversify";
-import container from "@/core/Container";
+import { inject, injectable } from "inversify";
+import { UserState } from "@/state/UserState";
 
 interface IDataRequest {
   email: Email;
@@ -24,6 +24,11 @@ export default class JWTChangeRequest extends Request<
 > {
   withCSRF: boolean = true;
   method: HTTPMethod = "POST";
+  authorized: boolean = false;
+
+  constructor(@inject(UserState) userState: UserState) {
+    super(userState);
+  }
 
   mapData(data: IDataRequest): ISubRequestData {
     return {
@@ -37,25 +42,10 @@ export default class JWTChangeRequest extends Request<
     };
   }
 
-  onSuccess(data: IRequestOutput): boolean | Promise<boolean> {
-    if (!this.checkCanable())
-      throw new Error("Service worker is not initialized!");
-
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.active?.postMessage({
-        type: "TOKEN",
-        payload: data.accessToken,
-      });
-    });
+  async onSuccess(data: IRequestOutput): Promise<boolean> {
+    console.log(this);
+    this.setAuth(data.accessToken);
 
     return data.userExistsBefore;
   }
-
-  private checkCanable(): boolean {
-    if (!navigator.serviceWorker) return false;
-    if (!navigator.serviceWorker.controller) return false;
-    return true;
-  }
 }
-
-container.bind(JWTChangeRequest).toSelf();

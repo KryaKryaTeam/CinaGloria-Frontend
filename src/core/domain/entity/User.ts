@@ -1,4 +1,4 @@
-import { ValidationError } from "@/infrastructur/Result";
+import { ValidationError } from "@/infrastructure/Result";
 import AvatarURL from "../value-object/AvatarURL";
 import Email from "../value-object/Email";
 import Username from "../value-object/Username";

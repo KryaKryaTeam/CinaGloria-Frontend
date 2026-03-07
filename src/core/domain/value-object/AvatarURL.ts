@@ -1,7 +1,6 @@
-import { Result, ValidationError } from "@/infrastructur/Result";
+import { Result, ValidationError } from "@/infrastructure/Result";
 import ValueObject from "./ValueObject";
-import { singleton } from "tsyringe";
-@singleton()
+
 export default class AvatarURL extends ValueObject<string> {
   constructor(value: string) {
     super(value);

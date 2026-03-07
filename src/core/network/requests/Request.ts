@@ -1,15 +1,26 @@
-import URLAddValue from "@/infrastructur/URLAddKey";
+import URLAddValue from "@/infrastructure/URLAddKey";
 import URLEnum from "../URLEnum";
 import { HTTPMethod } from "./type";
+import { inject, injectable } from "inversify";
+import { UserState } from "@/state/UserState";
 
 export interface ISubRequestData {
   init: RequestInit;
   url: URL;
 }
 
+@injectable()
 export default abstract class Request<Data, Response, RequestOutput> {
+  constructor(
+    @inject(UserState)
+    private readonly userState: UserState,
+  ) {}
   abstract withCSRF: boolean;
+  abstract authorized: boolean;
   abstract method: HTTPMethod;
+
+  private retrying: number = 0;
+
   async getCsrf(): Promise<string> {
     let csrfToken: string = "";
     try {
@@ -26,8 +37,17 @@ export default abstract class Request<Data, Response, RequestOutput> {
     return csrfToken;
   }
 
+  getAuth(): string {
+    return this.userState.authToken;
+  }
+
+  setAuth(token: string) {
+    this.userState.setAuthToken(token);
+  }
+
   async execute(request_data: Data): Promise<Response> {
     try {
+      if (this.retrying > 2) throw new Error("Out of retry counter!");
       let mapped = this.mapData(request_data);
       if (this.preload) mapped = await this.preload(mapped);
 
@@ -40,12 +60,33 @@ export default abstract class Request<Data, Response, RequestOutput> {
 
       if (this.withCSRF)
         mapped.url = URLAddValue(mapped.url, "state", await this.getCsrf());
+      if (this.authorized) {
+        const token = this.getAuth();
+        if (!token) throw new Error("Unauthorized");
+        const headers = new Headers(mapped.init.headers);
+        headers.set("Authorization", `Bearer ${token}`);
+        mapped.init.headers = headers;
+      }
       return fetch(mapped.url, mapped.init)
         .then((res) => res.json())
         .then((json) => this.onSuccess(json));
     } catch (error) {
+      if ((error as ResponseInit).status == 401) {
+        const newAccess = (await fetch(URLEnum.REFRESH, {
+          credentials: "include",
+        })
+          .then((res) => res.json())
+          .catch((err) => {
+            throw err;
+          })) as { accessToken: string };
+
+        this.setAuth(newAccess.accessToken);
+
+        this.retrying++;
+        return await this.execute(request_data);
+      }
       if (this.onError) this.onError(error as Error);
-      //handle
+
       throw error;
     }
   }
