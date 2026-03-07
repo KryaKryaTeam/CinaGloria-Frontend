@@ -13,11 +13,11 @@ export default class AvatarURL extends ValueObject<string> {
       listOfAvalible[Math.floor(Math.random() * listOfAvalible.length)],
     );
   }
-  static create(raw: string): Result<AvatarURL, ValidationError> {
+  static create(raw: string): AvatarURL {
     if (!raw.includes("http://") || !raw.includes("https://"))
-      Result.fail(new ValidationError("Invalid URL format"));
+      throw new ValidationError("Invalid URL format");
 
-    return Result.ok(new AvatarURL(raw));
+    return new AvatarURL(raw);
   }
   equals(other: ValueObject<string>): boolean {
     return other instanceof AvatarURL && this._value === other._value;

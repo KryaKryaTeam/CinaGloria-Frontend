@@ -10,10 +10,10 @@ export default class Username extends ValueObject<string> {
     return this._value;
   }
 
-  static create(raw: string): Result<Username, ValidationError> {
+  static create(raw: string): Username {
     if (!raw || raw.trim().length === 0 || !/^\w+(\s+\w+)*$/.test(raw))
-      return Result.fail(new ValidationError("Username is required"));
-    return Result.ok(new Username(raw.toLowerCase().trim()));
+      throw new ValidationError("Username is required");
+    return new Username(raw.toLowerCase().trim());
   }
 
   equals(other: ValueObject<string>): boolean {

@@ -1,6 +1,6 @@
 import Email from "@/core/domain/value-object/Email";
-import Request, { ISubRequestData } from "./Request";
-import { Password } from "@/core/domain/value-object/Password";
+import { Request,ISubRequestData } from "./Request";
+import Password  from "@/core/domain/value-object/Password";
 import URLEnum from "../URLEnum";
 import { HTTPMethod } from "./type";
 import { inject, injectable } from "inversify";
@@ -19,18 +19,22 @@ interface IRequestOutput {
 @injectable()
 export default class JWTChangeRequest extends Request<
   IDataRequest,
-  boolean,
+  IRequestOutput,
   IRequestOutput
 > {
   withCSRF: boolean = true;
   method: HTTPMethod = "POST";
   authorized: boolean = false;
 
-  constructor(@inject(UserState) userState: UserState) {
-    super(userState);
-  }
+  // constructor(@inject(UserState) userState: UserState) {
+  //   super(userState);
+  // }
 
   mapData(data: IDataRequest): ISubRequestData {
+    console.log(JSON.stringify({
+          email: data.email.value,
+          password: data.password.value,
+        }))
     return {
       init: {
         body: JSON.stringify({
@@ -42,10 +46,8 @@ export default class JWTChangeRequest extends Request<
     };
   }
 
-  async onSuccess(data: IRequestOutput): Promise<boolean> {
+  async onSuccess(data: IRequestOutput): Promise<IRequestOutput> {
     console.log(this);
-    this.setAuth(data.accessToken);
-
-    return data.userExistsBefore;
+    return data;
   }
 }

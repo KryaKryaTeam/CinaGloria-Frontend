@@ -1,6 +1,4 @@
 import { action, observable } from "mobx";
-import { act } from "react";
-import { th } from "zod/locales";
 
 type Pos = 0 | 1;
 class AuthFormStore {

@@ -10,7 +10,7 @@ export interface ISubRequestData {
 }
 
 @injectable()
-export default abstract class Request<Data, Response, RequestOutput> {
+export abstract class Request<Data, Response, RequestOutput> {
   constructor(
     @inject(UserState)
     private readonly userState: UserState,
@@ -67,6 +67,7 @@ export default abstract class Request<Data, Response, RequestOutput> {
         headers.set("Authorization", `Bearer ${token}`);
         mapped.init.headers = headers;
       }
+      console.log(mapped)
       return fetch(mapped.url, mapped.init)
         .then((res) => res.json())
         .then((json) => this.onSuccess(json));

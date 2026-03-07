@@ -3,11 +3,7 @@ import { z } from "zod";
 export const signUpSchema = z
   .object({
     surname: z.string().min(2, "Minimum 2 characters"),
-    email: z.email({
-      pattern:
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      message: "Invalid email",
-    }),
+    email: z.string().email(),
     password: z
       .string()
       .min(8, "Minimum 8 characters")
@@ -21,11 +17,7 @@ export const signUpSchema = z
   });
 
 export const loginSchema = z.object({
-  email: z.email({
-    pattern:
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    message: "Invalid email",
-  }),
+  email: z.string().email(),
   password: z.string().min(8, "Minimum 8 characters"),
 });
 

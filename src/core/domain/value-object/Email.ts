@@ -9,15 +9,15 @@ export default class Email extends ValueObject<string> {
     return this._value;
   }
 
-  static create(raw: string): Result<Email, ValidationError> {
+  static create(raw: string): Email {
     if (!raw || raw.trim().length === 0)
-      return Result.fail(new ValidationError("Email is required"));
+      throw new ValidationError("Email is required");
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(raw))
-      return Result.fail(new ValidationError("Invalid email format"));
+      throw new ValidationError("Invalid email format");
 
-    return Result.ok(new Email(raw.toLowerCase().trim()));
+    return new Email(raw.toLowerCase().trim());
   }
 
   equals(other: ValueObject<string>): boolean {

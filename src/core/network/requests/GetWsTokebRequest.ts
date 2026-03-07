@@ -1,6 +1,6 @@
 import { UserState } from "@/state/UserState";
 import URLEnum from "../URLEnum";
-import Request, { ISubRequestData } from "./Request";
+import  { Request, ISubRequestData } from "./Request";
 import { HTTPMethod } from "./type";
 import { inject } from "inversify";
 
@@ -23,7 +23,7 @@ export class GetWsTokenRequest extends Request<
     return data;
   }
 
-  constructor(@inject(UserState) userState: UserState) {
-    super(userState);
-  }
+  // constructor(@inject(UserState) userState: UserState) {
+  //   super(userState);
+  // }
 }
