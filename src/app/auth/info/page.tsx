@@ -1,5 +1,7 @@
+import SecondDataForm from "@/ui/widgets/SecondDataForm";
+
 function Page() {
-  return <div>Hello</div>;
+  return <SecondDataForm />;
 }
 
 export default Page;

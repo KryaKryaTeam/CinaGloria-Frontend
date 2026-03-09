@@ -47,6 +47,7 @@ export abstract class Request<Data, Response, RequestOutput> {
 
   async execute(request_data: Data): Promise<Response> {
     try {
+      console.log("MEOOOW!", this);
       if (this.retrying > 2) throw new Error("Out of retry counter!");
       let mapped = this.mapData(request_data);
       if (this.preload) mapped = await this.preload(mapped);
@@ -62,7 +63,10 @@ export abstract class Request<Data, Response, RequestOutput> {
         mapped.url = URLAddValue(mapped.url, "state", await this.getCsrf());
       if (this.authorized) {
         const token = this.getAuth();
-        if (!token) throw new Error("Unauthorized");
+        if (!token) {
+          await this.refresh();
+          return await this.execute(request_data);
+        }
         const headers = new Headers(mapped.init.headers);
         headers.set("Authorization", `Bearer ${token}`);
         mapped.init.headers = headers;
@@ -78,22 +82,28 @@ export abstract class Request<Data, Response, RequestOutput> {
         })
         .then((json) => this.onSuccess(json));
     } catch (error) {
+      console.log(error);
       if ((error as Error).cause == 401) {
-        const res = await fetch(URLEnum.REFRESH, {
-          credentials: "include",
-        });
-
-        if (!res.ok) throw new Error("Unauthorized!");
-
-        this.setAuth((await res.json()).accessToken);
-
-        this.retrying++;
+        await this.refresh();
         return await this.execute(request_data);
       }
       if (this.onError) this.onError(JSON.stringify((error as Error).message));
 
-      throw JSON.stringify((error as Error).message);
+      throw (error as Error).message;
     }
+  }
+
+  private async refresh() {
+    const res = await fetch(URLEnum.REFRESH, {
+      credentials: "include",
+      method: "POST",
+    });
+
+    if (!res.ok) throw new Error("Unauthorized!");
+
+    this.setAuth((await res.json()).accessToken);
+
+    this.retrying++;
   }
 
   abstract onSuccess(data: RequestOutput): Response | Promise<Response>;

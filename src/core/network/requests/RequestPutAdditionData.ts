@@ -5,12 +5,12 @@ import { HTTPMethod, StatusCode } from "./type";
 import { UserState } from "@/state/UserState";
 
 export interface AdditionData {
-  telegram: string;
-  discord: string;
-  firstName: string;
-  lastName: string;
-  surName: string;
-  bithDay: Date;
+  telegram?: string;
+  discord?: string;
+  firstName?: string;
+  lastName?: string;
+  surName?: string;
+  bithDay?: Date;
 }
 @injectable()
 export default class RequestPutAdditionData extends Request<
@@ -27,15 +27,27 @@ export default class RequestPutAdditionData extends Request<
   }
 
   mapData(data: AdditionData): ISubRequestData {
+    const payload = {
+      ...data,
+      bithDay: data.bithDay
+        ? data.bithDay.toISOString().split("T")[0]
+        : undefined,
+    };
+
     this.userState.changeUserData(data);
+
     return {
       url: new URL(URLEnum.ADDITION),
       init: {
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload), // Тепер тут чистий об'єкт
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
     };
   }
   onSuccess(data: void): boolean | Promise<boolean> {
+    console.log("MACARENA");
     return true;
   }
   protected onError(error: string): void {

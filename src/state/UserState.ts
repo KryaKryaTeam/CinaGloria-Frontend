@@ -23,23 +23,25 @@ export class UserState {
     console.log(user);
     this.User = user;
   }
-  @action changeUserData(data: AdditionData): void | Error{
-      if(this.User != null) {
-        this.User.updateContact(data);
-        this.User.updateAge(data.bithDay)
+  @action changeUserData(data: AdditionData): void | Error {
+    if (this.User != null) {
+      this.User.updateContact({
+        telegram: data.telegram || "",
+        discord: data.discord || "",
+      });
+      if (data.bithDay) this.User.updateAge(data.bithDay);
+      if (data.firstName && data.lastName && data.surName)
         this.User.updateFullName({
           firstName: data.firstName,
           lastName: data.lastName,
-          surName: data.surName
-        })
-      } else {
-        throw new Error("user is null")
-      }
+          surName: data.surName,
+        });
+    }
   }
-  @action clearUserData(){
-          if(this.User != null) {
-            this.User.clearAdditionData()
-      }
+  @action clearUserData() {
+    if (this.User != null) {
+      this.User.clearAdditionData();
+    }
   }
   constructor() {
     makeObservable(this);
