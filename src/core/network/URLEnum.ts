@@ -5,5 +5,6 @@ enum URLEnum {
   REFRESH = `${BASE_URL}/auth/refresh`,
   GET_WS_TOKEN = `${BASE_URL}/ws/token`,
   ME = `${BASE_URL}/user/me`,
+  ADDITION = `${BASE_URL}/user/additional`
 }
 export default URLEnum;

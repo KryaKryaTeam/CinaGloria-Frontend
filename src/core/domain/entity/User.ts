@@ -4,6 +4,7 @@ import Email from "../value-object/Email";
 import Username from "../value-object/Username";
 import { RoleEnum } from "./RoleEnum";
 import { Providers } from "./type";
+import { th } from "zod/locales";
 
 export interface IUserContacts {
   telegram: string;
@@ -12,7 +13,7 @@ export interface IUserContacts {
 
 export interface IUserAge {
   value: number;
-  birthDay: string;
+  birthDay: Date;
 }
 
 export interface IUserFullName {
@@ -117,14 +118,37 @@ export default class User {
     this._contacts = { ...this._contacts, ...contacts };
   }
 
-  updateFullName(fullName: IUserFullName) {
-    this._fullName = fullName;
+  updateFullName(fullName: {
+    firstName: string,
+    lastName: string,
+    surName: string
+  }) {
+    if(this._fullName && fullName) {
+      this._fullName.firstName = fullName.firstName;
+      this._fullName.lastName = fullName.lastName;
+      this._fullName.surName = fullName.surName;
+      this._fullName.value = (fullName.firstName.trim() + fullName.lastName.trim() + fullName.surName.trim());
+    }
   }
 
-  updateAge(age: IUserAge) {
-    this._age = age;
+  updateAge(age: Date ) {
+    if (this._age) {
+      this._age.birthDay = age;
+      this._age.value = age.getFullYear();
+    }
   }
-
+  updateContact(contact: IUserContacts){
+    this._contacts.discord = contact.discord
+    this._contacts.telegram = contact.telegram
+  }
+  clearAdditionData(){
+    this._contacts = {
+      telegram: '',
+      discord: ''
+    }
+    this._age = null
+    this._fullName = null
+  }
   public get username() {
     return this._username;
   }

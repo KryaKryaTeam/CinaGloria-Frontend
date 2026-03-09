@@ -1,13 +1,12 @@
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, UseFormRegister, FieldErrors } from "react-hook-form";
 import { SignUpData, signUpSchema } from "./schema/AuthSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import container from "@/core/Container";
-import AuthService from "@/core/usecase/Auth/AuthService";
 
 interface UseSignupReturn {
   submit: () => void;
-  register: ReturnType<typeof useForm>['register'];
-  errors: ReturnType<typeof useForm>['formState']['errors'];
+  register: UseFormRegister<SignUpData>;
+  errors: FieldErrors<SignUpData>;
 }
 
 export default function useSignup(): UseSignupReturn {
@@ -21,12 +20,10 @@ export default function useSignup(): UseSignupReturn {
     mode: "onChange",
   });
 
-  const serviceAuth = container.get(AuthService);
+  
 
   const onSubmit: SubmitHandler<SignUpData> = async (data) => {
-    // TODO: call signup endpoint when available
-    console.log("signup data", data);
-    // e.g. await serviceAuth.signup(...)
+
   };
 
   const submit = handleSubmit(onSubmit);

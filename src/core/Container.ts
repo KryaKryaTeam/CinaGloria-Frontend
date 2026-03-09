@@ -4,6 +4,7 @@ import { UserState } from "@/state/UserState";
 import { GetWsTokenRequest } from "./network/requests/GetWsTokebRequest";
 import { WsSocket } from "./network/socket/initSocket";
 import RequestMe from "./network/requests/RequestMe";
+import RequestPutAdditionData from "./network/requests/RequestPutAdditionData";
 
 const container: Container = new Container();
 
@@ -12,4 +13,5 @@ container.bind(GetWsTokenRequest).toSelf().inRequestScope();
 container.bind(RequestMe).toSelf().inRequestScope();
 container.bind(UserState).toSelf().inSingletonScope();
 container.bind(WsSocket).toSelf().inSingletonScope();
+container.bind(RequestPutAdditionData).toSelf().inSingletonScope();
 export default container;
