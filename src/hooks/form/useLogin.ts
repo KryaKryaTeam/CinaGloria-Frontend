@@ -4,8 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import container from "@/core/Container";
 import Email from "@/core/domain/value-object/Email";
 import Password from "@/core/domain/value-object/Password";
-import { UserState } from "@/state/UserState";
-import { inject } from "inversify";
 import JWTChangeRequest from "@/core/network/requests/JWTRequest";
 import RequestMe from "@/core/network/requests/RequestMe";
 

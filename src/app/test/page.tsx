@@ -4,6 +4,7 @@ import Email from "@/core/domain/value-object/Email";
 import Password from "@/core/domain/value-object/Password";
 import JWTChangeRequest from "@/core/network/requests/JWTRequest";
 import { WsSocket } from "@/core/network/socket/initSocket";
+import WaveBackground from "@/ui/backgrounds/WaveBackground";
 import { Button } from "@/ui/button";
 import SecondDataForm from "@/ui/widgets/SecondDataForm";
 export default function TestPage() {
@@ -17,7 +18,5 @@ export default function TestPage() {
 
   const socket = container.get(WsSocket);
 
-  return (
-    <SecondDataForm />
-  );
+  return <WaveBackground />;
 }

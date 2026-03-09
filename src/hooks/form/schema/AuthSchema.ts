@@ -2,8 +2,7 @@ import { z } from "zod";
 
 export const signUpSchema = z
   .object({
-    surname: z.string().min(2, "Minimum 2 characters"),
-    email: z.string().email(),
+    email: z.email(),
     password: z
       .string()
       .min(8, "Minimum 8 characters")
@@ -17,7 +16,7 @@ export const signUpSchema = z
   });
 
 export const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(8, "Minimum 8 characters"),
 });
 

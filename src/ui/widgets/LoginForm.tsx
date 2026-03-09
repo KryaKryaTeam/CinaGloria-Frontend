@@ -13,7 +13,7 @@ import {
 import { Input } from "@/ui/input";
 import { Label } from "@/ui/label";
 import { Separator } from "@/ui/separator";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import GithubOAuthButton from "../component/GithubOAuthButton";
 import GoogleOAuthButton from "../component/GoogleOAuthButton";
 import Link from "next/link";
@@ -25,6 +25,16 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md border-border/60 shadow-lg">
       <CardHeader className="pb-4 text-center">
+        <Link href={"/"} className="w-max">
+          <Button
+            size={"icon-lg"}
+            variant={"secondary"}
+            className="cursor-pointer"
+          >
+            <ArrowLeft />
+          </Button>
+        </Link>
+
         <CardTitle className="text-2xl font-bold tracking-tight text-balance">
           Welcome back
         </CardTitle>
@@ -100,7 +110,7 @@ export function LoginForm() {
         <p className="text-sm text-muted-foreground">
           Don`t have an account?{" "}
           <Link
-            href="/auth/signup"
+            href="/terms"
             className="font-medium text-foreground underline underline-offset-4 transition-colors hover:text-foreground/80"
           >
             Sign up
