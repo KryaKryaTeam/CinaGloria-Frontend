@@ -1,9 +1,18 @@
+"use client";
+
+import WaveBackground from "@/ui/backgrounds/WaveBackground";
+
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-center h-screen">{children}</div>
+    <>
+      <WaveBackground />
+      <div className="flex items-center justify-center h-screen">
+        {children}
+      </div>
+    </>
   );
 }

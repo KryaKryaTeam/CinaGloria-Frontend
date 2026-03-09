@@ -7,5 +7,6 @@ enum URLEnum {
   ME = `${BASE_URL}/user/me`,
   ADDITION = `${BASE_URL}/user/additional`,
   REGISTER_LOCAL = `${BASE_URL}/auth/registration?provider=LOCAL`,
+  CONFIRM = `${BASE_URL}/auth/continue`,
 }
 export default URLEnum;
