@@ -110,7 +110,7 @@ export function LoginForm() {
         <p className="text-sm text-muted-foreground">
           Don`t have an account?{" "}
           <Link
-            href="/terms"
+            href="/auth/singup"
             className="font-medium text-foreground underline underline-offset-4 transition-colors hover:text-foreground/80"
           >
             Sign up

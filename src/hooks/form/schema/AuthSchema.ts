@@ -5,10 +5,19 @@ export const signUpSchema = z
     email: z.email(),
     password: z
       .string()
-      .min(8, "Minimum 8 characters")
-      .regex(/[0-9]/, "Need at least one digit")
-      .regex(/[^a-zA-Z0-9]/, "Need at least one special character (!@#$%...)"),
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[a-z]/, "At least one lowercase letter is required")
+      .regex(/[A-Z]/, "At least one uppercase letter is required")
+      .regex(/[0-9]/, "At least one digit is required")
+      .regex(
+        /[@$!%*?&]/,
+        "At least one special character is required (@$!%*?&)",
+      ),
     repeatPassword: z.string(),
+    termsAndPolicyChecked: z.boolean().refine((val) => val === true, {
+      message:
+        "Please accept the terms and conditions and privacy policy to continue",
+    }),
   })
   .refine((data) => data.password === data.repeatPassword, {
     message: "Passwords do not match",

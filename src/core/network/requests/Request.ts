@@ -67,33 +67,37 @@ export abstract class Request<Data, Response, RequestOutput> {
         headers.set("Authorization", `Bearer ${token}`);
         mapped.init.headers = headers;
       }
-      console.log(mapped);
       return fetch(mapped.url, mapped.init)
-        .then((res) => res.json())
+        .then(async (res) => {
+          const data = await res.json().catch(() => ({}));
+          if (res.ok) return data;
+
+          throw new Error(data.message || "Request failed", {
+            cause: res.status,
+          });
+        })
         .then((json) => this.onSuccess(json));
     } catch (error) {
-      if ((error as ResponseInit).status == 401) {
-        const newAccess = (await fetch(URLEnum.REFRESH, {
+      if ((error as Error).cause == 401) {
+        const res = await fetch(URLEnum.REFRESH, {
           credentials: "include",
-        })
-          .then((res) => res.json())
-          .catch((err) => {
-            throw err;
-          })) as { accessToken: string };
+        });
 
-        this.setAuth(newAccess.accessToken);
+        if (!res.ok) throw new Error("Unauthorized!");
+
+        this.setAuth((await res.json()).accessToken);
 
         this.retrying++;
         return await this.execute(request_data);
       }
-      if (this.onError) this.onError(error as Error);
+      if (this.onError) this.onError(JSON.stringify((error as Error).message));
 
-      throw error;
+      throw JSON.stringify((error as Error).message);
     }
   }
 
   abstract onSuccess(data: RequestOutput): Response | Promise<Response>;
   abstract mapData(data: Data): ISubRequestData;
   protected async preload?(base: ISubRequestData): Promise<ISubRequestData>;
-  protected onError?(error: Error): void;
+  protected onError?(error: string): void;
 }

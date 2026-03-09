@@ -4,7 +4,7 @@ export default function GoogleOAuthButton() {
   return (
     <Button
       variant="outline"
-      className="h-11 w-full gap-3 text-sm font-medium"
+      className="h-10 w-full gap-3 text-sm font-medium"
       type="button"
     >
       <svg

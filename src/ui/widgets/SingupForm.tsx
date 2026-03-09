@@ -13,18 +13,28 @@ import {
 import { Input } from "@/ui/input";
 import { Label } from "@/ui/label";
 import { Separator } from "@/ui/separator";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import GithubOAuthButton from "../component/GithubOAuthButton";
 import GoogleOAuthButton from "../component/GoogleOAuthButton";
 import Link from "next/link";
 import useSignup from "@/hooks/form/useSingup";
+import { Checkbox } from "@/ui/checkbox";
 
 export function SingupForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const { submit, register } = useSignup();
+  const { submit, register, errors, setValue } = useSignup();
   return (
     <Card className="w-full max-w-md border-border/60 shadow-lg">
       <CardHeader className="pb-4 text-center">
+        <Link href={"/"} className="w-max">
+          <Button
+            size={"icon-lg"}
+            variant={"secondary"}
+            className="cursor-pointer"
+          >
+            <ArrowLeft />
+          </Button>
+        </Link>
         <CardTitle className="text-2xl font-bold tracking-tight text-balance">
           Create your account
         </CardTitle>
@@ -47,21 +57,7 @@ export function SingupForm() {
           <Separator className="flex-1" />
         </div>
 
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={submit}
-        >
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="surname">Surname</Label>
-            <Input
-              id="surname"
-              type="text"
-              placeholder="Doe"
-              autoComplete="family-name"
-              {...register("surname")}
-              required
-            />
-          </div>
+        <form className="flex flex-col gap-4" onSubmit={submit}>
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -70,9 +66,11 @@ export function SingupForm() {
               placeholder="you@example.com"
               autoComplete="email"
               {...register("email")}
-              required
             />
           </div>
+          {errors.email && (
+            <p className="text-xs text-destructive">{errors.email.message}</p>
+          )}
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="password">Password</Label>
@@ -84,7 +82,6 @@ export function SingupForm() {
                 autoComplete="new-password"
                 className="pr-10"
                 {...register("password")}
-                required
               />
 
               <button
@@ -101,6 +98,11 @@ export function SingupForm() {
               </button>
             </div>
           </div>
+          {errors.password && (
+            <p className="text-xs text-destructive">
+              {errors.password.message}
+            </p>
+          )}
           <div className="flex flex-col gap-2">
             <Label htmlFor="repeatPassword">Repeat Password</Label>
             <div className="relative">
@@ -111,7 +113,6 @@ export function SingupForm() {
                 {...register("repeatPassword")}
                 autoComplete="new-password"
                 className="pr-10"
-                required
               />
               <button
                 type="button"
@@ -127,12 +128,54 @@ export function SingupForm() {
               </button>
             </div>
           </div>
+          {errors.repeatPassword && (
+            <p className="text-xs text-destructive">
+              {errors.repeatPassword.message}
+            </p>
+          )}
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="terms"
+              onCheckedChange={(checked) =>
+                setValue("termsAndPolicyChecked", checked === true)
+              }
+            />
+            <label
+              htmlFor="terms"
+              className="text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              I agree to the{" "}
+              <Link
+                href="/terms"
+                className="underline font-semibold hover:text-primary"
+              >
+                Terms of Service
+              </Link>{" "}
+              and have read the{" "}
+              <Link
+                href="/policy"
+                className="underline font-semibold  hover:text-primary"
+              >
+                Privacy Policy
+              </Link>
+              .
+            </label>
+          </div>
+          {errors.termsAndPolicyChecked && (
+            <p className="text-xs text-destructive">
+              {errors.termsAndPolicyChecked.message}
+            </p>
+          )}
+
           <Button
             type="submit"
             className="mt-2 h-11 w-full text-sm font-semibold"
           >
             Create Account
           </Button>
+          {errors.root && (
+            <p className="text-xs text-destructive">{errors.root.message}</p>
+          )}
         </form>
       </CardContent>
 
