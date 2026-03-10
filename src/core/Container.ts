@@ -7,6 +7,7 @@ import RequestMe from "./network/requests/RequestMe";
 import RequestPutAdditionData from "./network/requests/RequestPutAdditionData";
 import { RequestRegistartion } from "./network/requests/RequestRegistration";
 import { RequestConfirm } from "./network/requests/RequestConfirm";
+import { RequestLoginWithGoogle } from "./network/requests/RequestLoginWithGoogle";
 
 const container: Container = new Container();
 
@@ -18,5 +19,6 @@ container.bind(WsSocket).toSelf().inSingletonScope();
 container.bind(RequestPutAdditionData).toSelf().inRequestScope();
 container.bind(RequestRegistartion).toSelf().inRequestScope();
 container.bind(RequestConfirm).toSelf().inRequestScope();
+container.bind(RequestLoginWithGoogle).toSelf().inRequestScope();
 
 export default container;

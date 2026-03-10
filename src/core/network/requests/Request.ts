@@ -47,7 +47,6 @@ export abstract class Request<Data, Response, RequestOutput> {
 
   async execute(request_data: Data): Promise<Response> {
     try {
-      console.log("MEOOOW!", this);
       if (this.retrying > 2) throw new Error("Out of retry counter!");
       let mapped = this.mapData(request_data);
       if (this.preload) mapped = await this.preload(mapped);
@@ -82,7 +81,6 @@ export abstract class Request<Data, Response, RequestOutput> {
         })
         .then((json) => this.onSuccess(json));
     } catch (error) {
-      console.log(error);
       if ((error as Error).cause == 401) {
         await this.refresh();
         return await this.execute(request_data);
