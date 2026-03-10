@@ -62,7 +62,7 @@ export default function GoogleOAuthButton() {
         }}
       ></Script>
 
-      <div id="googleBtn" className="w-full"></div>
+      <div id="googleBtn" className="w-full h-11 overflow-y-clip"></div>
       {Error && <p className="text-xs text-destructive">{Error}</p>}
     </>
   );

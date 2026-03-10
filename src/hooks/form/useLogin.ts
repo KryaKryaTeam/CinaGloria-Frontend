@@ -13,8 +13,10 @@ export default function useLogin() {
     handleSubmit,
     register,
     formState: { errors },
+    setError,
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
+    mode: "onChange",
     defaultValues: {
       email: "",
       password: "",
@@ -33,7 +35,7 @@ export default function useLogin() {
 
       await me_request.execute();
     } catch (error) {
-      console.error("Login failed:", error);
+      setError("root", { message: (error as Error).message });
     }
   };
 

@@ -3,6 +3,7 @@ const BASE_URL: string = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "";
 export const URLEnum = {
   LOGIN_LOCAL: `${BASE_URL}/auth/login?provider=LOCAL`,
   LOGIN_GOOGLE: `${BASE_URL}/auth/login?provider=GOOGLE`,
+  LOGIN_GITHUB: `${BASE_URL}/auth/login?provider=GITHUB`,
   CSRF: `${BASE_URL}/auth/csrf`,
   REFRESH: `${BASE_URL}/auth/refresh`,
   GET_WS_TOKEN: `${BASE_URL}/ws/token`,

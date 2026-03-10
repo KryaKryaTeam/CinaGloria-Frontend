@@ -21,7 +21,7 @@ import useLogin from "@/hooks/form/useLogin";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const { submit, register } = useLogin();
+  const { submit, register, errors } = useLogin();
   return (
     <Card className="w-full max-w-md border-border/60 shadow-lg">
       <CardHeader className="pb-4 text-center">
@@ -66,8 +66,10 @@ export function LoginForm() {
               placeholder="you@example.com"
               autoComplete="email"
               {...register("email")}
-              required
             />
+            {errors.email && (
+              <p className="text-xs text-destructive">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
@@ -80,7 +82,6 @@ export function LoginForm() {
                 autoComplete="current-password"
                 className="pr-10"
                 {...register("password")}
-                required
               />
 
               <button
@@ -96,6 +97,11 @@ export function LoginForm() {
                 )}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-xs text-destructive">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <Button
             type="submit"
@@ -103,6 +109,9 @@ export function LoginForm() {
           >
             Login
           </Button>
+          {errors.root && (
+            <p className="text-xs text-destructive">{errors.root.message}</p>
+          )}
         </form>
       </CardContent>
 
