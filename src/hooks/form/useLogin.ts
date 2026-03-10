@@ -6,6 +6,7 @@ import Email from "@/core/domain/value-object/Email";
 import Password from "@/core/domain/value-object/Password";
 import JWTChangeRequest from "@/core/network/requests/JWTRequest";
 import RequestMe from "@/core/network/requests/RequestMe";
+import { useRouter } from "next/navigation";
 
 export default function useLogin() {
   // rhf initialization hook
@@ -23,8 +24,8 @@ export default function useLogin() {
     },
   });
 
+  const n = useRouter();
   const jwt_request = container.get(JWTChangeRequest);
-  const me_request = container.get(RequestMe);
 
   const onSubmit: SubmitHandler<LoginData> = async (data: LoginData) => {
     try {
@@ -33,7 +34,7 @@ export default function useLogin() {
         password: new Password(data.password),
       });
 
-      await me_request.execute();
+      n.push("/app/profile");
     } catch (error) {
       setError("root", { message: (error as Error).message });
     }
