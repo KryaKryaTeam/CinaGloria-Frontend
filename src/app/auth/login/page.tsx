@@ -1,5 +1,6 @@
-import { AuthForm } from "@/ui/widgets/AuthForm";
-
+"use client";
+import authFormStore from "@/state/AuthFormsState";
+import { LoginForm } from "@/ui/widgets/auth/LoginForm";
 export default function Login() {
-  return <AuthForm authPageType="login" />;
+  return <LoginForm />;
 }

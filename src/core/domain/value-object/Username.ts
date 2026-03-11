@@ -1,7 +1,6 @@
-import { singleton } from "tsyringe";
 import ValueObject from "./ValueObject";
-import { Result, ValidationError } from "@/infrastructur/Result";
-@singleton()
+import { Result, ValidationError } from "@/infrastructure/Result";
+
 export default class Username extends ValueObject<string> {
   public constructor(value: string) {
     super(value);
@@ -11,10 +10,10 @@ export default class Username extends ValueObject<string> {
     return this._value;
   }
 
-  static create(raw: string): Result<Username, ValidationError> {
-    if (!raw || raw.trim().length === 0 || !/^\w+(\s+\w+)*$/.test(raw))
-      return Result.fail(new ValidationError("Username is required"));
-    return Result.ok(new Username(raw.toLowerCase().trim()));
+  static create(raw: string): Username {
+    if (!raw || raw.trim().length === 0)
+      throw new ValidationError("Username is required");
+    return new Username(raw.toLowerCase().trim());
   }
 
   equals(other: ValueObject<string>): boolean {

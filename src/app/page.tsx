@@ -1,12 +1,21 @@
-'use client';
-import registerServiceWorker from "@/infrastructur/RegisterServiceWorker";
-import { AuthForm } from "@/ui/widgets/AuthForm";
-import Image from "next/image";
-import { useEffect } from "react";
+import SticksBackground from "@/ui/backgrounds/SticksBackground";
+import MainHeader from "@/ui/widgets/main/MainHeader";
 
 export default function Home() {
-  useEffect(() => {
-    registerServiceWorker();
-  }, []);
-  return <>is main</>;
+  return (
+    <>
+      <MainHeader />
+      <main>
+        <section className="w-full h-screen relative">
+          <div className="absolute w-screen h-screen z-10 flex items-center justify-center">
+            <p className="text-5xl text-center leading-30 text-background">
+              Welcome to <br />
+              <span className="font-bebas text-[140px]">CinaGloria</span>
+            </p>
+          </div>
+          <SticksBackground />
+        </section>
+      </main>
+    </>
+  );
 }

@@ -1,42 +1,40 @@
-import { singleton } from "tsyringe";
 import ValueObject from "./ValueObject";
-import { Result, ValidationError } from "@/infrastructur/Result";
-@singleton()
-export class Password extends ValueObject<string> {
+import { Result, ValidationError } from "@/infrastructure/Result";
+export default class Password extends ValueObject<string> {
   public constructor(value: string) {
     super(value);
   }
 
   get value(): string {
-    return this.value;
+    return this._value;
   }
 
-  static create(raw: string): Result<Password, ValidationError> {
+  static create(raw: string): Password {
     if (!raw || raw.trim().length === 0)
-      return Result.fail(new ValidationError("Password is required"));
+      throw Result.fail(new ValidationError("Password is required"));
 
     if (raw.length < 8)
-      return Result.fail(new ValidationError("Minimum 8 characters"));
+      throw Result.fail(new ValidationError("Minimum 8 characters"));
 
     if (!/[A-Z]/.test(raw))
-      return Result.fail(
+      throw Result.fail(
         new ValidationError("Need at least one uppercase letter"),
       );
 
     if (!/[a-z]/.test(raw))
-      return Result.fail(
+      throw Result.fail(
         new ValidationError("Need at least one lowercase letter"),
       );
 
     if (!/[0-9]/.test(raw))
-      return Result.fail(new ValidationError("Need at least one digit"));
+      throw Result.fail(new ValidationError("Need at least one digit"));
 
     if (!/[@$!%?&]/.test(raw))
-      return Result.fail(
+      throw Result.fail(
         new ValidationError("Need at least one special character (@$!%?&)"),
       );
 
-    return Result.ok(new Password(raw));
+    return new Password(raw);
   }
 
   equals(other: ValueObject<string>): boolean {

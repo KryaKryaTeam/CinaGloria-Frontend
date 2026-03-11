@@ -1,7 +1,6 @@
-import { Result, ValidationError } from "@/infrastructur/Result";
+import { Result, ValidationError } from "@/infrastructure/Result";
 import ValueObject from "./ValueObject";
-import { singleton } from "tsyringe";
-@singleton()
+
 export default class AvatarURL extends ValueObject<string> {
   constructor(value: string) {
     super(value);
@@ -14,11 +13,11 @@ export default class AvatarURL extends ValueObject<string> {
       listOfAvalible[Math.floor(Math.random() * listOfAvalible.length)],
     );
   }
-  static create(raw: string): Result<AvatarURL, ValidationError> {
-    if (!raw.includes("http://") || !raw.includes("https://"))
-      Result.fail(new ValidationError("Invalid URL format"));
+  static create(raw: string): AvatarURL {
+    if (!raw.startsWith("http://") && !raw.startsWith("https://"))
+      throw new ValidationError("Invalid URL format");
 
-    return Result.ok(new AvatarURL(raw));
+    return new AvatarURL(raw);
   }
   equals(other: ValueObject<string>): boolean {
     return other instanceof AvatarURL && this._value === other._value;

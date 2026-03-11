@@ -13,21 +13,28 @@ import {
 import { Input } from "@/ui/input";
 import { Label } from "@/ui/label";
 import { Separator } from "@/ui/separator";
-import { Eye, EyeOff } from "lucide-react";
-import GithubOAuthButton from "../component/GithubOAuthButton";
-import GoogleOAuthButton from "../component/GoogleOAuthButton";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import GithubOAuthButton from "../../component/GithubOAuthButton";
+import GoogleOAuthButton from "../../component/GoogleOAuthButton";
 import Link from "next/link";
+import useSignup from "@/hooks/form/useSingup";
+import { Checkbox } from "@/ui/checkbox";
 
-interface AuthFormProps {
-  authPageType: "login" | "signup";
-}
-
-export function AuthForm({ authPageType }: AuthFormProps) {
+export function SingupForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [repeatPassword, setRepeatPassword] = useState("");
+  const { submit, register, errors, setValue } = useSignup();
   return (
     <Card className="w-full max-w-md border-border/60 shadow-lg">
       <CardHeader className="pb-4 text-center">
+        <Link href={"/"} className="w-max">
+          <Button
+            size={"icon-lg"}
+            variant={"secondary"}
+            className="cursor-pointer"
+          >
+            <ArrowLeft />
+          </Button>
+        </Link>
         <CardTitle className="text-2xl font-bold tracking-tight text-balance">
           Create your account
         </CardTitle>
@@ -50,38 +57,20 @@ export function AuthForm({ authPageType }: AuthFormProps) {
           <Separator className="flex-1" />
         </div>
 
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
-          {authPageType === "signup" && (
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="surname">Surname</Label>
-              <Input
-                id="surname"
-                type="text"
-                placeholder="Doe"
-                // value={surname}
-                // onChange={(e) => setSurname(e.target.value)}
-                autoComplete="family-name"
-                required
-              />
-            </div>
-          )}
+        <form className="flex flex-col gap-4" onSubmit={submit}>
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               placeholder="you@example.com"
-              // value={email}
-              // onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
-              required
+              {...register("email")}
             />
           </div>
+          {errors.email && (
+            <p className="text-xs text-destructive">{errors.email.message}</p>
+          )}
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="password">Password</Label>
@@ -90,11 +79,9 @@ export function AuthForm({ authPageType }: AuthFormProps) {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                // value={password}
-                // onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
                 className="pr-10"
-                required
+                {...register("password")}
               />
 
               <button
@@ -111,20 +98,22 @@ export function AuthForm({ authPageType }: AuthFormProps) {
               </button>
             </div>
           </div>
-          {authPageType === "signup" && (
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="repeatPassword">Repeat Password</Label>
-              <div className="relative">
-                <Input
-                  id="repeatPassword"
-                  placeholder="Repeat your password"
-                  value={repeatPassword}
-                  onChange={(e) => setRepeatPassword(e.target.value)}
-                  autoComplete="new-password"
-                  className="pr-10"
-                  required
-                />
-              </div>
+          {errors.password && (
+            <p className="text-xs text-destructive">
+              {errors.password.message}
+            </p>
+          )}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="repeatPassword">Repeat Password</Label>
+            <div className="relative">
+              <Input
+                id="repeatPassword"
+                type={showPassword ? "text" : "password"}
+                placeholder="Repeat your password"
+                {...register("repeatPassword")}
+                autoComplete="new-password"
+                className="pr-10"
+              />
               <button
                 type="button"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
@@ -138,13 +127,55 @@ export function AuthForm({ authPageType }: AuthFormProps) {
                 )}
               </button>
             </div>
+          </div>
+          {errors.repeatPassword && (
+            <p className="text-xs text-destructive">
+              {errors.repeatPassword.message}
+            </p>
           )}
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="terms"
+              onCheckedChange={(checked) =>
+                setValue("termsAndPolicyChecked", checked === true)
+              }
+            />
+            <label
+              htmlFor="terms"
+              className="text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              I agree to the{" "}
+              <Link
+                href="/terms"
+                className="underline font-semibold hover:text-primary"
+              >
+                Terms of Service
+              </Link>{" "}
+              and have read the{" "}
+              <Link
+                href="/policy"
+                className="underline font-semibold  hover:text-primary"
+              >
+                Privacy Policy
+              </Link>
+              .
+            </label>
+          </div>
+          {errors.termsAndPolicyChecked && (
+            <p className="text-xs text-destructive">
+              {errors.termsAndPolicyChecked.message}
+            </p>
+          )}
+
           <Button
             type="submit"
             className="mt-2 h-11 w-full text-sm font-semibold"
           >
             Create Account
           </Button>
+          {errors.root && (
+            <p className="text-xs text-destructive">{errors.root.message}</p>
+          )}
         </form>
       </CardContent>
 
@@ -152,10 +183,10 @@ export function AuthForm({ authPageType }: AuthFormProps) {
         <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
-            href={authPageType === "signup" ? "/auth/login" : "/auth/signup"}
+            href="/auth/login"
             className="font-medium text-foreground underline underline-offset-4 transition-colors hover:text-foreground/80"
           >
-            {authPageType === "signup" ? "Log in" : "Sign up"}
+            Log in
           </Link>
         </p>
       </CardFooter>
