@@ -7,11 +7,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../card";
-import { Button } from "../button";
+} from "../../card";
+import { Button } from "../../button";
 import { ArrowLeft } from "lucide-react";
-import { Input } from "../input";
-import { Label } from "../label";
+import { Input } from "../../input";
+import { Label } from "../../label";
 import useVerification from "@/hooks/form/useVerification";
 
 function VerificationCodeForm() {

@@ -110,14 +110,12 @@ export function generateWavesForScreen(
   choosen: { x: number; y: number }[],
 ): Point[] {
   const dots: Point[] = [];
-  const gap = 20;
-  const cx = width / 2;
-  const cy = height / 2;
+  const gap = 30;
   const frequency = 0.02;
   const amplitude = 50;
   const speed = 0.5;
   const redCof = 0;
-  const greenCof = 0;
+  const greenCof = 10;
   const blueCof = 0;
 
   for (let x = 0; x < width; x += gap) {
@@ -144,7 +142,7 @@ export function generateWavesForScreen(
       dots.push({
         x: x,
         y: y + finalZ,
-        size: Math.min(Math.max(5, finalZ / 10), 8),
+        size: Math.min(Math.max(3, finalZ / 10), 10),
         color: {
           r: Math.min(255, 255 - (brightness + redCof)),
           g: Math.min(255, 255 - (brightness + greenCof)),

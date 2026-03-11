@@ -1,4 +1,4 @@
-import VerificationCodeForm from "@/ui/widgets/VerificationCodeForm";
+import VerificationCodeForm from "@/ui/widgets/auth/VerificationCodeForm";
 
 function Page() {
   return <VerificationCodeForm />;

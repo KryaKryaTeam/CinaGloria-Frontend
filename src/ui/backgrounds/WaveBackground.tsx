@@ -29,17 +29,13 @@ export default function WaveBackground() {
     console.log(choosen);
 
     function render() {
-      ctx!.fillStyle = "black";
-      ctx!.fillRect(0, 0, width, height);
+      ctx!.clearRect(0, 0, width, height);
 
       const dots = generateWavesForScreen(width, height, frame, choosen);
 
       dots.forEach((dot: Point) => {
-        ctx!.fillStyle = `rgb(${dot.color.r},${dot.color.g},${dot.color.b})`;
-
-        ctx!.beginPath();
-        ctx!.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-        ctx!.fill();
+        ctx!.fillStyle = `rgba(${dot.color.r},${dot.color.g},${dot.color.b}, ${Math.min(1, frame)})`;
+        ctx!.fillRect(dot.x, dot.y, 20, 20);
       });
 
       frame += 0.01; // Швидкість анімації

@@ -80,11 +80,10 @@ function Page() {
     } else call();
   }, []);
   return (
-    <Card>
-      <CardContent>
-        <Loader className="animate-spin" />
-      </CardContent>
-    </Card>
+    <div className="bg-background flex flex-col gap-2 justify-center items-center w-screen h-screen">
+      <Loader className="animate-spin" />
+      <h2 className="text-xs font-light">Loading...</h2>
+    </div>
   );
 }
 

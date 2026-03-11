@@ -6,7 +6,7 @@ import JWTChangeRequest from "@/core/network/requests/JWTRequest";
 import { WsSocket } from "@/core/network/socket/initSocket";
 import WaveBackground from "@/ui/backgrounds/WaveBackground";
 import { Button } from "@/ui/button";
-import SecondDataForm from "@/ui/widgets/SecondDataForm";
+import SecondDataForm from "@/ui/widgets/auth/SecondDataForm";
 export default function TestPage() {
   const aboba = () => {
     const service = container.get(JWTChangeRequest);

@@ -14,8 +14,8 @@ import { Input } from "@/ui/input";
 import { Label } from "@/ui/label";
 import { Separator } from "@/ui/separator";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import GithubOAuthButton from "../component/GithubOAuthButton";
-import GoogleOAuthButton from "../component/GoogleOAuthButton";
+import GithubOAuthButton from "../../component/GithubOAuthButton";
+import GoogleOAuthButton from "../../component/GoogleOAuthButton";
 import Link from "next/link";
 import useLogin from "@/hooks/form/useLogin";
 

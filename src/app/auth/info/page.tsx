@@ -1,4 +1,4 @@
-import SecondDataForm from "@/ui/widgets/SecondDataForm";
+import SecondDataForm from "@/ui/widgets/auth/SecondDataForm";
 
 function Page() {
   return <SecondDataForm />;

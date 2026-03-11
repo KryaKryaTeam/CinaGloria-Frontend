@@ -8,6 +8,18 @@ import { useRouter } from "next/navigation";
 const _120_YEARS_IN_MS = 120 * 365.25 * 24 * 60 * 60 * 1000;
 const _14_YEARS_IN_MS = 14 * 365.25 * 24 * 60 * 60 * 1000;
 
+const refineAllDone = (data: {
+  firstName?: string;
+  lastName?: string;
+  surName?: string;
+}): boolean => {
+  const { firstName, lastName, surName } = data;
+  const filledCount = [firstName, lastName, surName].filter(
+    (f) => f && f.trim().length > 0,
+  ).length;
+  return filledCount === 0 || filledCount === 3;
+};
+
 const schema = z
   .object({
     firstName: z.string().max(255, "Too long").optional().or(z.literal("")),
@@ -36,21 +48,11 @@ const schema = z
       .optional()
       .or(z.literal("")),
   })
-  .refine(
-    (data) => {
-      const { firstName, lastName, surName } = data;
-      const filledCount = [firstName, lastName, surName].filter(
-        (f) => f && f.trim().length > 0,
-      ).length;
-      return filledCount === 0 || filledCount === 3;
-    },
-    {
-      message: "Please fill in all name fields or leave them all empty",
-      path: ["surName"], // Zod only allows one string in 'path' per refine
-    },
-  );
+  .refine(refineAllDone, {
+    message: "Please fill in all name fields or leave them all empty",
+    path: ["surName"],
+  });
 
-// Define the type from the schema
 type AdditionalData = z.infer<typeof schema>;
 
 export default function useAdditionalDataForm() {
