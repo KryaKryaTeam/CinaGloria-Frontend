@@ -1,6 +1,6 @@
 "use client";
 import container from "@/core/Container";
-import RequestMe from "@/core/network/requests/RequestMe";
+import RequestMe from "@/core/requests/network/Me.request";
 import { UserState } from "@/state/UserState";
 import { Button } from "@/ui/button";
 import { observer } from "mobx-react-lite";
