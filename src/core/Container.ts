@@ -1,13 +1,13 @@
 import { Container } from "inversify";
-import JWTChangeRequest from "./network/requests/JWTRequest";
+import JWTChangeRequest from "./requests/network/JWT.request";
+import { GetWsTokenRequest } from "./requests/network/GetWsToken.request";
+import RequestMe from "./requests/network/Me.request";
 import { UserState } from "@/state/UserState";
-import { GetWsTokenRequest } from "./network/requests/GetWsTokebRequest";
-import { WsSocket } from "./network/socket/initSocket";
-import RequestMe from "./network/requests/RequestMe";
-import RequestPutAdditionData from "./network/requests/RequestPutAdditionData";
-import { RequestRegistartion } from "./network/requests/RequestRegistration";
-import { RequestConfirm } from "./network/requests/RequestConfirm";
-import { RequestLoginWithGoogle } from "./network/requests/RequestLoginWithGoogle";
+import RequestPutAdditionData from "./requests/network/PutAdditionData.request";
+import { RequestRegistartion } from "./requests/network/Registration.request";
+import { RequestConfirm } from "./requests/network/Confirm.request";
+import { RequestLoginWithGoogle } from "./requests/network/LoginWithGoogle.request";
+import { WsSocket } from "./initSocket";
 
 const container: Container = new Container();
 

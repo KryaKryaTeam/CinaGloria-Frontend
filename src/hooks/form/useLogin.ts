@@ -4,9 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import container from "@/core/Container";
 import Email from "@/core/domain/value-object/Email";
 import Password from "@/core/domain/value-object/Password";
-import JWTChangeRequest from "@/core/network/requests/JWTRequest";
-import RequestMe from "@/core/network/requests/RequestMe";
 import { useRouter } from "next/navigation";
+import JWTChangeRequest from "@/core/requests/network/JWT.request";
 
 export default function useLogin() {
   // rhf initialization hook

@@ -8,8 +8,8 @@ import {
 import { SignUpData, signUpSchema } from "./schema/AuthSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import container from "@/core/Container";
-import { RequestRegistartion } from "@/core/network/requests/RequestRegistration";
 import { useRouter } from "next/navigation";
+import { RequestRegistartion } from "@/core/requests/network/Registration.request";
 
 interface UseSignupReturn {
   submit: () => void;

@@ -1,6 +1,4 @@
-import { ISubRequestData, Request } from "./Request";
-import { HTTPMethod, Token } from "./type";
-import URLEnum from "../URLEnum";
+import { HTTPMethod, Token } from "../type";
 import type { IUserEntityData } from "@/core/domain/entity/User";
 import User from "@/core/domain/entity/User";
 import Username from "@/core/domain/value-object/Username";
@@ -8,9 +6,11 @@ import Email from "@/core/domain/value-object/Email";
 import AvatarURL from "@/core/domain/value-object/AvatarURL";
 import { inject, injectable } from "inversify";
 import { UserState } from "@/state/UserState";
+import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
+import URLEnum from "../URLEnum";
 
 @injectable()
-export default class RequestMe extends Request<void, void, IUserEntityData> {
+export default class RequestMe extends NetworkRequest<void, void, IUserEntityData> {
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
   authorized: boolean = true;

@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
 import URLEnum from "../URLEnum";
-import { ISubRequestData, Request } from "./Request";
-import { HTTPMethod, StatusCode } from "./type";
+import { HTTPMethod, StatusCode } from "../type";
 import { UserState } from "@/state/UserState";
+import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
 
 export interface AdditionData {
   telegram?: string;
@@ -13,7 +13,7 @@ export interface AdditionData {
   birthDay?: Date;
 }
 @injectable()
-export default class RequestPutAdditionData extends Request<
+export default class RequestPutAdditionData extends NetworkRequest<
   AdditionData,
   boolean,
   void

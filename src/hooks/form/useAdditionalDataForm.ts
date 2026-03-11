@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import container from "@/core/Container";
-import RequestPutAdditionData from "@/core/network/requests/RequestPutAdditionData";
 import { useRouter } from "next/navigation";
+import RequestPutAdditionData from "@/core/requests/network/PutAdditionData.request";
 
 const _120_YEARS_IN_MS = 120 * 365.25 * 24 * 60 * 60 * 1000;
 const _14_YEARS_IN_MS = 14 * 365.25 * 24 * 60 * 60 * 1000;

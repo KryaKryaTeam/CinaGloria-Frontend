@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import container from "@/core/Container";
-import { RequestConfirm } from "@/core/network/requests/RequestConfirm";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { RequestConfirm } from "@/core/requests/network/Confirm.request";
 
 const schema = z.object({
   code: z
