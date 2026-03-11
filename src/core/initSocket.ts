@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { io, Socket } from "socket.io-client";
-import { GetWsTokenRequest } from "../requests/GetWsTokebRequest";
+import { GetWsTokenRequest } from "./requests/network/GetWsToken.request";
 
 @injectable()
 export class WsSocket {

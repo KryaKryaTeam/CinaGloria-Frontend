@@ -1,10 +1,10 @@
 import Email from "@/core/domain/value-object/Email";
-import { Request, ISubRequestData } from "./Request";
 import Password from "@/core/domain/value-object/Password";
-import URLEnum from "../URLEnum";
-import { HTTPMethod } from "./type";
+import { HTTPMethod } from "../type";
 import { inject, injectable } from "inversify";
 import { UserState } from "@/state/UserState";
+import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
+import URLEnum from "../URLEnum";
 
 interface IDataRequest {
   email: Email;
@@ -17,7 +17,7 @@ interface IRequestOutput {
 }
 
 @injectable()
-export default class JWTChangeRequest extends Request<
+export default class JWTChangeRequest extends NetworkRequest<
   IDataRequest,
   IRequestOutput,
   IRequestOutput

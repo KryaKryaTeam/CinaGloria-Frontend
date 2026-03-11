@@ -1,9 +1,8 @@
-import { init } from "next/dist/compiled/webpack/webpack";
-import { ISubRequestData, Request } from "./Request";
 import URLEnum from "../URLEnum";
-import { HTTPMethod } from "./type";
+import { HTTPMethod } from "../type";
 import { UserState } from "@/state/UserState";
 import { inject } from "inversify";
+import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
 
 interface LoginWithGoogleInput {
   code: string;
@@ -13,7 +12,7 @@ interface LoginWithGoogleOutput {
   userExistsBefore: boolean;
 }
 
-export class RequestLoginWithGoogle extends Request<
+export class RequestLoginWithGoogle extends NetworkRequest<
   LoginWithGoogleInput,
   boolean,
   LoginWithGoogleOutput

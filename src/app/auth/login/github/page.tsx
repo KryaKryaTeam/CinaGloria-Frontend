@@ -1,5 +1,5 @@
 "use client";
-import URLEnum from "@/core/network/URLEnum";
+import URLEnum from "@/core/requests/URLEnum";
 import { Card, CardContent } from "@/ui/card";
 import { Loader } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";

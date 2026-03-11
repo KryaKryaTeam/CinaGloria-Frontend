@@ -1,6 +1,6 @@
 import URLEnum from "../URLEnum";
-import { ISubRequestData, Request } from "./Request";
-import { HTTPMethod } from "./type";
+import { HTTPMethod } from "../type";
+import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
 
 interface RegisterData {
   email: string;
@@ -11,7 +11,7 @@ interface RegisterOutput {
   requestId: string;
 }
 
-export class RequestRegistartion extends Request<
+export class RequestRegistartion extends NetworkRequest<
   RegisterData,
   RegisterOutput,
   RegisterOutput

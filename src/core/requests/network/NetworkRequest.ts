@@ -1,6 +1,6 @@
 import URLAddValue from "@/infrastructure/URLAddKey";
 import URLEnum from "../URLEnum";
-import { HTTPMethod } from "./type";
+import { HTTPMethod } from "../type";
 import { inject, injectable } from "inversify";
 import { UserState } from "@/state/UserState";
 
@@ -10,7 +10,7 @@ export interface ISubRequestData {
 }
 
 @injectable()
-export abstract class Request<Data, Response, RequestOutput> {
+export abstract class NetworkRequest<Data, Response, RequestOutput> {
   constructor(
     @inject(UserState)
     protected readonly userState: UserState,

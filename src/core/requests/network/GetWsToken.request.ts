@@ -1,10 +1,8 @@
-import { UserState } from "@/state/UserState";
+import { HTTPMethod } from "../type";
 import URLEnum from "../URLEnum";
-import  { Request, ISubRequestData } from "./Request";
-import { HTTPMethod } from "./type";
-import { inject } from "inversify";
+import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
 
-export class GetWsTokenRequest extends Request<
+export class GetWsTokenRequest extends NetworkRequest<
   undefined,
   { token: string },
   { token: string }
