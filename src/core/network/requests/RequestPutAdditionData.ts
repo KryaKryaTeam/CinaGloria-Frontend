@@ -10,7 +10,7 @@ export interface AdditionData {
   firstName?: string;
   lastName?: string;
   surName?: string;
-  bithDay?: Date;
+  birthDay?: Date;
 }
 @injectable()
 export default class RequestPutAdditionData extends Request<
@@ -29,8 +29,8 @@ export default class RequestPutAdditionData extends Request<
   mapData(data: AdditionData): ISubRequestData {
     const payload = {
       ...data,
-      bithDay: data.bithDay
-        ? data.bithDay.toISOString().split("T")[0]
+      birthDay: data.birthDay
+        ? data.birthDay.toISOString().split("T")[0]
         : undefined,
     };
 

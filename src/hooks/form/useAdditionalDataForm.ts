@@ -13,7 +13,7 @@ const schema = z
     firstName: z.string().max(255, "Too long").optional().or(z.literal("")),
     lastName: z.string().max(255, "Too long").optional().or(z.literal("")),
     surName: z.string().max(255, "Too long").optional().or(z.literal("")),
-    birthDate: z
+    birthDay: z
       .date({ error: "Please select a valid date" })
       .min(
         new Date(Date.now() - _120_YEARS_IN_MS),
@@ -23,8 +23,7 @@ const schema = z
         new Date(Date.now() - _14_YEARS_IN_MS),
         "You must be at least 14 years old",
       )
-      .optional()
-      .nullable(),
+      .optional(),
     telegram: z
       .string()
       .max(255, "Telegram username is too long")
@@ -47,7 +46,7 @@ const schema = z
     },
     {
       message: "Please fill in all name fields or leave them all empty",
-      path: ["firstName"], // Zod only allows one string in 'path' per refine
+      path: ["surName"], // Zod only allows one string in 'path' per refine
     },
   );
 
@@ -71,7 +70,7 @@ export default function useAdditionalDataForm() {
       surName: "",
       telegram: "",
       discord: "",
-      birthDate: null,
+      birthDay: undefined,
     },
   });
 

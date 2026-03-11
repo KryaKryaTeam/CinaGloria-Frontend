@@ -61,10 +61,10 @@ export default function SecondDataForm() {
 
           <div>
             <Label className="block mb-1">Birth date</Label>
-            <DatePickerInput className="w-full" {...register("birthDate")} />
-            {errors.birthDate && (
+            <DatePickerInput className="w-full" {...register("birthDay")} />
+            {errors.birthDay && (
               <p className="text-xs text-destructive">
-                {errors.birthDate.message}
+                {errors.birthDay.message}
               </p>
             )}
           </div>

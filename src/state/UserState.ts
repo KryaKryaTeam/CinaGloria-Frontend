@@ -29,7 +29,7 @@ export class UserState {
         telegram: data.telegram || "",
         discord: data.discord || "",
       });
-      if (data.bithDay) this.User.updateAge(data.bithDay);
+      if (data.birthDay) this.User.updateAge(data.birthDay);
       if (data.firstName && data.lastName && data.surName)
         this.User.updateFullName({
           firstName: data.firstName,
