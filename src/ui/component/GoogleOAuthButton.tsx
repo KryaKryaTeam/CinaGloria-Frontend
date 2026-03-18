@@ -2,8 +2,9 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import container from "@/core/Container";
-import { RequestLoginWithGoogle } from "@/core/network/requests/RequestLoginWithGoogle";
+
 import { usePathname, useRouter } from "next/navigation";
+import { RequestLoginWithGoogle } from "@/core/requests/network/LoginWithGoogle.request";
 
 export default function GoogleOAuthButton() {
   const [Error, setError] = useState<string | null>(null);
