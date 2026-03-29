@@ -8,6 +8,8 @@ import { RequestRegistartion } from "./requests/network/Registration.request";
 import { RequestConfirm } from "./requests/network/Confirm.request";
 import { RequestLoginWithGoogle } from "./requests/network/LoginWithGoogle.request";
 import { WsSocket } from "./initSocket";
+import AnotherUserDataRequest from "./requests/network/AnotherUserData.request";
+import { ModalState } from "@/state/ModalState";
 
 const container: Container = new Container();
 
@@ -20,5 +22,6 @@ container.bind(RequestPutAdditionData).toSelf().inRequestScope();
 container.bind(RequestRegistartion).toSelf().inRequestScope();
 container.bind(RequestConfirm).toSelf().inRequestScope();
 container.bind(RequestLoginWithGoogle).toSelf().inRequestScope();
-
+container.bind(AnotherUserDataRequest).toSelf().inRequestScope();
+container.bind(ModalState).toSelf().inSingletonScope();
 export default container;

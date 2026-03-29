@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import { ProfileModal } from "@/ui/component/ProfileModal";
 import { Bebas_Neue, Mulish } from "next/font/google";
-const bbne = Bebas_Neue({ weight: "400" });
-const mulish = Mulish({});
+
+const bbne = Bebas_Neue({ subsets: ["latin"], weight: "400" });
+const mulish = Mulish({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${bbne.className} ${mulish.className}`}>
+        {}
         {children}
+
+        {}
+        <ProfileModal />
       </body>
     </html>
   );
