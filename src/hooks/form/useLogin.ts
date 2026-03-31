@@ -33,7 +33,7 @@ export default function useLogin() {
         password: new Password(data.password),
       });
 
-      n.push("/app/profile");
+      n.push("/main");
     } catch (error) {
       setError("root", { message: (error as Error).message });
     }

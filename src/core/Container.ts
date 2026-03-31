@@ -1,4 +1,4 @@
-import { Container } from "inversify";
+import { Container, inject } from "inversify";
 import JWTChangeRequest from "./requests/network/JWT.request";
 import { GetWsTokenRequest } from "./requests/network/GetWsToken.request";
 import RequestMe from "./requests/network/Me.request";
@@ -8,6 +8,10 @@ import { RequestRegistartion } from "./requests/network/Registration.request";
 import { RequestConfirm } from "./requests/network/Confirm.request";
 import { RequestLoginWithGoogle } from "./requests/network/LoginWithGoogle.request";
 import { WsSocket } from "./initSocket";
+import { NotificationAggregate } from "./domain/aggregate/NotificationAggregate";
+import ReadedRequest from "./requests/network/ReadedRequest.request";
+import NotificationStore from "@/state/NotificationStore";
+import OldNotificationPageRequest from "./requests/network/OldNotificationPage.request";
 
 const container: Container = new Container();
 
@@ -20,5 +24,7 @@ container.bind(RequestPutAdditionData).toSelf().inRequestScope();
 container.bind(RequestRegistartion).toSelf().inRequestScope();
 container.bind(RequestConfirm).toSelf().inRequestScope();
 container.bind(RequestLoginWithGoogle).toSelf().inRequestScope();
-
+container.bind(ReadedRequest).toSelf().inRequestScope();
+container.bind(NotificationStore).toSelf().inSingletonScope();
+container.bind(OldNotificationPageRequest).toSelf().inRequestScope();
 export default container;

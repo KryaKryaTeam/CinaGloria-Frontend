@@ -1,6 +1,6 @@
 import { Bell } from "lucide-react";
 
-export default function MainHeader(){
+export default function Page(){
     return (
         <>
             <Bell />

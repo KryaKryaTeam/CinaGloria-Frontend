@@ -39,7 +39,7 @@ export default class RequestPutAdditionData extends NetworkRequest<
     return {
       url: new URL(URLEnum.ADDITION),
       init: {
-        body: JSON.stringify(payload), // Тепер тут чистий об'єкт
+        body: JSON.stringify(payload), 
         headers: {
           "Content-Type": "application/json",
         },
@@ -47,7 +47,6 @@ export default class RequestPutAdditionData extends NetworkRequest<
     };
   }
   onSuccess(data: void): boolean | Promise<boolean> {
-    console.log("MACARENA");
     return true;
   }
   protected onError(error: string): void {

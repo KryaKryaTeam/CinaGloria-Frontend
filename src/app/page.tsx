@@ -1,10 +1,11 @@
 import SticksBackground from "@/ui/backgrounds/SticksBackground";
-import MainHeader from "@/ui/widgets/main/MainHeader";
+import BaseHeader from "@/ui/widgets/main/BaseHeader";
+
 
 export default function Home() {
   return (
     <>
-      <MainHeader />
+      <BaseHeader />
       <main>
         <section className="w-full h-screen relative">
           <div className="absolute w-screen h-screen z-10 flex items-center justify-center">

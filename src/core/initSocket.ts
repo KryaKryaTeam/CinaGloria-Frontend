@@ -1,6 +1,8 @@
 import { inject, injectable } from "inversify";
 import { io, Socket } from "socket.io-client";
 import { GetWsTokenRequest } from "./requests/network/GetWsToken.request";
+import NotificationStore from "@/state/NotificationStore";
+import container from "./Container";
 
 @injectable()
 export class WsSocket {
@@ -24,7 +26,10 @@ export class WsSocket {
     this.socket.on("connect", () => {
       console.log("Connected");
     });
-
+    this.socket.on("new_notification", (data) => {
+      const store = container.get(NotificationStore);
+      store.addNew(data)
+    })
     this.socket.on("disconnect", () => {
       console.log("Disconected");
     });
