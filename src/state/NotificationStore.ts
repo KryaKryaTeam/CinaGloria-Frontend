@@ -1,4 +1,4 @@
-\import type { INotification } from "@/core/domain/entity/Notification";
+import type { INotification } from "@/core/domain/entity/Notification";
 import { injectable } from "inversify";
 import { action, observable, makeObservable } from "mobx";
 import { Notification } from "@/core/domain/entity/Notification";
