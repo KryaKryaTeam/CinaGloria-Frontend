@@ -47,6 +47,12 @@ export interface IUserConstructorProps {
   role: string;
 }
 
+export interface IUserShortProfile {
+  avatarUrl: string;
+  username: string;
+  role: RoleEnum;
+}
+
 export default class User {
   public readonly id: string;
   public readonly email: string;
@@ -119,35 +125,38 @@ export default class User {
   }
 
   updateFullName(fullName: {
-    firstName: string,
-    lastName: string,
-    surName: string
+    firstName: string;
+    lastName: string;
+    surName: string;
   }) {
-    if(this._fullName && fullName) {
+    if (this._fullName && fullName) {
       this._fullName.firstName = fullName.firstName;
       this._fullName.lastName = fullName.lastName;
       this._fullName.surName = fullName.surName;
-      this._fullName.value = (fullName.firstName.trim() + fullName.lastName.trim() + fullName.surName.trim());
+      this._fullName.value =
+        fullName.firstName.trim() +
+        fullName.lastName.trim() +
+        fullName.surName.trim();
     }
   }
 
-  updateAge(age: Date ) {
+  updateAge(age: Date) {
     if (this._age) {
       this._age.birthDay = age;
       this._age.value = age.getFullYear();
     }
   }
-  updateContact(contact: IUserContacts){
-    this._contacts.discord = contact.discord
-    this._contacts.telegram = contact.telegram
+  updateContact(contact: IUserContacts) {
+    this._contacts.discord = contact.discord;
+    this._contacts.telegram = contact.telegram;
   }
-  clearAdditionData(){
+  clearAdditionData() {
     this._contacts = {
-      telegram: '',
-      discord: ''
-    }
-    this._age = null
-    this._fullName = null
+      telegram: "",
+      discord: "",
+    };
+    this._age = null;
+    this._fullName = null;
   }
   public get username() {
     return this._username;
@@ -182,6 +191,14 @@ export default class User {
     if (!this._age) return false;
     if (!this._fullName) return false;
     return true;
+  }
+
+  public get shortProfile(): IUserShortProfile {
+    return {
+      avatarUrl: this._avatarUrl.value,
+      role: this._role,
+      username: this._username.value,
+    };
   }
 
   public toJSON(): IUserEntityData {

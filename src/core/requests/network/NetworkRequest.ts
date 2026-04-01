@@ -9,6 +9,8 @@ export interface ISubRequestData {
   url: URL;
 }
 
+let refreshPr: undefined | Promise<void>;
+
 @injectable()
 export abstract class NetworkRequest<Data, Response, RequestOutput> {
   constructor(
@@ -92,16 +94,27 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
   }
 
   private async refresh() {
-    const res = await fetch(URLEnum.REFRESH, {
-      credentials: "include",
-      method: "POST",
-    });
+    if (refreshPr) {
+      return await refreshPr;
+    }
 
-    if (!res.ok) throw new Error("Unauthorized!");
+    try {
+      refreshPr = (async () => {
+        const res = await fetch(URLEnum.REFRESH, {
+          credentials: "include",
+          method: "POST",
+        });
 
-    this.setAuth((await res.json()).accessToken);
+        if (!res.ok) throw new Error("Session expired!");
 
-    this.retrying++;
+        this.setAuth((await res.json()).accessToken);
+
+        this.retrying++;
+      })();
+      await refreshPr;
+    } finally {
+      refreshPr = undefined;
+    }
   }
 
   abstract onSuccess(data: RequestOutput): Response | Promise<Response>;

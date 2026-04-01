@@ -1,7 +1,6 @@
-export type HTTPMethod= "GET" | "POST" | "PUT" | "DELETE";
+export type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 export type Token = string;
 
 export enum StatusCode {
-    OK = 200,
-    
+  OK = 200,
 }

@@ -35,6 +35,15 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   headers,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cinagloria-service-bucket.s3.us-east-1.amazonaws.com",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

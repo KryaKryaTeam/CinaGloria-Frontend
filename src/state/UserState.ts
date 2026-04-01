@@ -8,7 +8,7 @@ import { action, makeObservable, observable } from "mobx";
 export class UserState {
   @observable isAuthorized: boolean = false;
   @observable authToken: string = "";
-  User: User | null = null;
+  @observable User: User | null = null;
   @action
   setAuthToken(token: string) {
     this.authToken = token;
