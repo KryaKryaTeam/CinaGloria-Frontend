@@ -1,9 +1,7 @@
 import type { INotification } from "@/core/domain/entity/Notification";
 import { injectable } from "inversify";
-import { action, observable, makeObservable } from "mobx";
+import { action, observable, makeObservable, computed } from "mobx";
 import { Notification } from "@/core/domain/entity/Notification";
-import { NotificationAggregate } from "@/core/domain/aggregate/NotificationAggregate";
-import container from "@/core/Container";
 import NotificationStatus from "@/core/domain/entity/NotificationType.enum";
 
 @injectable()
@@ -34,7 +32,7 @@ export default class NotificationStore {
 
 
     @action
-    async readByPos(index: number, actorId: string) {
+    async readById(index: number, actorId: string) {
         const notification = this.notifications[index];
 
         if (!notification || notification.status === NotificationStatus.readed) {
@@ -62,14 +60,18 @@ export default class NotificationStore {
                 )
         } 
         
-    @action
-    get unreadNotificationIds(): string[] {
-        return this.notifications
-            .filter((n) => n.status !== NotificationStatus.readed)
-            .map((n) => n.id);
-    }
-    @action
-    get notificationsList(): INotification[] {  
-        return this.notifications.map((n) => n.Object);
-    }
+        // ✅ Change @action to @computed
+@computed
+get unreadNotificationIds(): string[] {
+    return this.notifications
+        .filter((n) => n.status !== NotificationStatus.readed)
+        .map((n) => n.id);
+}
+
+// ✅ Change @action to @computed
+@computed
+get notificationsList(): INotification[] {  
+    return this.notifications.map((n) => n.Object);
+}
+
 }

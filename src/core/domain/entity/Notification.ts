@@ -55,8 +55,8 @@ export class Notification {
     }
   }
    public markAsRead(actorId: string): void {
-    if (this._to !== actorId) {
-      throw new Error("Only the recipient can mark the notification as read.");
+    if (this._to === actorId) {
+      throw new Error("Only the owner can mark the notification as read.");
     }
 
     if (this._status === NotificationStatus.readed) {

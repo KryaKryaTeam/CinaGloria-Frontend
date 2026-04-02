@@ -1,33 +1,41 @@
-onst isRead = notification.status === NotificationStatus.readed;
+import { INotification } from "@/core/domain/entity/Notification";
+import useNotification from "@/hooks/form/useNotification"
+import { useEffect, useState } from "react"
+import NotificationWidget from "./NotificationWidget";
+import NotificationDetailPanel from "./NotificationDetailPanel";
+import { observer } from "mobx-react-lite";
+
+export default observer(function NotificationWindow() {
+  const { get, read, readAll, getOld } = useNotification()
+  const [activeNotificationData, setActiveNotificationData] = useState<INotification | null>(null);
+
+
+  async function handleNotificationClick(notificationId: string) {
+  const notificationData = get().find((notification) => notification.id === notificationId);
+  console.log(notificationId);
+  setActiveNotificationData(notificationData ?? null);
+  await read(notificationId); 
+  }
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      await getOld();
+    }
+    fetchNotifications();
+  }, [getOld]) 
 
   return (
-    <div className="flex items-center gap-3 rounded-lg border bg-card p-3 transition-colors hover:bg-accent/50">
-      {/* Status indicator */}
-      <div
-        className={`size-2 shrink-0 rounded-full ${
-          isRead ? "bg-emerald-400" : "bg-blue-500"
-        }`}
-      />
-
-      {/* Content */}
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-foreground">
-          {notification.title}
-        </p>
-        <p className="truncate text-xs text-muted-foreground">
-          From: {notification.from}
-        </p>
+    <div className="">
+      <div>
+        {get().map((notification) => (
+          <div key={notification.id} onClick={() => handleNotificationClick(notification.id)}>
+            <NotificationWidget {...notification} />
+          </div>
+        ))}
       </div>
-
-      {/* Status badge */}
-      <span
-        className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ${
-          isRead
-            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400"
-            : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400"
-        }`}
-      >
-        {isRead ? "Read" : "New"}
-      </span>
+      <div>
+        <NotificationDetailPanel notification={activeNotificationData} />
+      </div>
     </div>
   );
+});
