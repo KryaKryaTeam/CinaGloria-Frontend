@@ -11,7 +11,7 @@ export const URLEnum = {
   ADDITION: `${BASE_URL}/user/additional`,
   REGISTER_LOCAL: `${BASE_URL}/auth/registration?provider=LOCAL`,
   CONFIRM: `${BASE_URL}/auth/continue`,
-  NOTIFICATION: `${BASE_URL}/v1/notification/`
+  NOTIFICATION: `${BASE_URL}/notification/`
 
 } as const;
 export default URLEnum;

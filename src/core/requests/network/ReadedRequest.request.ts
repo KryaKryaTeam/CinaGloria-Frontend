@@ -27,7 +27,7 @@ export default class ReadedRequest extends NetworkRequest<string, true, void> {
   onSuccess(data: void): true | Promise<true> {
     const userId = this.userState.User?.id;
     if (userId) {
-      this.notificationStore.readByPos(0, userId);
+      this.notificationStore.readById(0, userId);
     } else {
       throw new Error("User ID is not available in UserState.");
     }

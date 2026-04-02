@@ -1,7 +1,7 @@
-import container from "@/core/Container";
+
 import User from "@/core/domain/entity/User";
-import type { AdditionData } from "@/core/network/requests/RequestPutAdditionData";
-import { inject, injectable } from "inversify";
+import type { AdditionData } from "@/core/requests/network/PutAdditionData.request";
+import { injectable } from "inversify";
 import { action, makeObservable, observable } from "mobx";
 
 @injectable()

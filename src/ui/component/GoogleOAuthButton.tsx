@@ -25,7 +25,7 @@ export default function GoogleOAuthButton() {
             code: res.credential,
           });
 
-          n.push(existsBefore ? "/app/profile" : "/auth/info");
+          n.push(existsBefore ? "/test" : "/auth/info");
         } catch (err) {
           setError(`Login failed: ${(err as Error).message}`);
         }

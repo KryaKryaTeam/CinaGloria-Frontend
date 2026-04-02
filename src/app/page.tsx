@@ -1,5 +1,6 @@
 import SticksBackground from "@/ui/backgrounds/SticksBackground";
-import BaseHeader from "@/ui/widgets/main/BaseHeader";
+import BaseHeader from "@/ui/widgets/base/BaseHeader";
+
 
 
 export default function Home() {
