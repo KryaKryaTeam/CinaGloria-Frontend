@@ -7,4 +7,5 @@ export abstract class Event<T> {
   constructor(payload: T) {
     this.payload = Object.freeze(payload);
   }
+  
 }
