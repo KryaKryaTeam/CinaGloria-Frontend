@@ -1,7 +1,7 @@
 
 import User from "@/core/domain/entity/User";
 import type { AdditionData } from "@/core/requests/network/PutAdditionData.request";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import { action, makeObservable, observable } from "mobx";
 
 @injectable()
