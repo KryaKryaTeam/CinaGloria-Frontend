@@ -12,6 +12,7 @@ import { NotificationAggregate } from "./domain/aggregate/NotificationAggregate"
 import ReadedRequest from "./requests/network/ReadedRequest.request";
 import NotificationStore from "@/state/NotificationStore";
 import OldNotificationPageRequest from "./requests/network/OldNotificationPage.request";
+import { LoadState } from "@/state/LoadMachine/LoadState";
 
 const container: Container = new Container();
 
@@ -27,4 +28,6 @@ container.bind(RequestLoginWithGoogle).toSelf().inRequestScope();
 container.bind(ReadedRequest).toSelf().inRequestScope();
 container.bind(NotificationStore).toSelf().inSingletonScope();
 container.bind(OldNotificationPageRequest).toSelf().inRequestScope();
+container.bind(LoadState).toSelf().inSingletonScope();
+
 export default container;

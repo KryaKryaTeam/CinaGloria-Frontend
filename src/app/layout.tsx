@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { Bebas_Neue, Mulish } from "next/font/google";
+import { TooltipProvider } from "@/ui/tooltip";
+import { SidebarProvider } from "@/ui/sidebar";
 const bbne = Bebas_Neue({ weight: "400" });
 const mulish = Mulish({});
 
@@ -18,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${bbne.className} ${mulish.className}`}>
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
   );

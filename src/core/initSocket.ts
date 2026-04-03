@@ -10,7 +10,7 @@ export class WsSocket {
   constructor(
     @inject(GetWsTokenRequest) private get_ws_token_req: GetWsTokenRequest,
   ) {
-    this.socket = io("https://bots.swedka121.com/", {
+    this.socket = io("https://bots.swedka121.com/notification", {
       autoConnect: false,
       path: "/ws/",
       transports: ["websocket", "polling"],
@@ -27,9 +27,10 @@ export class WsSocket {
       console.log("Connected");
     });
     this.socket.on("new_notification", (data) => {
+      console.log("NEW!!");
       const store = container.get(NotificationStore);
-      store.addNew(data)
-    })
+      store.addNew(data);
+    });
     this.socket.on("disconnect", () => {
       console.log("Disconected");
     });
