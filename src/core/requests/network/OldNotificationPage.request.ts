@@ -19,18 +19,18 @@ export default class OldNotificationPageRequest extends NetworkRequest<
     @inject(NotificationStore)
     private readonly notificationStore: NotificationStore,
     @inject(UserState)
-    readonly userState: UserState, 
+    readonly userState: UserState,
   ) {
     super(userState);
   }
 
   mapData(data: number): ISubRequestData {
     return {
-      url: new URL(`${URLEnum.NOTIFICATION}${data}`),
+      url: new URL(`${URLEnum.NOTIFICATION_PAGE}/${data}`),
       init: {},
     };
   }
   onSuccess(data: INotification[]): void | Promise<void> {
-    this.notificationStore.addOld(data)
+    this.notificationStore.addOld(data);
   }
 }

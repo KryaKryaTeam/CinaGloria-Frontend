@@ -10,12 +10,16 @@ export class WsSocket {
   constructor(
     @inject(GetWsTokenRequest) private get_ws_token_req: GetWsTokenRequest,
   ) {
-    this.socket = io("https://bots.swedka121.com/notification", {
-      autoConnect: false,
-      path: "/ws/",
-      transports: ["websocket", "polling"],
-      secure: true,
-    });
+    this.socket = io(
+      `${process.env.NEXT_PUBLIC_BACKEND_SOCKET_URL}/notification`,
+      {
+        autoConnect: false,
+        path: "/ws/",
+        transports: ["websocket", "polling"],
+        secure:
+          !process.env.NEXT_PUBLIC_BACKEND_SOCKET_URL?.includes("localhost"),
+      },
+    );
   }
 
   async connect() {

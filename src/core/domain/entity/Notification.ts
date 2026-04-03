@@ -26,14 +26,14 @@ export class Notification {
   private readonly _createdAt: Date;
 
   constructor(props: INotification) {
-    this._id = props.id;
+    this._id = props.id || `notification-${Math.random() * 10000}`;
     this._title = props.title;
     this._content = props.content;
     this._from = props.from;
     this._to = props.to;
     this._status = props.status;
     this._targets = props.targets;
-    this._createdAt = props.createdAt;
+    this._createdAt = new Date(props.createdAt);
   }
 
   get id() {
@@ -57,28 +57,15 @@ export class Notification {
   get createdAt() {
     return this._createdAt;
   }
-  get Object() {
-    return {
-      id: this._id,
-      title: this._title,
-      content: this._content,
-      from: this._from,
-      to: this._to,
-      status: this._status,
-      targets: this._targets,
-      createdAt: this._createdAt,
-      read: this.status == NotificationStatus.readed,
-    };
-  }
-  public markAsRead(actorId: string): void {
-    if (this._to === actorId) {
-      throw new Error("Only the owner can mark the notification as read.");
-    }
-
+  public markAsRead(): void {
     if (this._status === NotificationStatus.readed) {
       return;
     }
 
     this._status = NotificationStatus.readed;
+  }
+
+  get read(): boolean {
+    return this.status === NotificationStatus.readed;
   }
 }

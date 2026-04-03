@@ -7,20 +7,20 @@ import { useCallback, useState } from "react";
 import NotificationSheet from "./NotificationSheet";
 
 function NotificationButton() {
-  const { shouldPlayAnimation, animationPlayed } = useNotification();
+  const nt = useNotification();
   const [AnimationIsPlaying, setAnimationIsPlaying] = useState(false);
   const ref = useCallback(
     (obj: SVGSVGElement) => {
       if (!obj) return;
 
-      if (shouldPlayAnimation && !AnimationIsPlaying) {
+      if (nt.shouldPlayAnimation && !AnimationIsPlaying) {
         const timeline = createTimeline({
           onBegin: () => {
             setAnimationIsPlaying(true);
           },
           onComplete: () => {
             setAnimationIsPlaying(false);
-            animationPlayed();
+            nt.animationPlayed();
           },
         });
 
@@ -33,7 +33,7 @@ function NotificationButton() {
         timeline.play();
       }
     },
-    [shouldPlayAnimation, AnimationIsPlaying, animationPlayed],
+    [AnimationIsPlaying, nt],
   );
   return (
     <NotificationSheet>
