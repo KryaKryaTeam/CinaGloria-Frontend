@@ -10,7 +10,9 @@ interface IUseNotification {
   read: (id: string) => Promise<void>;
   readAll: () => Promise<void>;
   get: () => INotification[];
-  getOld: () => Promise<INotification[]>; 
+  getOld: () => Promise<INotification[]>;
+  shouldPlayAnimation: boolean;
+  animationPlayed: () => void;
 }
 
 const useNotification = (): IUseNotification => {
@@ -18,15 +20,17 @@ const useNotification = (): IUseNotification => {
   const requestLoadOld = container.get(OldNotificationPageRequest);
   const store = container.get(NotificationStore);
   const userStore = container.get(UserState);
-  let NotificationWasLoaded = false;
   const actorId = userStore.User?.id ?? "";
 
   const read = async (id: string) => {
     if (!actorId && process.env.NODE_ENV === "production") {
       throw new Error("User ID is required to read notifications");
     }
-    
-    store.readById((store.notificationsList.findIndex((n) => n.id === id)), actorId);
+
+    store.readById(
+      store.notificationsList.findIndex((n) => n.id === id),
+      actorId,
+    );
     await requestReaded.execute(id.toString());
   };
 
@@ -38,27 +42,40 @@ const useNotification = (): IUseNotification => {
     if (unreadedIds.length === 0) return;
     store.readAll(actorId);
     try {
-      for (const id of unreadedIds) {
-        await requestReaded.execute(id);
-      }
+      await Promise.all(
+        unreadedIds.map(async (id) => {
+          await requestReaded.execute(id);
+        }),
+      );
     } catch (error) {
       console.error("Failed to mark all as read on server:", error);
     }
   };
 
-
   const getOld = async (): Promise<INotification[]> => {
-    if (!NotificationWasLoaded) {
+    if (!store.notificationsIsFetched) {
       await requestLoadOld.execute(0);
-      NotificationWasLoaded = true;
+      store.fetched();
     }
-    return store.notificationsList; 
+    return store.notificationsList;
   };
 
+  const get = (): INotification[] => {
+    return store.notificationsList;
+  };
 
-  const get = (): INotification[] => { return store.notificationsList; };
+  const animationPlayed = () => {
+    store.animationPlayed();
+  };
 
-  return { read, readAll, get, getOld };
+  return {
+    read,
+    readAll,
+    get,
+    getOld,
+    shouldPlayAnimation: store.shouldPlayAnimation,
+    animationPlayed,
+  };
 };
 
 export default useNotification;

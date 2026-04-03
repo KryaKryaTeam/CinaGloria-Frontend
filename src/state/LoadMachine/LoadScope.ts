@@ -9,17 +9,28 @@ export enum LoadScopeStates {
   REFRESHING,
 }
 
-class LoadScope {
+export class LoadScope {
   @observable private _state: LoadScopeStates = LoadScopeStates.EMPTY;
   @observable shouldShowLoadCircle = false;
   @observable error = null;
   @observable scopeInUse: boolean = false;
+  @observable pendingTasks: Promise<unknown>[] = [];
 
   private timeoutForStale: NodeJS.Timeout | null = null;
   private lastRefresh: number = Date.now();
   private readonly ttl: number = 10 * 60 * 1000;
 
   private readonly promiseFactory: () => Promise<void>;
+
+  @action registerTask(promise: Promise<unknown>) {
+    if (
+      this.state === LoadScopeStates.LOADING ||
+      this.state === LoadScopeStates.REFRESHING
+    ) {
+      console.log("Register task!");
+      this.pendingTasks.push(promise);
+    }
+  }
 
   @action enterScope() {
     if (this.timeoutForStale) clearTimeout(this.timeoutForStale);
@@ -48,14 +59,25 @@ class LoadScope {
       return;
     }
 
+    console.log("Refreshing scope!");
+
+    this.pendingTasks = [];
+
     if (this.state == LoadScopeStates.EMPTY)
       this.setState(LoadScopeStates.LOADING);
     else this.setState(LoadScopeStates.REFRESHING);
 
     try {
       await this.promiseFactory();
+
+      await new Promise((res) => setTimeout(res, 50));
+
+      if (this.pendingTasks.length > 0) await Promise.all(this.pendingTasks);
+
       this.setState(LoadScopeStates.ACTUAL);
       this.lastRefresh = Date.now();
+
+      console.log("Complete!");
     } catch {
       this.setState(LoadScopeStates.ERROR);
     }

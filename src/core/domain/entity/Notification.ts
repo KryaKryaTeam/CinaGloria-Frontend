@@ -12,6 +12,7 @@ export interface INotification {
   status: NotificationStatus;
   targets: string[];
   createdAt: Date;
+  read: boolean;
 }
 
 export class Notification {
@@ -35,14 +36,28 @@ export class Notification {
     this._createdAt = props.createdAt;
   }
 
-  get id() { return this._id; }
-  get status() { return this._status; }
-  get to() { return this._to; }
-  get content() { return this._content; }
-  get title() { return this._title; }
-  get from() { return this._from; }
-  get createdAt() { return this._createdAt; }
-  get Object() { 
+  get id() {
+    return this._id;
+  }
+  get status() {
+    return this._status;
+  }
+  get to() {
+    return this._to;
+  }
+  get content() {
+    return this._content;
+  }
+  get title() {
+    return this._title;
+  }
+  get from() {
+    return this._from;
+  }
+  get createdAt() {
+    return this._createdAt;
+  }
+  get Object() {
     return {
       id: this._id,
       title: this._title,
@@ -52,9 +67,10 @@ export class Notification {
       status: this._status,
       targets: this._targets,
       createdAt: this._createdAt,
-    }
+      read: this.status == NotificationStatus.readed,
+    };
   }
-   public markAsRead(actorId: string): void {
+  public markAsRead(actorId: string): void {
     if (this._to === actorId) {
       throw new Error("Only the owner can mark the notification as read.");
     }
