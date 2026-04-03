@@ -1,0 +1,25 @@
+import container from "@/core/Container";
+import { RoleEnum } from "@/core/domain/entity/RoleEnum";
+import { IUserShortProfile } from "@/core/domain/entity/User";
+import RequestMe from "@/core/requests/network/Me.request";
+import { UserState } from "@/state/UserState";
+
+export function useMe(): { get(): IUserShortProfile; fetch(): void } {
+  const request = container.get(RequestMe);
+  const state = container.get(UserState);
+  return {
+    get: () => {
+      if (!state.User || !state.User.shortProfile) {
+        return {
+          username: "Undefined",
+          avatarUrl: "/fallback-avatar.webp",
+          role: RoleEnum.USER,
+        };
+      }
+      return state.User.shortProfile;
+    },
+    fetch: () => {
+      request.execute();
+    },
+  };
+}

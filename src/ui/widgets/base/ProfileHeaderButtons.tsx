@@ -17,7 +17,9 @@ export default observer(function ProfileHeaderButtons() {
   return (
     <>
       {userState.isAuthorized ? (
-        <p>authorized</p>
+        <Link href={"/app/profile"}>
+          <Button>To profile</Button>
+        </Link> // need to be replaced
       ) : (
         <div className="flex flex-row gap-2">
           <Link href="/auth/login">

@@ -1,14 +1,14 @@
 
 import User from "@/core/domain/entity/User";
 import type { AdditionData } from "@/core/requests/network/PutAdditionData.request";
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { action, makeObservable, observable } from "mobx";
 
 @injectable()
 export class UserState {
   @observable isAuthorized: boolean = false;
   @observable authToken: string = "";
-  User: User | null = null;
+  @observable User: User | null = null;
   @action
   setAuthToken(token: string) {
     this.authToken = token;

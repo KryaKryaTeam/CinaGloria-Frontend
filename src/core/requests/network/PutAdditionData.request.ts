@@ -19,7 +19,7 @@ export default class RequestPutAdditionData extends NetworkRequest<
   void
 > {
   withCSRF: boolean = false;
-  method: HTTPMethod = "PUT";
+  method: HTTPMethod = "PATCH";
   authorized: boolean = true;
 
   constructor(@inject(UserState) userState: UserState) {
