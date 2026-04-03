@@ -75,11 +75,9 @@ function NotificationSheet({ children }: PropsWithChildren) {
                         <h2 className="font-semibold">{notification.title}</h2>
                       </ItemTitle>
                       <ItemDescription>
-                        <p>
-                          {isValid(notification.createdAt)
-                            ? format(notification.createdAt, "do MMMM yyyy")
-                            : "Meow!"}
-                        </p>
+                        {isValid(notification.createdAt)
+                          ? format(notification.createdAt, "do MMMM yyyy")
+                          : "Meow!"}
                       </ItemDescription>
                     </ItemContent>
                   </Item>
