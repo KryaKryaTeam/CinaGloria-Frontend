@@ -2,7 +2,6 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import container from "@/core/Container";
-
 import { usePathname, useRouter } from "next/navigation";
 import { RequestLoginWithGoogle } from "@/core/requests/network/LoginWithGoogle.request";
 
@@ -26,7 +25,7 @@ export default function GoogleOAuthButton() {
             code: res.credential,
           });
 
-          n.push(existsBefore ? "/app/profile" : "/auth/info");
+          n.push(existsBefore ? "/test" : "/auth/info");
         } catch (err) {
           setError(`Login failed: ${(err as Error).message}`);
         }
