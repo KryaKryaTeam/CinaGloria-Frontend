@@ -5,6 +5,7 @@ import URLEnum from "../URLEnum";
 import NotificationStore from "@/state/NotificationStore";
 import { inject } from "inversify";
 import { UserState } from "@/state/UserState";
+import { TYPES } from "@/core/Container.types";
 
 export default class OldNotificationPageRequest extends NetworkRequest<
   number,
@@ -16,9 +17,9 @@ export default class OldNotificationPageRequest extends NetworkRequest<
   method: HTTPMethod = "GET";
 
   constructor(
-    @inject(NotificationStore)
+    @inject(TYPES.NotificationStore)
     private readonly notificationStore: NotificationStore,
-    @inject(UserState)
+    @inject(TYPES.UserState)
     readonly userState: UserState,
   ) {
     super(userState);

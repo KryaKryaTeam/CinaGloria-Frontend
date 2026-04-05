@@ -1,5 +1,5 @@
 "use client";
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import RequestMe from "@/core/requests/network/Me.request";
 import { UserState } from "@/state/UserState";
 import { Button } from "@/ui/button";
@@ -8,10 +8,10 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 export default observer(function ProfileHeaderButtons() {
-  const userState = container.get(UserState);
+  const userState = container.get<UserState>(TYPES.UserState);
 
   useEffect(() => {
-    const request = container.get(RequestMe);
+    const request = container.get<RequestMe>(TYPES.RequestMe);
     request.execute();
   }, []);
   return (

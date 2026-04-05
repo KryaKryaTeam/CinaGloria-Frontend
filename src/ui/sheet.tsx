@@ -63,7 +63,7 @@ function SheetContent({
   side = "right",
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side: "right" | "left" | "bottom" | "top";
+  side?: "right" | "left" | "bottom" | "top";
 }) {
   // 1. Отримуємо стан open безпосередньо з контексту Radix
   const open = React.useContext(SheetContext);
@@ -99,11 +99,10 @@ function SheetContent({
         setShouldRender(false);
       };
     }
-  }, [open, shouldRender, side]);
+  }, [container, open, overlay, shouldRender, side]);
 
   // Ефект для вхідної анімації (спрацьовує відразу після setShouldRender(true))
   React.useEffect(() => {
-    console.log(shouldRender, open, container, overlay);
     if (shouldRender && open && container && overlay) {
       const isHorizontal = side === "left" || side === "right";
       const axis = isHorizontal ? "translateX" : "translateY";

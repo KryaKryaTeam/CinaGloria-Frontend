@@ -22,14 +22,15 @@ import {
 } from "@/ui/item";
 import { marked } from "marked";
 import { Notification } from "@/core/domain/entity/Notification";
+import { trace } from "mobx";
 
 function NotificationSheet({ children }: PropsWithChildren) {
+  trace();
   const nt = useNotification();
   const [SelectedNotification, setSelectedNotification] =
     useState<Notification | null>(null);
 
   const handleSelect = (notification: Notification) => {
-    console.log("MEOW!");
     setSelectedNotification(notification);
     nt.read(notification.id);
   };
@@ -59,51 +60,51 @@ function NotificationSheet({ children }: PropsWithChildren) {
 
               <div className="flex flex-col gap-2 px-4">
                 {nt.notifications.map((notification) => (
-                  <Item
-                    variant={notification.read ? "muted" : "outline"}
-                    className="w-full cursor-pointer"
-                    key={notification.id}
-                    onClick={() => handleSelect(notification)}
-                  >
-                    <ItemMedia>
-                      {!notification.read && (
-                        <div className="w-3 h-3 rounded-full bg-chart-1" />
-                      )}
-                    </ItemMedia>
-                    <ItemContent>
-                      <ItemTitle>
-                        <h2 className="font-semibold">{notification.title}</h2>
-                      </ItemTitle>
-                      <ItemDescription>
-                        {isValid(notification.createdAt)
-                          ? format(notification.createdAt, "do MMMM yyyy")
-                          : "Meow!"}
-                      </ItemDescription>
-                    </ItemContent>
-                  </Item>
+                  <Sheet key={notification.id}>
+                    <SheetTrigger>
+                      <Item
+                        variant={notification.read ? "muted" : "outline"}
+                        className="w-full cursor-pointer"
+                        onClick={() => handleSelect(notification)}
+                      >
+                        <ItemMedia>
+                          {!notification.read && (
+                            <div className="w-3 h-3 rounded-full bg-chart-1" />
+                          )}
+                        </ItemMedia>
+                        <ItemContent>
+                          <ItemTitle>
+                            <h2 className="font-semibold">
+                              {notification.title}
+                            </h2>
+                          </ItemTitle>
+                          <ItemDescription className="text-start">
+                            {isValid(notification.createdAt)
+                              ? format(notification.createdAt, "do MMMM yyyy")
+                              : "Meow!"}
+                          </ItemDescription>
+                        </ItemContent>
+                      </Item>
+                    </SheetTrigger>
+                    <SheetContent>
+                      <SheetHeader>
+                        <SheetTitle>{SelectedNotification?.title}</SheetTitle>
+                      </SheetHeader>
+                      <ScrollArea className="h-[calc(100vh-100px)] mt-4 prose-shadcn px-4">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: marked.parse(
+                              SelectedNotification?.content || "",
+                            ) as string,
+                          }}
+                        />
+                      </ScrollArea>
+                    </SheetContent>
+                  </Sheet>
                 ))}
               </div>
             </section>
             <div className="h-12 w-full opacity-0"></div>
-          </ScrollArea>
-        </SheetContent>
-      </Sheet>
-      <Sheet
-        open={!!SelectedNotification}
-        onOpenChange={(open) => !open && setSelectedNotification(null)}
-      >
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>{SelectedNotification?.title}</SheetTitle>
-          </SheetHeader>
-          <ScrollArea className="h-[calc(100vh-100px)] mt-4 prose-shadcn px-4">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: marked.parse(
-                  SelectedNotification?.content || "",
-                ) as string,
-              }}
-            />
           </ScrollArea>
         </SheetContent>
       </Sheet>

@@ -2,7 +2,7 @@ import { Github } from "lucide-react";
 import { Button } from "../button";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import { UserState } from "@/state/UserState";
 
 export default function GithubOAuthButton() {
@@ -28,8 +28,7 @@ export default function GithubOAuthButton() {
       if (EVENT) {
         switch (EVENT) {
           case "SUCCESS": {
-            const state = container.get(UserState);
-
+            const state = container.get<UserState>(TYPES.UserState);
             state.setAuthToken(data.accessToken);
 
             if (data?.userExistsBefore) {

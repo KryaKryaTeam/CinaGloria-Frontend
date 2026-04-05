@@ -1,12 +1,26 @@
 "use client";
 
+import container, { TYPES } from "@/core/Container";
+import { LoadState } from "@/state/LoadMachine/LoadState";
 import { SidebarProvider } from "@/ui/sidebar";
 import AppSidebar from "@/ui/widgets/app/AppSidebar";
 import LoaderScreen from "@/ui/widgets/app/LoaderScreen";
 import NotificationButton from "@/ui/widgets/notifications/NotificationButton";
-import { PropsWithChildren } from "react";
+import { observer } from "mobx-react-lite";
+import { PropsWithChildren, useEffect, useState } from "react";
 
 function Layout({ children }: PropsWithChildren) {
+  const [isMounted, setIsMounted] = useState(false);
+  const loadState = container.get<LoadState>(TYPES.LoadState);
+
+  useEffect(() => {
+    loadState.mount();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, [loadState]);
+
+  if (!isMounted) return null;
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div
@@ -25,4 +39,4 @@ function Layout({ children }: PropsWithChildren) {
   );
 }
 
-export default Layout;
+export default observer(Layout);

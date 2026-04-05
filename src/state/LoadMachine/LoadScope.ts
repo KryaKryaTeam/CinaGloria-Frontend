@@ -19,7 +19,6 @@ export class LoadScope {
   private timeoutForStale: NodeJS.Timeout | null = null;
   private lastRefresh: number = Date.now();
   private readonly ttl: number = 10 * 60 * 1000;
-
   private readonly promiseFactory: () => Promise<void>;
 
   @action registerTask(promise: Promise<unknown>) {
@@ -78,7 +77,8 @@ export class LoadScope {
       this.lastRefresh = Date.now();
 
       console.log("Complete!");
-    } catch {
+    } catch (e) {
+      console.log(e);
       this.setState(LoadScopeStates.ERROR);
     }
   }
@@ -113,7 +113,7 @@ export class LoadScope {
   }
 
   constructor(promiseFactory: () => Promise<void>) {
-    this.promiseFactory = promiseFactory;
+    this.promiseFactory = promiseFactory.bind(this);
     makeObservable(this);
   }
 }

@@ -4,6 +4,7 @@ import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
 import { UserState } from "@/state/UserState";
 import { HTTPMethod } from "../type";
 import NotificationStore from "@/state/NotificationStore";
+import { TYPES } from "@/core/Container.types";
 
 @injectable()
 export default class ReadedRequest extends NetworkRequest<
@@ -15,8 +16,8 @@ export default class ReadedRequest extends NetworkRequest<
   authorized: boolean = true;
   method: HTTPMethod = "PUT";
   constructor(
-    @inject(UserState) userState: UserState,
-    @inject(NotificationStore)
+    @inject(TYPES.UserState) userState: UserState,
+    @inject(TYPES.NotificationStore)
     private readonly _notificationStore: NotificationStore,
   ) {
     super(userState);

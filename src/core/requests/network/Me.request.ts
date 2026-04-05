@@ -8,14 +8,19 @@ import { inject, injectable } from "inversify";
 import { UserState } from "@/state/UserState";
 import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
 import URLEnum from "../URLEnum";
+import { TYPES } from "@/core/Container.types";
 
 @injectable()
-export default class RequestMe extends NetworkRequest<void, void, IUserEntityData> {
+export default class RequestMe extends NetworkRequest<
+  void,
+  void,
+  IUserEntityData
+> {
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
   authorized: boolean = true;
 
-  constructor(@inject(UserState) userState: UserState) {
+  constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }
 
@@ -27,7 +32,6 @@ export default class RequestMe extends NetworkRequest<void, void, IUserEntityDat
   }
 
   onSuccess(data: IUserEntityData): void {
-    console.log(data);
     this.userState.setUser(
       new User({
         id: data.id,

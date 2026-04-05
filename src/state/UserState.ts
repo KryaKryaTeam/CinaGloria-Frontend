@@ -1,4 +1,3 @@
-
 import User from "@/core/domain/entity/User";
 import type { AdditionData } from "@/core/requests/network/PutAdditionData.request";
 import { injectable } from "inversify";
@@ -20,7 +19,6 @@ export class UserState {
     this.isAuthorized = false;
   }
   @action setUser(user: User) {
-    console.log(user);
     this.User = user;
   }
   @action changeUserData(data: AdditionData): void | Error {

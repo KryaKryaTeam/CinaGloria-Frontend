@@ -40,7 +40,7 @@ function Page() {
         });
       const token = ((await csrf.json()) as { csrf: string }).csrf;
 
-      console.log(p.get("code"));
+      );
 
       const url = new URL(URLEnum.LOGIN_GITHUB);
       url.searchParams.append("state", token);

@@ -1,4 +1,4 @@
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import { HTTPMethod } from "../type";
 import URLEnum from "../URLEnum";
 import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
@@ -12,8 +12,8 @@ export default class ReadAllRequest extends NetworkRequest<void, void, void> {
   withCSRF: boolean = false;
 
   constructor(
-    @inject(UserState) userState: UserState,
-    @inject(NotificationStore)
+    @inject(TYPES.UserState) userState: UserState,
+    @inject(TYPES.NotificationStore)
     private readonly _notificationStore: NotificationStore,
   ) {
     super(userState);

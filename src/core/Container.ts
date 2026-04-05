@@ -1,35 +1,55 @@
-import { Container, inject } from "inversify";
+import { Container } from "inversify";
+import NotificationStore from "@/state/NotificationStore";
+import { UserState } from "@/state/UserState";
+import { LoadState } from "@/state/LoadMachine/LoadState";
+import { WsSocket } from "./initSocket";
+import { TYPES } from "./Container.types";
+
+const container: Container = new Container();
+
+// --- SINGLETONS (Using Constant Value for absolute safety) ---
+container
+  .bind(TYPES.NotificationStore)
+  .to(NotificationStore)
+  .inSingletonScope();
+container.bind(TYPES.UserState).to(UserState).inSingletonScope();
+container.bind(TYPES.LoadState).to(LoadState).inSingletonScope();
+container.bind(TYPES.WsSocket).to(WsSocket).inSingletonScope();
+
+// --- REQUEST SCOPE (Transient-like) ---
 import JWTChangeRequest from "./requests/network/JWT.request";
 import { GetWsTokenRequest } from "./requests/network/GetWsToken.request";
 import RequestMe from "./requests/network/Me.request";
-import { UserState } from "@/state/UserState";
 import RequestPutAdditionData from "./requests/network/PutAdditionData.request";
 import { RequestRegistartion } from "./requests/network/Registration.request";
 import { RequestConfirm } from "./requests/network/Confirm.request";
 import { RequestLoginWithGoogle } from "./requests/network/LoginWithGoogle.request";
-import { WsSocket } from "./initSocket";
-import { NotificationAggregate } from "./domain/aggregate/NotificationAggregate";
 import ReadedRequest from "./requests/network/ReadedRequest.request";
-import NotificationStore from "@/state/NotificationStore";
 import OldNotificationPageRequest from "./requests/network/OldNotificationPage.request";
-import { LoadState } from "@/state/LoadMachine/LoadState";
 import ReadAllRequest from "./requests/network/ReadAllRequest.request";
 
-const container: Container = new Container();
-
-container.bind(JWTChangeRequest).toSelf().inRequestScope();
-container.bind(GetWsTokenRequest).toSelf().inRequestScope();
-container.bind(RequestMe).toSelf().inRequestScope();
-container.bind(UserState).toSelf().inSingletonScope();
-container.bind(WsSocket).toSelf().inSingletonScope();
-container.bind(RequestPutAdditionData).toSelf().inRequestScope();
-container.bind(RequestRegistartion).toSelf().inRequestScope();
-container.bind(RequestConfirm).toSelf().inRequestScope();
-container.bind(RequestLoginWithGoogle).toSelf().inRequestScope();
-container.bind(ReadedRequest).toSelf().inRequestScope();
-container.bind(NotificationStore).toSelf().inSingletonScope();
-container.bind(OldNotificationPageRequest).toSelf().inRequestScope();
-container.bind(LoadState).toSelf().inSingletonScope();
-container.bind(ReadAllRequest).toSelf().inRequestScope();
+container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
+container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
+container.bind(TYPES.RequestMe).to(RequestMe).inRequestScope();
+container
+  .bind(TYPES.RequestPutAdditionData)
+  .to(RequestPutAdditionData)
+  .inRequestScope();
+container
+  .bind(TYPES.RequestRegistartion)
+  .to(RequestRegistartion)
+  .inRequestScope();
+container.bind(TYPES.RequestConfirm).to(RequestConfirm).inRequestScope();
+container
+  .bind(TYPES.RequestLoginWithGoogle)
+  .to(RequestLoginWithGoogle)
+  .inRequestScope();
+container.bind(TYPES.ReadedRequest).to(ReadedRequest).inRequestScope();
+container
+  .bind(TYPES.OldNotificationPageRequest)
+  .to(OldNotificationPageRequest)
+  .inRequestScope();
+container.bind(TYPES.ReadAllRequest).to(ReadAllRequest).inRequestScope();
 
 export default container;
+export { TYPES };

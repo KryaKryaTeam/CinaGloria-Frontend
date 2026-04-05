@@ -1,41 +1,41 @@
-import container from "@/core/Container";
-import { Notification } from "@/core/domain/entity/Notification";
+import { useMemo } from "react";
+import container, { TYPES } from "@/core/Container";
 import ReadedRequest from "@/core/requests/network/ReadedRequest.request";
 import NotificationStore from "@/state/NotificationStore";
-import OldNotificationPageRequest from "@/core/requests/network/OldNotificationPage.request";
 import ReadAllRequest from "@/core/requests/network/ReadAllRequest.request";
 
-// interface IUseNotification {
-//   read: (id: string) => Promise<void>;
-//   readAll: () => Promise<void>;
-//   get: () => Notification[];
-//   getOld: () => Promise<Notification[]>;
-//   shouldPlayAnimation: boolean;
-//   animationPlayed: () => void;
-// }
-
 const useNotification = () => {
-  const requestReaded = container.get(ReadedRequest);
-  const requestReadAll = container.get(ReadAllRequest);
-  const store = container.get(NotificationStore);
-
-  const read = async (id: string) => {
-    await requestReaded.execute(id.toString());
-  };
-
-  const readAll = async () => {
-    await requestReadAll.execute();
-  };
-
-  const animationPlayed = () => {
-    store.animationPlayed();
-  };
+  const requestReaded = useMemo(
+    () => container.get<ReadedRequest>(TYPES.ReadedRequest),
+    [],
+  );
+  const requestReadAll = useMemo(
+    () => container.get<ReadAllRequest>(TYPES.ReadAllRequest),
+    [],
+  );
+  const store = useMemo(
+    () => container.get<NotificationStore>(TYPES.NotificationStore),
+    [],
+  );
 
   return {
-    ...store,
-    readAll,
-    read,
-    animationPlayed,
+    store,
+    read: async (id: string) => {
+      await requestReaded.execute(id.toString());
+    },
+    readAll: async () => {
+      await requestReadAll.execute();
+    },
+    animationPlayed: () => store.animationPlayed(),
+    get notifications() {
+      return store.notifications;
+    },
+    get shouldPlayAnimation() {
+      return store.shouldPlayAnimation;
+    },
+    get haveUnreadedNotifications() {
+      return store.haveUnreadedNotifications;
+    },
   };
 };
 

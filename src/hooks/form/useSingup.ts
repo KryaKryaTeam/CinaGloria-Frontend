@@ -7,7 +7,7 @@ import {
 } from "react-hook-form";
 import { SignUpData, signUpSchema } from "./schema/AuthSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import { useRouter } from "next/navigation";
 import { RequestRegistartion } from "@/core/requests/network/Registration.request";
 
@@ -38,11 +38,12 @@ export default function useSignup(): UseSignupReturn {
 
   const n = useRouter();
 
-  const registration_request = container.get(RequestRegistartion);
+  const registration_request = container.get<RequestRegistartion>(
+    TYPES.RequestRegistartion,
+  );
 
   const onSubmit: SubmitHandler<SignUpData> = async (data) => {
     try {
-      console.log(data);
       const { requestId } = await registration_request.execute({
         email: data.email,
         password: data.password,

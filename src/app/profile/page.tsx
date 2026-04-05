@@ -1,11 +1,8 @@
-'use client'
-import container from "@/core/Container"
-import { UserState } from "@/state/UserState"
+"use client";
+import container, { TYPES } from "@/core/Container";
+import { UserState } from "@/state/UserState";
 
-export default function PageProfile(){
-    const user = container.get(UserState)
-    console.log(user)
-    return (
-        <div>dsasd</div>
-    )
+export default function PageProfile() {
+  const user = container.get<UserState>(TYPES.UserState);
+  return <div>dsasd</div>;
 }

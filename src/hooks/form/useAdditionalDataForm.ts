@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import { useRouter } from "next/navigation";
 import RequestPutAdditionData from "@/core/requests/network/PutAdditionData.request";
 
@@ -76,12 +76,12 @@ export default function useAdditionalDataForm() {
     },
   });
 
-  const put_additional_data = container.get(RequestPutAdditionData);
+  const put_additional_data = container.get<RequestPutAdditionData>(
+    TYPES.RequestPutAdditionData,
+  );
   const n = useRouter();
 
   const submit = handleSubmit(async (data) => {
-    console.log("Transformed Data:", data);
-
     try {
       await put_additional_data.execute(data);
 

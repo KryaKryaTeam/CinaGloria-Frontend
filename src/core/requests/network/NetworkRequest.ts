@@ -3,6 +3,7 @@ import URLEnum from "../URLEnum";
 import { HTTPMethod } from "../type";
 import { inject, injectable } from "inversify";
 import { UserState } from "@/state/UserState";
+import { TYPES } from "@/core/Container.types";
 
 export interface ISubRequestData {
   init: RequestInit;
@@ -14,7 +15,7 @@ let refreshPr: undefined | Promise<void>;
 @injectable()
 export abstract class NetworkRequest<Data, Response, RequestOutput> {
   constructor(
-    @inject(UserState)
+    @inject(TYPES.UserState)
     protected readonly userState: UserState,
   ) {}
   abstract withCSRF: boolean;

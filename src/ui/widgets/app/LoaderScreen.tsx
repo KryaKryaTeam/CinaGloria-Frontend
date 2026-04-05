@@ -13,7 +13,7 @@ import {
   LucideLamp,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface Fact {
   content: string;
@@ -127,75 +127,70 @@ function LoaderScreen() {
   const [enterAnimationIsPlaying, setEnterAnimationIsPlaying] = useState(false);
   const [fact, setFact] = useState("");
 
-  const ref = useCallback(
-    (obj: HTMLDivElement) => {
-      if (!obj) {
-        return;
-      }
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const obj = ref.current;
+    if (!obj) return;
 
-      console.log(
-        loadMachine.shouldAnimateEnter,
-        loadMachine.shouldAnimateExit,
-        enterAnimationIsPlaying,
-        exitAnimationIsPlaying,
-      );
+    document.getElementById("hidder")!.style.display = "none";
 
-      const hidder = document.querySelector("#hidder") as HTMLDivElement;
-      hidder.style.display = "none";
+    // 1. FORCE HIDE if we already finished the flow in the past
+    if (
+      loadMachine.loadedBefore &&
+      !loadMachine.isAppBlocking &&
+      !exitAnimationIsPlaying
+    ) {
+      obj.style.display = "none";
+      return;
+    }
 
-      if (
-        !enterAnimationIsPlaying &&
-        !exitAnimationIsPlaying &&
-        loadMachine.shouldAnimateEnter
-      ) {
-        obj.childNodes.forEach((value, key) => {
-          animate(value, {
-            delay: 200 + 100 * key,
-            y: { from: 100, to: 0 },
-            opacity: { from: 0, to: 1 },
-            onComplete: () => {
-              if (key == obj.children.length - 1) {
-                setEnterAnimationIsPlaying(false);
-                loadMachine.enterAnimationClear();
-              }
-            },
-            onBegin: () => {
-              if (key == 0) setEnterAnimationIsPlaying(true);
-            },
-          });
-        });
-      }
-      if (
-        !exitAnimationIsPlaying &&
-        !enterAnimationIsPlaying &&
-        loadMachine.shouldAnimateExit
-      ) {
-        animate(obj, {
-          opacity: { from: 1, to: 0 },
-          delay: 300,
-          duration: 1000,
-          ease: "inOut",
-          onBegin: () => {
-            obj.style.display = "flex";
-            setExitAnimationIsPlaying(true);
-          },
+    // 2. EXIT ANIMATION LOGIC
+    // If the store says we should exit, and we aren't already doing it:
+    if (loadMachine.shouldAnimateExit && !exitAnimationIsPlaying) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+
+      animate(obj, {
+        opacity: [1, 0], // Using array syntax for clarity
+        duration: 800,
+        easing: "easeInOutQuad",
+        onBegin: () => {
+          setExitAnimationIsPlaying(true);
+
+          obj.style.display = "flex";
+        },
+        onComplete: () => {
+          obj.style.display = "none";
+          setExitAnimationIsPlaying(false);
+          // CRITICAL: Tell the store we are done so it flips loadedBefore to true
+          loadMachine.exitAnimationClear();
+        },
+      });
+    }
+
+    // 3. ENTER ANIMATION LOGIC
+    if (loadMachine.shouldAnimateEnter && !enterAnimationIsPlaying) {
+      obj.childNodes.forEach((value, key) => {
+        animate(value, {
+          delay: 200 + 100 * key,
+          y: { from: 100, to: 0 },
+          opacity: { from: 0, to: 1 },
           onComplete: () => {
-            obj.style.display = "none";
-            setExitAnimationIsPlaying(false);
-            loadMachine.exitAnimationClear();
+            if (key == obj.children.length - 1) {
+              setEnterAnimationIsPlaying(false);
+              loadMachine.enterAnimationClear();
+            }
+          },
+          onBegin: () => {
+            if (key == 0) setEnterAnimationIsPlaying(true);
           },
         });
-      }
-
-      if (
-        loadMachine.loadedBefore &&
-        !loadMachine.isAppBlocking &&
-        !exitAnimationIsPlaying
-      )
-        obj.style.display = "none";
-    },
-    [loadMachine, enterAnimationIsPlaying, exitAnimationIsPlaying],
-  );
+      });
+    }
+  }, [
+    loadMachine.shouldAnimateExit,
+    loadMachine.shouldAnimateEnter,
+    loadMachine.isAppBlocking,
+  ]);
 
   const loaderAnim = useCallback((obj: SVGSVGElement) => {
     if (!obj) return;

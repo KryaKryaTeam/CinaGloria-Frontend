@@ -1,19 +1,23 @@
 import type { INotification } from "@/core/domain/entity/Notification";
 import { injectable } from "inversify";
-import { action, observable, makeObservable, computed, reaction } from "mobx";
+import {
+  action,
+  observable,
+  makeObservable,
+  computed,
+  autorun,
+  trace,
+} from "mobx";
 import { Notification } from "@/core/domain/entity/Notification";
 import NotificationStatus from "@/core/domain/entity/NotificationType.enum";
 
 @injectable()
 export default class NotificationStore {
   @observable notifications: Notification[] = [];
-  @observable private unreadNotificationCount: number = 0;
   @observable notificationsIsFetched: boolean = false;
   @observable shouldPlayAnimation: boolean = false;
 
-  constructor() {
-    makeObservable(this);
-  }
+  public id = Math.random();
 
   @action animationPlayed() {
     this.shouldPlayAnimation = false;
@@ -21,18 +25,19 @@ export default class NotificationStore {
 
   @action
   addNew(notification: INotification) {
-    this.notifications.unshift(new Notification({ ...notification }));
-    this.unreadNotificationCount += 1;
+    console.log("Store id (in add new):", this.id);
+
+    this.notifications = [
+      new Notification({ ...notification }),
+      ...this.notifications,
+    ];
+
     this.shouldPlayAnimation = true;
   }
 
   @action
   addOld(data: Array<INotification>) {
     this.notifications = data.map((n) => new Notification(n));
-
-    this.unreadNotificationCount = this.notifications.filter(
-      (n) => n.status !== NotificationStatus.readed,
-    ).length;
   }
 
   @action fetched() {
@@ -43,16 +48,18 @@ export default class NotificationStore {
   async readById(id: string) {
     const notification = this.notifications.find((a) => a.id == id);
 
-    console.log(notification);
-
     if (!notification || notification.status === NotificationStatus.readed) {
       return;
     }
-
     notification.markAsRead();
-    if (this.unreadNotificationCount > 0) {
-      this.unreadNotificationCount -= 1;
-    }
+  }
+
+  @computed
+  get haveUnreadedNotifications() {
+    trace();
+    return this.notifications.some(
+      (a) => a.status == NotificationStatus.sended,
+    );
   }
 
   @action
@@ -60,26 +67,13 @@ export default class NotificationStore {
     const unreadList = this.notifications.filter(
       (n) => n.status !== NotificationStatus.readed,
     );
-
-    console.log(unreadList);
-
-    this.unreadNotificationCount = 0;
-    if (unreadList.length === 0) return;
-
     unreadList.map((notification) => notification.markAsRead());
   }
 
-  @computed
-  get unreadNotificationIds(): string[] {
-    return this.notifications
-      .filter((n) => n.status !== NotificationStatus.readed)
-      .map((n) => n.id);
-  }
-
-  @computed
-  get haveUnreadedNotifications() {
-    return this.notifications.some(
-      (a) => a.status == NotificationStatus.sended,
-    );
+  constructor() {
+    autorun(() => {
+      console.log("Read", this.haveUnreadedNotifications);
+    });
+    makeObservable(this);
   }
 }

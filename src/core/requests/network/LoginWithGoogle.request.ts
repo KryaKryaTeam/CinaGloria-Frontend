@@ -3,6 +3,7 @@ import { HTTPMethod } from "../type";
 import { UserState } from "@/state/UserState";
 import { inject } from "inversify";
 import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
+import { TYPES } from "@/core/Container.types";
 
 interface LoginWithGoogleInput {
   code: string;
@@ -21,7 +22,7 @@ export class RequestLoginWithGoogle extends NetworkRequest<
   withCSRF: boolean = true;
   method: HTTPMethod = "POST";
 
-  constructor(@inject(UserState) userState: UserState) {
+  constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }
 
