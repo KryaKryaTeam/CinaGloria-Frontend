@@ -1,4 +1,4 @@
-import useNotification from "@/hooks/notification/useNotification";
+import useNotification from "@/hooks/notification/useNotification.hook";
 import { Button } from "@/ui/button";
 import { animate, createTimeline } from "animejs";
 import { Bell } from "lucide-react";
@@ -8,7 +8,6 @@ import NotificationSheet from "./NotificationSheet";
 import { trace } from "mobx";
 
 function NotificationButton() {
-  trace();
   const nt = useNotification();
   const [AnimationIsPlaying, setAnimationIsPlaying] = useState(false);
 
@@ -16,8 +15,6 @@ function NotificationButton() {
 
   useEffect(() => {
     if (!ref.current) return;
-
-    console.log("Store id:", nt.store.id);
 
     if (nt.store.shouldPlayAnimation && !AnimationIsPlaying) {
       const timeline = createTimeline({

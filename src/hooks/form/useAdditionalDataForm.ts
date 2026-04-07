@@ -85,7 +85,7 @@ export default function useAdditionalDataForm() {
     try {
       await put_additional_data.execute(data);
 
-      n.push("/app/profile");
+      n.push("/app/profile/information");
     } catch (err) {
       setError("root", { message: (err as Error).message });
     }

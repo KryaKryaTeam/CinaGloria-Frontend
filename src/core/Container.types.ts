@@ -1,3 +1,5 @@
+import { LogoutRequest } from "./requests/network/Logout.request";
+
 export const TYPES = {
   NotificationStore: Symbol.for("NotificationStore"),
   UserState: Symbol.for("UserState"),
@@ -13,4 +15,5 @@ export const TYPES = {
   ReadedRequest: Symbol.for("ReadedRequest"),
   OldNotificationPageRequest: Symbol.for("OldNotificationPageRequest"),
   ReadAllRequest: Symbol.for("ReadAllRequest"),
+  LogoutRequest: Symbol.for("LogoutRequest"),
 } as const;

@@ -25,8 +25,6 @@ export default class NotificationStore {
 
   @action
   addNew(notification: INotification) {
-    console.log("Store id (in add new):", this.id);
-
     this.notifications = [
       new Notification({ ...notification }),
       ...this.notifications,
@@ -56,7 +54,6 @@ export default class NotificationStore {
 
   @computed
   get haveUnreadedNotifications() {
-    trace();
     return this.notifications.some(
       (a) => a.status == NotificationStatus.sended,
     );

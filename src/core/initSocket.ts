@@ -41,7 +41,6 @@ export class WsSocket {
       console.log("Connected");
     });
     this.socket.on("new_notification", (data) => {
-      console.log("Store id (in socket):", this.notificationStore.id);
       runInAction(() => this.notificationStore.addNew(data));
     });
     this.socket.on("disconnect", () => {

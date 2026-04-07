@@ -17,7 +17,7 @@ export default observer(function ProfileHeaderButtons() {
   return (
     <>
       {userState.isAuthorized ? (
-        <Link href={"/app/profile"}>
+        <Link href={"/app/profile/information"}>
           <Button>To profile</Button>
         </Link> // need to be replaced
       ) : (

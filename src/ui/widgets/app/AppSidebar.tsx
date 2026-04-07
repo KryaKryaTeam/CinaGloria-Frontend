@@ -1,25 +1,29 @@
+import { RoleEnum } from "@/core/domain/entity/RoleEnum";
 import { useLoadMachine } from "@/hooks/loadMachine/useLoadMachine.hook";
-import { useMe } from "@/hooks/user/UseMe.hook";
+import { useMe } from "@/hooks/user/useMe.hook";
 import { Badge } from "@/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/ui/dropdown-menu";
 import Logo from "@/ui/logo";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/ui/sidebar";
-import { Swords, User } from "lucide-react";
+import { Download, HardHat, Swords, User2, UserCog2 } from "lucide-react";
+import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,19 +38,50 @@ function AppSidebar() {
     {
       icon: <Swords size={20} />,
       name: "Competitions",
+      role: "all",
       actions: [
-        { name: "Active Blocks", link: "/competitions/active" },
-        { name: "Leaderboard", link: "/competitions/leaderboard" },
-        { name: "Join a Tournament", link: "/competitions/join" },
+        {
+          role: "all",
+          name: "Browse Tournaments",
+          link: "/competitions/active",
+        },
+        { role: "all", name: "History", link: "/competitions/history" },
+        {
+          role: [RoleEnum.ADMIN, RoleEnum.ORGANIZER],
+          name: "Create competition",
+          link: "/competitions/create",
+        },
+        {
+          role: [RoleEnum.ADMIN, RoleEnum.ORGANIZER],
+          name: "Manage competitions",
+          link: "/competitions/manage",
+        },
       ],
     },
     {
-      icon: <User size={20} />,
+      icon: <User2 size={20} />,
       name: "Profile",
+      role: "all",
       actions: [
-        { name: "Information", link: "/profile" },
-        { name: "Privacy", link: "/profile/privacy" },
-        { name: "Notifications", link: "/profile/notifications" },
+        { role: "all", name: "Information", link: "/profile/information" },
+        { role: "all", name: "Settings", link: "/profile/settings" },
+      ],
+    },
+    {
+      icon: <UserCog2 />,
+      name: "Admin panel",
+      role: [RoleEnum.ADMIN],
+      actions: [
+        { role: [RoleEnum.ADMIN], name: "Users", link: "/admin/users" },
+      ],
+    },
+    {
+      icon: <HardHat />,
+      name: "My teams",
+      role: "all",
+      actions: [
+        { role: "all", name: "Browse", link: "/teams/browse" },
+        { role: "all", name: "Create new", link: "/teams/create" },
       ],
     },
   ];
@@ -59,46 +94,62 @@ function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {menu.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton>
-                  {item.icon}
-                  <span>{item.name}</span>
-                </SidebarMenuButton>
+            {menu.map((item) => {
+              return item.role == "all" || item.role.includes(profile.role) ? (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton>
+                    {item.icon}
+                    <span>{item.name}</span>
+                  </SidebarMenuButton>
 
-                {item.actions && item.actions.length > 0 && (
-                  <SidebarMenuSub>
-                    {item.actions.map((action) => (
-                      <SidebarMenuSubItem key={action.name}>
-                        <SidebarMenuSubButton asChild>
-                          <Link href={"/app" + action.link}>{action.name}</Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                )}
-              </SidebarMenuItem>
-            ))}
+                  {item.actions && item.actions.length > 0 && (
+                    <SidebarMenuSub>
+                      {item.actions.map((action) => {
+                        return action.role == "all" ||
+                          action.role.includes(profile.role) ? (
+                          <SidebarMenuSubItem key={action.name}>
+                            <SidebarMenuSubButton asChild>
+                              <Link href={"/app" + action.link}>
+                                {action.name}
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ) : null;
+                      })}
+                    </SidebarMenuSub>
+                  )}
+                </SidebarMenuItem>
+              ) : null;
+            })}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="flex justify-center items-center h-20">
-        <article className="flex flex-row gap-4 p-2 rounded-md">
-          <Image
-            key={profile.avatarUrl}
-            src={profile.avatarUrl}
-            width={128}
-            height={128}
-            alt="avatar"
-            className="w-12 h-12 rounded-full bg-foreground"
-            unoptimized
-            {...loadMachine.attachToScope("global")}
-          ></Image>
-          <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-bold">{profile.username}</h3>
-            <Badge>{profile.role.toLocaleLowerCase()}</Badge>
-          </div>
-        </article>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <article className="flex flex-row gap-4 p-2 rounded-md border-foreground border-1 hover:bg-accent">
+              <Image
+                key={profile.avatarUrl}
+                src={profile.avatarUrl}
+                width={128}
+                height={128}
+                alt="avatar"
+                className="w-12 h-12 rounded-full bg-foreground"
+                unoptimized
+                {...loadMachine.attachToScope("global")}
+              ></Image>
+              <div className="flex flex-col gap-1">
+                <h3 className="text-sm font-bold">{profile.username}</h3>
+                <Badge>{profile.role.toLocaleLowerCase()}</Badge>
+              </div>
+            </article>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => me.logout()}>
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
   );

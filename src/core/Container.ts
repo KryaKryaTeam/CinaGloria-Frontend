@@ -27,6 +27,7 @@ import { RequestLoginWithGoogle } from "./requests/network/LoginWithGoogle.reque
 import ReadedRequest from "./requests/network/ReadedRequest.request";
 import OldNotificationPageRequest from "./requests/network/OldNotificationPage.request";
 import ReadAllRequest from "./requests/network/ReadAllRequest.request";
+import { LogoutRequest } from "./requests/network/Logout.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -50,6 +51,7 @@ container
   .to(OldNotificationPageRequest)
   .inRequestScope();
 container.bind(TYPES.ReadAllRequest).to(ReadAllRequest).inRequestScope();
+container.bind(TYPES.LogoutRequest).to(LogoutRequest).inRequestScope();
 
 export default container;
 export { TYPES };

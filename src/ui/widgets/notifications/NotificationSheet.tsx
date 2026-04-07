@@ -1,4 +1,4 @@
-import useNotification from "@/hooks/notification/useNotification";
+import useNotification from "@/hooks/notification/useNotification.hook";
 import { Button } from "@/ui/button";
 import { Card, CardHeader } from "@/ui/card";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
@@ -25,7 +25,6 @@ import { Notification } from "@/core/domain/entity/Notification";
 import { trace } from "mobx";
 
 function NotificationSheet({ children }: PropsWithChildren) {
-  trace();
   const nt = useNotification();
   const [SelectedNotification, setSelectedNotification] =
     useState<Notification | null>(null);

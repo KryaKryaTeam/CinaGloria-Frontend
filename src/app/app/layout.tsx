@@ -7,11 +7,14 @@ import AppSidebar from "@/ui/widgets/app/AppSidebar";
 import LoaderScreen from "@/ui/widgets/app/LoaderScreen";
 import NotificationButton from "@/ui/widgets/notifications/NotificationButton";
 import { observer } from "mobx-react-lite";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 
 function Layout({ children }: PropsWithChildren) {
   const [isMounted, setIsMounted] = useState(false);
   const loadState = container.get<LoadState>(TYPES.LoadState);
+
+  const path = usePathname();
 
   useEffect(() => {
     loadState.mount();
@@ -19,7 +22,24 @@ function Layout({ children }: PropsWithChildren) {
     setIsMounted(true);
   }, [loadState]);
 
-  if (!isMounted) return null;
+  const prevScopeRef = useRef<string>(null);
+
+  useEffect(() => {
+    const segments = path.split("/");
+    if (segments[1] !== "app") return;
+
+    const newScope = segments[2];
+    const oldScope = prevScopeRef.current;
+
+    if (newScope === oldScope) return;
+
+    if (oldScope) {
+      loadState.leaveFromScope(oldScope);
+    }
+
+    loadState.enterInScope(newScope);
+    prevScopeRef.current = newScope;
+  }, [path, loadState]);
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -30,7 +50,9 @@ function Layout({ children }: PropsWithChildren) {
       <LoaderScreen />
       <section className="flex flex-row w-screen">
         <AppSidebar />
-        <section className="bg-foreground h-screen grow">{children}</section>
+        <section className="bg-foreground h-screen grow p-6">
+          {children}
+        </section>
       </section>
       <section className="fixed right-0 top-0 w-auto p-8">
         <NotificationButton />

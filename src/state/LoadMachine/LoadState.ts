@@ -20,6 +20,7 @@ export class LoadState {
   @observable shouldAnimateExit: boolean = false;
   @observable shouldAnimateEnter: boolean = false;
   @observable loadedBefore: boolean = false;
+  @observable currentScope: string = "";
   private readonly MAX_CONCURRENT = 3;
   private isInitialized = false;
 
@@ -191,14 +192,22 @@ export class LoadState {
 
   @action
   enterInScope(scopeName: string) {
+    console.log("Enter in scope:", scopeName);
     const item = this.scopes[scopeName];
-    if (item) item.scope.enterScope();
+    if (item && this.currentScope != scopeName) {
+      this.currentScope = scopeName;
+      item.scope.enterScope();
+    }
   }
 
   @action
   leaveFromScope(scopeName: string) {
+    console.log("Leave from scope:", scopeName);
     const item = this.scopes[scopeName];
-    if (item) item.scope.exitScope();
+    if (item) {
+      item.scope.exitScope();
+      this.currentScope = "";
+    }
   }
 
   @computed get isAppBlocking() {
