@@ -1,31 +1,44 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { XIcon } from "lucide-react"
-import { Dialog as SheetPrimitive } from "radix-ui"
+import * as React from "react";
+import { XIcon } from "lucide-react";
+import { Dialog as SheetPrimitive } from "radix-ui";
 
-import { cn } from "@/infrastructure/utils"
+import { cn } from "@/infrastructure/utils";
+import { animate } from "animejs";
+
+const SheetContext = React.createContext(false);
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />
+  const [Open, setOpen] = React.useState(props.open || false);
+  return (
+    <SheetContext.Provider value={Open}>
+      <SheetPrimitive.Root
+        data-slot="sheet"
+        onOpenChange={(_new) => setOpen(_new)}
+        open={Open}
+        {...props}
+      />
+    </SheetContext.Provider>
+  );
 }
 
 function SheetTrigger({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
-  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
+  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
 function SheetClose({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Close>) {
-  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />
+  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
 }
 
 function SheetPortal({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Portal>) {
-  return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
+  return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
 function SheetOverlay({
@@ -37,52 +50,108 @@ function SheetOverlay({
       data-slot="sheet-overlay"
       className={cn(
         "fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function SheetContent({
   className,
   children,
   side = "right",
-  showCloseButton = true,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side?: "top" | "right" | "bottom" | "left"
-  showCloseButton?: boolean
+  side?: "right" | "left" | "bottom" | "top";
 }) {
+  // 1. Отримуємо стан open безпосередньо з контексту Radix
+  const open = React.useContext(SheetContext);
+
+  // 2. Стан для реального монтування в DOM
+  const [shouldRender, setShouldRender] = React.useState(open);
+  const [container, setContainer] = React.useState<HTMLDivElement | null>(null);
+  const [overlay, setOverlay] = React.useState<HTMLDivElement | null>(null);
+
+  React.useLayoutEffect(() => {
+    if (open) {
+      setShouldRender(true);
+    } else if (shouldRender && container && overlay) {
+      const isHorizontal = side === "left" || side === "right";
+      const axis = isHorizontal ? "translateX" : "translateY";
+      const exitValue =
+        side === "right" || side === "bottom" ? "100%" : "-100%";
+
+      const outAnim = animate(container, {
+        [axis]: exitValue,
+        opacity: 0,
+        duration: 300,
+        easing: "easeInQuint",
+      });
+
+      animate(overlay, {
+        opacity: 0,
+        duration: 300,
+        easing: "linear",
+      });
+
+      outAnim.onComplete = () => {
+        setShouldRender(false);
+      };
+    }
+  }, [container, open, overlay, shouldRender, side]);
+
+  // Ефект для вхідної анімації (спрацьовує відразу після setShouldRender(true))
+  React.useEffect(() => {
+    if (shouldRender && open && container && overlay) {
+      const isHorizontal = side === "left" || side === "right";
+      const axis = isHorizontal ? "translateX" : "translateY";
+      const startValue =
+        side === "right" || side === "bottom" ? "100%" : "-100%";
+
+      animate(container, {
+        [axis]: [startValue, 0],
+        opacity: [0, 1],
+        duration: 450,
+        easing: "spring(1, 80, 13, 0)",
+      });
+
+      animate(overlay, {
+        opacity: [0, 1],
+        duration: 300,
+        easing: "linear",
+      });
+    }
+  }, [shouldRender, open, side, overlay, container]);
+
+  if (!shouldRender) return null;
+
   return (
-    <SheetPortal>
-      <SheetOverlay />
+    <SheetPortal forceMount>
+      <SheetPrimitive.Overlay
+        forceMount
+        ref={setOverlay}
+        className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+      />
       <SheetPrimitive.Content
-        data-slot="sheet-content"
+        forceMount
+        ref={setContainer}
         className={cn(
-          "fixed z-50 flex flex-col gap-4 bg-background shadow-lg transition ease-in-out data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:animate-in data-[state=open]:duration-500",
+          "fixed z-50 flex flex-col gap-4 bg-background shadow-2xl outline-none",
           side === "right" &&
-            "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+            "inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
           side === "left" &&
-            "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
-          side === "top" &&
-            "inset-x-0 top-0 h-auto border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
-          side === "bottom" &&
-            "inset-x-0 bottom-0 h-auto border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-          className
+            "inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
+          side === "top" && "inset-x-0 top-0 h-auto border-b",
+          side === "bottom" && "inset-x-0 bottom-0 h-auto border-t",
+          className,
         )}
         {...props}
       >
         {children}
-        {showCloseButton && (
-          <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary">
-            <XIcon className="size-4" />
-            <span className="sr-only">Close</span>
-          </SheetPrimitive.Close>
-        )}
       </SheetPrimitive.Content>
     </SheetPortal>
-  )
+  );
 }
 
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
@@ -92,7 +161,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
       className={cn("flex flex-col gap-1.5 p-4", className)}
       {...props}
     />
-  )
+  );
 }
 
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
@@ -102,7 +171,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
       className={cn("mt-auto flex flex-col gap-2 p-4", className)}
       {...props}
     />
-  )
+  );
 }
 
 function SheetTitle({
@@ -115,7 +184,7 @@ function SheetTitle({
       className={cn("font-semibold text-foreground", className)}
       {...props}
     />
-  )
+  );
 }
 
 function SheetDescription({
@@ -128,7 +197,7 @@ function SheetDescription({
       className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
-  )
+  );
 }
 
 export {
@@ -140,4 +209,4 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
-}
+};

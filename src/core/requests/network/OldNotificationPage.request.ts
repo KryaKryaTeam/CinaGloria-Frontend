@@ -5,6 +5,7 @@ import URLEnum from "../URLEnum";
 import NotificationStore from "@/state/NotificationStore";
 import { inject } from "inversify";
 import { UserState } from "@/state/UserState";
+import { TYPES } from "@/core/Container.types";
 
 export default class OldNotificationPageRequest extends NetworkRequest<
   number,
@@ -16,21 +17,21 @@ export default class OldNotificationPageRequest extends NetworkRequest<
   method: HTTPMethod = "GET";
 
   constructor(
-    @inject(NotificationStore)
+    @inject(TYPES.NotificationStore)
     private readonly notificationStore: NotificationStore,
-    @inject(UserState)
-    readonly userState: UserState, 
+    @inject(TYPES.UserState)
+    readonly userState: UserState,
   ) {
     super(userState);
   }
 
   mapData(data: number): ISubRequestData {
     return {
-      url: new URL(`${URLEnum.NOTIFICATION}${data}`),
+      url: new URL(`${URLEnum.NOTIFICATION_PAGE}/${data}`),
       init: {},
     };
   }
   onSuccess(data: INotification[]): void | Promise<void> {
-    this.notificationStore.addOld(data)
+    this.notificationStore.addOld(data);
   }
 }

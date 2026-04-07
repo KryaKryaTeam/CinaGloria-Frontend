@@ -3,6 +3,7 @@ import URLEnum from "../URLEnum";
 import { HTTPMethod, StatusCode } from "../type";
 import { UserState } from "@/state/UserState";
 import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
+import { TYPES } from "@/core/Container.types";
 
 export interface AdditionData {
   telegram?: string;
@@ -12,7 +13,6 @@ export interface AdditionData {
   surName?: string;
   birthDay?: Date;
 }
-@injectable()
 export default class RequestPutAdditionData extends NetworkRequest<
   AdditionData,
   boolean,
@@ -22,7 +22,7 @@ export default class RequestPutAdditionData extends NetworkRequest<
   method: HTTPMethod = "PATCH";
   authorized: boolean = true;
 
-  constructor(@inject(UserState) userState: UserState) {
+  constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }
 
@@ -39,7 +39,7 @@ export default class RequestPutAdditionData extends NetworkRequest<
     return {
       url: new URL(URLEnum.ADDITION),
       init: {
-        body: JSON.stringify(payload), 
+        body: JSON.stringify(payload),
         headers: {
           "Content-Type": "application/json",
         },

@@ -26,8 +26,6 @@ export default function WaveBackground() {
     let frame = 0;
 
     const choosen = getRandomChoosen(width, height, 2);
-    console.log(choosen);
-
     function render() {
       ctx!.clearRect(0, 0, width, height);
 

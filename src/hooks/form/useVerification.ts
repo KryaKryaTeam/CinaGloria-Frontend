@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { RequestConfirm } from "@/core/requests/network/Confirm.request";
 
@@ -26,7 +26,7 @@ export default function useVerification() {
   const searchParams = useSearchParams();
   const requestId = searchParams.get("requestId");
   const n = useRouter();
-  const request_confirm = container.get(RequestConfirm);
+  const request_confirm = container.get<RequestConfirm>(TYPES.RequestConfirm);
 
   const submit = handleSubmit(async (data) => {
     if (!requestId) return n.push("/auth/singup");

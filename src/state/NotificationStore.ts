@@ -1,19 +1,23 @@
 import type { INotification } from "@/core/domain/entity/Notification";
 import { injectable } from "inversify";
-import { action, observable, makeObservable, computed, reaction } from "mobx";
+import {
+  action,
+  observable,
+  makeObservable,
+  computed,
+  autorun,
+  trace,
+} from "mobx";
 import { Notification } from "@/core/domain/entity/Notification";
 import NotificationStatus from "@/core/domain/entity/NotificationType.enum";
 
 @injectable()
 export default class NotificationStore {
-  @observable private notifications: Notification[] = [];
-  @observable private unreadNotificationCount: number = 0;
+  @observable notifications: Notification[] = [];
   @observable notificationsIsFetched: boolean = false;
   @observable shouldPlayAnimation: boolean = false;
 
-  constructor() {
-    makeObservable(this);
-  }
+  public id = Math.random();
 
   @action animationPlayed() {
     this.shouldPlayAnimation = false;
@@ -21,18 +25,17 @@ export default class NotificationStore {
 
   @action
   addNew(notification: INotification) {
-    this.notifications.push(new Notification({ ...notification }));
-    this.unreadNotificationCount += 1;
+    this.notifications = [
+      new Notification({ ...notification }),
+      ...this.notifications,
+    ];
+
     this.shouldPlayAnimation = true;
   }
 
   @action
   addOld(data: Array<INotification>) {
     this.notifications = data.map((n) => new Notification(n));
-
-    this.unreadNotificationCount = this.notifications.filter(
-      (n) => n.status !== NotificationStatus.readed,
-    ).length;
   }
 
   @action fetched() {
@@ -40,42 +43,13 @@ export default class NotificationStore {
   }
 
   @action
-  async readById(index: number, actorId: string) {
-    const notification = this.notifications[index];
+  async readById(id: string) {
+    const notification = this.notifications.find((a) => a.id == id);
 
     if (!notification || notification.status === NotificationStatus.readed) {
       return;
     }
-
-    notification.markAsRead(actorId);
-    if (this.unreadNotificationCount > 0) {
-      this.unreadNotificationCount -= 1;
-    }
-  }
-
-  @action
-  async readAll(actorId: string) {
-    const unreadList = this.notifications.filter(
-      (n) => n.status !== NotificationStatus.readed,
-    );
-
-    this.unreadNotificationCount = 0;
-
-    if (unreadList.length === 0) return;
-
-    unreadList.map((notification) => notification.markAsRead(actorId));
-  }
-
-  @computed
-  get unreadNotificationIds(): string[] {
-    return this.notifications
-      .filter((n) => n.status !== NotificationStatus.readed)
-      .map((n) => n.id);
-  }
-
-  @computed
-  get notificationsList(): INotification[] {
-    return this.notifications.map((n) => n.Object);
+    notification.markAsRead();
   }
 
   @computed
@@ -83,5 +57,20 @@ export default class NotificationStore {
     return this.notifications.some(
       (a) => a.status == NotificationStatus.sended,
     );
+  }
+
+  @action
+  async readAll() {
+    const unreadList = this.notifications.filter(
+      (n) => n.status !== NotificationStatus.readed,
+    );
+    unreadList.map((notification) => notification.markAsRead());
+  }
+
+  constructor() {
+    autorun(() => {
+      console.log("Read", this.haveUnreadedNotifications);
+    });
+    makeObservable(this);
   }
 }

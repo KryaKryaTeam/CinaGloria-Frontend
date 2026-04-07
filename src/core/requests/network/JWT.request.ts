@@ -5,6 +5,7 @@ import { inject, injectable } from "inversify";
 import { UserState } from "@/state/UserState";
 import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
 import URLEnum from "../URLEnum";
+import { TYPES } from "@/core/Container.types";
 
 interface IDataRequest {
   email: Email;
@@ -26,7 +27,7 @@ export default class JWTChangeRequest extends NetworkRequest<
   method: HTTPMethod = "POST";
   authorized: boolean = false;
 
-  constructor(@inject(UserState) userState: UserState) {
+  constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }
 

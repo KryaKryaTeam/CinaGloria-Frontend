@@ -2,19 +2,33 @@ import { inject, injectable } from "inversify";
 import { io, Socket } from "socket.io-client";
 import { GetWsTokenRequest } from "./requests/network/GetWsToken.request";
 import NotificationStore from "@/state/NotificationStore";
-import container from "./Container";
+import { autorun, runInAction } from "mobx";
+import { TYPES } from "./Container.types";
 
 @injectable()
 export class WsSocket {
   private socket: Socket;
   constructor(
-    @inject(GetWsTokenRequest) private get_ws_token_req: GetWsTokenRequest,
+    @inject(TYPES.GetWsTokenRequest)
+    private get_ws_token_req: GetWsTokenRequest,
+    @inject(TYPES.NotificationStore)
+    private notificationStore: NotificationStore,
   ) {
-    this.socket = io("https://bots.swedka121.com/notification", {
-      autoConnect: false,
-      path: "/ws/",
-      transports: ["websocket", "polling"],
-      secure: true,
+    this.socket = io(
+      `${process.env.NEXT_PUBLIC_BACKEND_SOCKET_URL}/notification`,
+      {
+        autoConnect: false,
+        path: "/ws/",
+        transports: ["websocket", "polling"],
+        secure:
+          !process.env.NEXT_PUBLIC_BACKEND_SOCKET_URL?.includes("localhost"),
+      },
+    );
+    autorun(() => {
+      console.log(
+        "WS WATCHER: Count is now",
+        this.notificationStore.notifications.length,
+      );
     });
   }
 
@@ -27,9 +41,7 @@ export class WsSocket {
       console.log("Connected");
     });
     this.socket.on("new_notification", (data) => {
-      console.log("NEW!!");
-      const store = container.get(NotificationStore);
-      store.addNew(data);
+      runInAction(() => this.notificationStore.addNew(data));
     });
     this.socket.on("disconnect", () => {
       console.log("Disconected");

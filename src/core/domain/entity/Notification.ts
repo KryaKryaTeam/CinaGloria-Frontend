@@ -1,3 +1,4 @@
+import { action, computed, makeObservable, observable } from "mobx";
 import { Root } from "../aggregate/Root";
 import { Event } from "../event/Event";
 import ReadedEvent from "../event/Readed.event";
@@ -21,24 +22,26 @@ export class Notification {
   private readonly _content: string;
   private readonly _from: string;
   private readonly _to: string;
-  private _status: NotificationStatus;
+  @observable private _status: NotificationStatus;
   private readonly _targets: string[];
   private readonly _createdAt: Date;
 
   constructor(props: INotification) {
-    this._id = props.id;
+    this._id = props.id || `notification-${Math.random() * 10000}`;
     this._title = props.title;
     this._content = props.content;
     this._from = props.from;
     this._to = props.to;
-    this._status = props.status;
+    this._status = props.status || NotificationStatus.sended;
     this._targets = props.targets;
-    this._createdAt = props.createdAt;
+    this._createdAt = new Date(props.createdAt);
+    makeObservable(this);
   }
 
   get id() {
     return this._id;
   }
+  @computed
   get status() {
     return this._status;
   }
@@ -57,28 +60,18 @@ export class Notification {
   get createdAt() {
     return this._createdAt;
   }
-  get Object() {
-    return {
-      id: this._id,
-      title: this._title,
-      content: this._content,
-      from: this._from,
-      to: this._to,
-      status: this._status,
-      targets: this._targets,
-      createdAt: this._createdAt,
-      read: this.status == NotificationStatus.readed,
-    };
-  }
-  public markAsRead(actorId: string): void {
-    if (this._to === actorId) {
-      throw new Error("Only the owner can mark the notification as read.");
-    }
 
+  @action
+  public markAsRead(): void {
     if (this._status === NotificationStatus.readed) {
       return;
     }
 
     this._status = NotificationStatus.readed;
+  }
+
+  @computed
+  get read(): boolean {
+    return this.status === NotificationStatus.readed;
   }
 }

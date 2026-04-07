@@ -8,8 +8,8 @@ const cspHeader = `
                ${process.env.NODE_ENV == "development" ? "'unsafe-eval' 'unsafe-inline'" : ""}; 
     style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style;
     frame-src https://accounts.google.com/gsi/;
-    connect-src 'self' https://accounts.google.com/gsi/;
-    img-src 'self' data: https://*.googleusercontent.com;
+    connect-src 'self' https://accounts.google.com/gsi/ https://bots.swedka121.com/app/ wss://bots.swedka121.com/ws/;
+    img-src 'self' data: https://*.googleusercontent.com https://cinagloria-service-bucket.s3.us-east-1.amazonaws.com/ https://bots.swedka121.com/app/;
     font-src 'self' data:;
     object-src 'none';
     base-uri 'self';

@@ -1,7 +1,14 @@
 import { injectable } from "inversify";
-import { makeObservable, observable, action, computed, reaction } from "mobx";
+import {
+  makeObservable,
+  observable,
+  action,
+  computed,
+  reaction,
+  runInAction,
+} from "mobx";
 import { LoadScope, LoadScopeStates } from "./LoadScope";
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import RequestMe from "@/core/requests/network/Me.request";
 import OldNotificationPageRequest from "@/core/requests/network/OldNotificationPage.request";
 import { WsSocket } from "@/core/initSocket";
@@ -13,19 +20,23 @@ export class LoadState {
   @observable shouldAnimateExit: boolean = false;
   @observable shouldAnimateEnter: boolean = false;
   @observable loadedBefore: boolean = false;
+  @observable currentScope: string = "";
   private readonly MAX_CONCURRENT = 3;
+  private isInitialized = false;
 
-  private readonly scopes: Record<
+  @observable private readonly scopes: Record<
     string,
     { priority: number; scope: LoadScope }
   > = {
     global: {
       priority: 0,
       scope: new LoadScope(async () => {
-        const me = container.get(RequestMe);
-        const notification = container.get(OldNotificationPageRequest);
+        const me = container.get<RequestMe>(TYPES.RequestMe);
+        const notification = container.get<OldNotificationPageRequest>(
+          TYPES.OldNotificationPageRequest,
+        );
 
-        const socket = container.get(WsSocket);
+        const socket = container.get<WsSocket>(TYPES.WsSocket);
         await socket.connect();
 
         await me.execute();
@@ -67,15 +78,25 @@ export class LoadState {
         }
       },
     );
+  }
 
-    this.scanAndFillQueue();
-    this.processNext();
-    this.shouldAnimateEnter = true;
+  @action
+  public mount() {
+    if (this.isInitialized) return;
+    this.isInitialized = true;
+
+    // Початкова анімація входу
+    runInAction(() => {
+      this.scanAndFillQueue();
+      this.processNext();
+      this.shouldAnimateEnter = true;
+    });
+
     setTimeout(() => {
-      this.shouldAnimateEnter = false;
+      runInAction(() => {
+        this.shouldAnimateEnter = false;
+      });
     }, 1000);
-
-    console.log("Initializaded load state!");
   }
 
   @action
@@ -102,8 +123,6 @@ export class LoadState {
         this.queue.sort((a, b) => this.getPriority(a) - this.getPriority(b));
       }
     });
-
-    console.log("Load state queue:", this.queue);
   }
 
   @action
@@ -121,6 +140,8 @@ export class LoadState {
     this.activeCount++;
     try {
       await scope.refresh();
+    } catch (e) {
+      console.error("CRITICAL ERROR in Scope execution:", e);
     } finally {
       this.onTaskComplete();
     }
@@ -132,7 +153,6 @@ export class LoadState {
   }
 
   public attachToScope(scopeName: string) {
-    console.log("Attacher to scope:", scopeName, this.scopes);
     if (!this.scopes)
       return {
         onError: () => {},
@@ -172,22 +192,38 @@ export class LoadState {
 
   @action
   enterInScope(scopeName: string) {
+    console.log("Enter in scope:", scopeName);
     const item = this.scopes[scopeName];
-    if (item) item.scope.enterScope();
+    if (item && this.currentScope != scopeName) {
+      this.currentScope = scopeName;
+      item.scope.enterScope();
+    }
   }
 
   @action
   leaveFromScope(scopeName: string) {
+    console.log("Leave from scope:", scopeName);
     const item = this.scopes[scopeName];
-    if (item) item.scope.exitScope();
+    if (item) {
+      item.scope.exitScope();
+      this.currentScope = "";
+    }
   }
 
   @computed get isAppBlocking() {
-    return Object.values(this.scopes).some(
+    const blocking = Object.values(this.scopes).some(
       (item) =>
         item.priority === 0 &&
         (item.scope.state === LoadScopeStates.LOADING ||
           item.scope.state === LoadScopeStates.EMPTY),
     );
+
+    if (!blocking && !this.loadedBefore && !this.shouldAnimateExit) {
+      runInAction(() => {
+        this.shouldAnimateExit = true;
+      });
+    }
+
+    return blocking;
   }
 }

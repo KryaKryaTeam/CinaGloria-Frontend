@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginData, loginSchema } from "./schema/AuthSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import Email from "@/core/domain/value-object/Email";
 import Password from "@/core/domain/value-object/Password";
 import { useRouter } from "next/navigation";
@@ -24,7 +24,7 @@ export default function useLogin() {
   });
 
   const n = useRouter();
-  const jwt_request = container.get(JWTChangeRequest);
+  const jwt_request = container.get<JWTChangeRequest>(TYPES.JWTChangeRequest);
 
   const onSubmit: SubmitHandler<LoginData> = async (data: LoginData) => {
     try {
@@ -33,7 +33,7 @@ export default function useLogin() {
         password: new Password(data.password),
       });
 
-      n.push("/test");
+      n.push("/app/profile/information");
     } catch (error) {
       setError("root", { message: (error as Error).message });
     }

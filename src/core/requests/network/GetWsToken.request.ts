@@ -3,6 +3,7 @@ import { HTTPMethod } from "../type";
 import URLEnum from "../URLEnum";
 import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
 import { UserState } from "@/state/UserState";
+import { TYPES } from "@/core/Container.types";
 
 export class GetWsTokenRequest extends NetworkRequest<
   undefined,
@@ -23,7 +24,7 @@ export class GetWsTokenRequest extends NetworkRequest<
     return data;
   }
 
-  constructor(@inject(UserState) userState: UserState) {
+  constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }
 }

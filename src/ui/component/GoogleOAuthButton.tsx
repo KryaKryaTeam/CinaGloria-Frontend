@@ -1,7 +1,7 @@
 "use client";
 import Script from "next/script";
 import { useEffect, useState } from "react";
-import container from "@/core/Container";
+import container, { TYPES } from "@/core/Container";
 import { usePathname, useRouter } from "next/navigation";
 import { RequestLoginWithGoogle } from "@/core/requests/network/LoginWithGoogle.request";
 
@@ -20,7 +20,9 @@ export default function GoogleOAuthButton() {
       use_fedcm_for_prompt: true,
       callback: async (res: { credential: string }) => {
         try {
-          const request = container.get(RequestLoginWithGoogle);
+          const request = container.get<RequestLoginWithGoogle>(
+            TYPES.RequestLoginWithGoogle,
+          );
           const existsBefore = await request.execute({
             code: res.credential,
           });

@@ -1,5 +1,5 @@
 function Page() {
-  return <section>Meow</section>;
+  return <section></section>;
 }
 
 export default Page;
