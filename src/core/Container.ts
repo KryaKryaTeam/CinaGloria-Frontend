@@ -28,6 +28,9 @@ import ReadedRequest from "./requests/network/ReadedRequest.request";
 import OldNotificationPageRequest from "./requests/network/OldNotificationPage.request";
 import ReadAllRequest from "./requests/network/ReadAllRequest.request";
 import { LogoutRequest } from "./requests/network/Logout.request";
+import CreateCompetitionRequest from "./requests/network/Competion/CreateCompetion.request";
+import CompetitionState from "@/state/CompetitionState";
+import GetPublicCompetitionRequest from "./requests/network/Competion/GetPublicCompetion.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -52,6 +55,8 @@ container
   .inRequestScope();
 container.bind(TYPES.ReadAllRequest).to(ReadAllRequest).inRequestScope();
 container.bind(TYPES.LogoutRequest).to(LogoutRequest).inRequestScope();
-
+container.bind(TYPES.CreateCompetitionRequest).to(CreateCompetitionRequest).inRequestScope();
+container.bind(TYPES.CompetitionState).to(CompetitionState).inSingletonScope();
+container.bind(TYPES.GetPublicCompetitionRequest).to(GetPublicCompetitionRequest).inRequestScope();
 export default container;
 export { TYPES };

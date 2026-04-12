@@ -16,4 +16,7 @@ export const TYPES = {
   OldNotificationPageRequest: Symbol.for("OldNotificationPageRequest"),
   ReadAllRequest: Symbol.for("ReadAllRequest"),
   LogoutRequest: Symbol.for("LogoutRequest"),
+  CreateCompetitionRequest: Symbol.for("CreateCompetitionRequest"),
+  CompetitionState: Symbol.for("CompetitionState"),
+  GetPublicCompetitionRequest: Symbol.for("GetPublicCompetitionRequest")
 } as const;
