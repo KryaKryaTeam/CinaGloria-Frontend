@@ -19,21 +19,22 @@ import GoogleOAuthButton from "../../component/GoogleOAuthButton";
 import Link from "next/link";
 import useLogin from "@/hooks/form/useLogin";
 
+
 export function LoginForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { submit, register, errors } = useLogin();
   return (
     <Card className="w-full max-w-md border-border/60 shadow-lg">
       <CardHeader className="pb-4 text-center">
-        <Link href={"/"} className="w-max">
           <Button
             size={"icon-lg"}
             variant={"secondary"}
             className="cursor-pointer"
+            onClick={() => router.back()}
           >
             <ArrowLeft />
           </Button>
-        </Link>
 
         <CardTitle className="text-2xl font-bold tracking-tight text-balance">
           Welcome back

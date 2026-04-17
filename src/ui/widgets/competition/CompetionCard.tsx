@@ -7,7 +7,11 @@ import { Separator } from "@/ui/separator";
 import { format } from "date-fns";
 import { enGB } from "date-fns/locale";
 import { CalendarDays, Clock, Trophy } from "lucide-react";
-import RegistrationButton from "./RegistrationButton";
+
+
+import getFirst100 from "@/infrastructure/getFirst100";
+import GoToCompetitionPageButton from "./GoToCompetitionPageButton";
+
 
 
 
@@ -124,7 +128,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
         </div>
 
         <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-          {description}
+          {getFirst100(description)}
         </p>
 
         <Separator className="my-2" />
@@ -148,8 +152,8 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
       </CardContent>
 
       {showCTA && (
-        <CardFooter className="px-4 pb-4 pt-0">
-          <RegistrationButton id={id} isRegistrationOpen={isRegistrationOpen} />
+        <CardFooter className="px-4 pt-0">
+          <GoToCompetitionPageButton id={id}  />
         </CardFooter>
       )}
     </Card>

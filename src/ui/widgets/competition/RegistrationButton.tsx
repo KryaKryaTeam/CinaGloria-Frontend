@@ -1,32 +1,44 @@
 'use client'
 
-import container, { TYPES } from "@/core/Container";
-import { UserState } from "@/state/UserState";
-import { Button } from "@/ui/button";
-import { useRouter } from "next/navigation";
+import { useMe } from "@/hooks/user/useMe.hook"
+import { Button } from "@/ui/button"
+import { ArrowRight, UserRoundPlus } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
 
-
-interface Props {
-  id: string;
-  isRegistrationOpen: boolean;
+interface RegistrationButtonProps {
+  isRegistrationOpen: boolean
+  id: string
 }
-export default function RegistrationButton(props: Props){
-    const n = useRouter();
-    const userState = container.get<UserState>(TYPES.UserState)
-    const handle = () => {
-        n.push(`/competiotions/${props.id}`)
+
+export default function RegistrationButton({
+  isRegistrationOpen,
+  id
+}: RegistrationButtonProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const {isAuthed} = useMe();
+  if (!isRegistrationOpen) return null
+
+  function handleClick() {
+    if (isAuthed()) {
+      router.push(`/competitions/${id}/register`)
+      return
     }
-    return (
-        <>
-                <Button
-      className="w-full"
-      size="sm"
-      variant={props.isRegistrationOpen ? "default" : "outline"}
-      disabled={!props.isRegistrationOpen}
-      onClick={handle}
+
+    const modal = searchParams.get('modal')
+    const next = modal === 'true' ? 'false' : 'true'
+    router.push(`?modal=${next}`)
+  }
+
+  return (
+    <Button
+      size="lg"
+      className="hidden sm:flex items-center gap-2 shrink-0"
+      onClick={handleClick}
     >
-      {props.isRegistrationOpen ? "Register now" : "Registration closed"}
+      <UserRoundPlus className="h-4 w-4" />
+      Go to Registration
+      <ArrowRight className="h-4 w-4" />
     </Button>
-        </>
-    )
+  )
 }
