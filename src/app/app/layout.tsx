@@ -1,5 +1,6 @@
 "use client";
 
+import AuthCheck from "@/core/client-check/AuthCheck";
 import container, { TYPES } from "@/core/Container";
 import { LoadState } from "@/state/LoadMachine/LoadState";
 import { SidebarProvider } from "@/ui/sidebar";
@@ -7,15 +8,16 @@ import AppSidebar from "@/ui/widgets/app/AppSidebar";
 import LoaderScreen from "@/ui/widgets/app/LoaderScreen";
 import NotificationButton from "@/ui/widgets/notifications/NotificationButton";
 import { observer } from "mobx-react-lite";
-import { usePathname } from "next/navigation";
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { PropsWithChildren, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 function Layout({ children }: PropsWithChildren) {
   const [isMounted, setIsMounted] = useState(false);
   const loadState = container.get<LoadState>(TYPES.LoadState);
-
+  const router = useRouter()
+  const check = container.get<AuthCheck>(TYPES.AuthCheck)
   const path = usePathname();
-
+  check.setRouter(router)
   useEffect(() => {
     loadState.mount();
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -25,6 +27,7 @@ function Layout({ children }: PropsWithChildren) {
   const prevScopeRef = useRef<string>(null);
 
   useEffect(() => {
+    check.check();
     const segments = path.split("/");
     if (segments[1] !== "app") return;
 
@@ -40,7 +43,6 @@ function Layout({ children }: PropsWithChildren) {
     loadState.enterInScope(newScope);
     prevScopeRef.current = newScope;
   }, [path, loadState]);
-
   return (
     <SidebarProvider defaultOpen={true}>
       <div
