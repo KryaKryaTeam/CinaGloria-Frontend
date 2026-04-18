@@ -1,4 +1,3 @@
-import { LogoutRequest } from "./requests/network/Logout.request";
 
 export const TYPES = {
   NotificationStore: Symbol.for("NotificationStore"),
@@ -16,4 +15,8 @@ export const TYPES = {
   OldNotificationPageRequest: Symbol.for("OldNotificationPageRequest"),
   ReadAllRequest: Symbol.for("ReadAllRequest"),
   LogoutRequest: Symbol.for("LogoutRequest"),
+  CreateCompetitionRequest: Symbol.for("CreateCompetitionRequest"),
+  CompetitionState: Symbol.for("CompetitionState"),
+  GetPublicCompetitionRequest: Symbol.for("GetPublicCompetitionRequest"),
+  AuthCheck: Symbol.for("AuthCheck")
 } as const;

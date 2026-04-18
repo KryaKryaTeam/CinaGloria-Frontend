@@ -15,5 +15,6 @@ export const URLEnum = {
   NOTIFICATION_ALL: `${BASE_URL}/notification/all`,
   NOTIFICATION_PAGE: `${BASE_URL}/notification`,
   LOGOUT: `${BASE_URL}/auth/logout`,
+  COMPETITION: `${BASE_URL}/competition/`
 } as const;
 export default URLEnum;
