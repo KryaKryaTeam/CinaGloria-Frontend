@@ -19,7 +19,7 @@ import GoogleOAuthButton from "../../component/GoogleOAuthButton";
 import Link from "next/link";
 import useSignup from "@/hooks/form/useSingup";
 import { Checkbox } from "@/ui/checkbox";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export function SingupForm() {
   const router = useRouter()

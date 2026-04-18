@@ -26,8 +26,8 @@ export default function ModalGoToAuth() {
             <Button className="w-full">Log In</Button>
           </Link>
           <span className="text-muted-foreground text-xs shrink-0">or</span>
-          <Link href="/auth/signin" className="w-full">
-            <Button variant="outline" className="w-full">Sign In</Button>
+          <Link href="/auth/singup" className="w-full">
+            <Button variant="outline" className="w-full">Sign Up</Button>
           </Link>
         </div>
       </DialogContent>
