@@ -7,10 +7,10 @@ import GridCard from "@/ui/component/gridCards/GridCard";
 import { Input } from "@/ui/input";
 import Loader from "@/ui/loader";
 import DragAndDropInput from "@/ui/widgets/dragAndDropInput";
-import { ArrowLeft, PencilIcon } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useWatch } from "react-hook-form";
 
 function UserDataUpdateForm() {

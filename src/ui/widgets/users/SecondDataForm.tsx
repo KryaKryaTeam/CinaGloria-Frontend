@@ -17,6 +17,10 @@ import useAdditionalDataForm from "@/hooks/form/useAdditionalDataForm";
 import GridCard from "@/ui/component/gridCards/GridCard";
 import { PropsWithChildren } from "react";
 
+const SecondDataForm = () => {
+  return null;
+};
+
 function Form({ children }: PropsWithChildren) {
   const { register, errors, submit } = useAdditionalDataForm();
   return (
@@ -82,7 +86,7 @@ function Form({ children }: PropsWithChildren) {
     </form>
   );
 }
-function SecondDataForm() {
+SecondDataForm.onBoarding = function OnBoardingForm() {
   return (
     <Card className="w-full max-w-lg">
       <CardHeader>
@@ -111,9 +115,9 @@ function SecondDataForm() {
       </CardContent>
     </Card>
   );
-}
+};
 
-function SecoundDataFormGrid() {
+SecondDataForm.grid = function GridForm() {
   return (
     <GridCard className="max-w-200 w-1/2 min-w-100">
       <article className="flex flex-col gap-4 w-full h-full">
@@ -129,6 +133,6 @@ function SecoundDataFormGrid() {
       </article>
     </GridCard>
   );
-}
+};
 
-export default { grid: SecoundDataFormGrid, auth: SecondDataForm };
+export default SecondDataForm;
