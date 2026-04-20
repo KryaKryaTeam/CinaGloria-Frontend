@@ -1,17 +1,16 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { animate } from "animejs";
 
 function Stick({ x, y, dl }: { x: number; y: number; dl: number }) {
   const ref = useCallback(
     (el: HTMLDivElement) => {
-      animate(el, {
-        ease: "inOut",
-        delay: dl * 100,
-        duration: 2000,
-        y: { from: -100, to: 0 },
-        opacity: { from: 0, to: 1 },
-      });
+      // animate(el, {
+      //   ease: "inOut",
+      //   delay: dl * 100,
+      //   duration: 2000,
+      //   y: { from: -100, to: 0 },
+      //   opacity: { from: 0, to: 1 },
+      // });
     },
     [dl],
   );

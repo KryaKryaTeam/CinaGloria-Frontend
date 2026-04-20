@@ -53,6 +53,14 @@ export interface IUserShortProfile {
   role: RoleEnum;
 }
 
+export interface IUserAdditionalData {
+  id: string;
+  email: string;
+  contacts: IUserContacts;
+  age: IUserAge | null;
+  fullName: IUserFullName | null;
+}
+
 export default class User {
   public readonly id: string;
   public readonly email: string;
@@ -198,6 +206,16 @@ export default class User {
       avatarUrl: this._avatarUrl.value,
       role: this._role,
       username: this._username.value,
+    };
+  }
+
+  public get additionalData(): IUserAdditionalData {
+    return {
+      id: this.id,
+      email: this.email,
+      age: this.age,
+      contacts: this.contacts,
+      fullName: this.fullName,
     };
   }
 

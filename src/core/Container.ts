@@ -28,6 +28,9 @@ import ReadedRequest from "./requests/network/ReadedRequest.request";
 import OldNotificationPageRequest from "./requests/network/OldNotificationPage.request";
 import ReadAllRequest from "./requests/network/ReadAllRequest.request";
 import { LogoutRequest } from "./requests/network/Logout.request";
+import { UploadFileToAServerRequest } from "./requests/network/UploadFileToAServer.request";
+import { ChangeAvatarRequest } from "./requests/network/ChangeAvatarRequest";
+import { ChangeUsernameRequest } from "./requests/network/ChangeUsernameRequest";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -52,6 +55,18 @@ container
   .inRequestScope();
 container.bind(TYPES.ReadAllRequest).to(ReadAllRequest).inRequestScope();
 container.bind(TYPES.LogoutRequest).to(LogoutRequest).inRequestScope();
+container
+  .bind(TYPES.UploadFileToAServerRequest)
+  .to(UploadFileToAServerRequest)
+  .inRequestScope();
+container
+  .bind(TYPES.ChangeAvatarRequest)
+  .to(ChangeAvatarRequest)
+  .inRequestScope();
+container
+  .bind(TYPES.ChangeUsernameRequest)
+  .to(ChangeUsernameRequest)
+  .inRequestScope();
 
 export default container;
 export { TYPES };
