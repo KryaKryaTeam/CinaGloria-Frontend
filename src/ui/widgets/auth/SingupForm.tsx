@@ -19,22 +19,24 @@ import GoogleOAuthButton from "../../component/GoogleOAuthButton";
 import Link from "next/link";
 import useSignup from "@/hooks/form/useSingup";
 import { Checkbox } from "@/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 export function SingupForm() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false);
   const { submit, register, errors, setValue } = useSignup();
   return (
     <Card className="w-full max-w-md border-border/60 shadow-lg">
       <CardHeader className="pb-4 text-center">
-        <Link href={"/"} className="w-max">
           <Button
             size={"icon-lg"}
             variant={"secondary"}
             className="cursor-pointer"
+            onClick={() => router.back()}
           >
             <ArrowLeft />
           </Button>
-        </Link>
+
         <CardTitle className="text-2xl font-bold tracking-tight text-balance">
           Create your account
         </CardTitle>

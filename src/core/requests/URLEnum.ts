@@ -18,5 +18,6 @@ export const URLEnum = {
   UPLOAD_FILE: `${BASE_URL}/file/upload/`,
   CHANGE_USER_AVATAR: `${BASE_URL}/user/avatar`,
   CHANGE_USERNAME: `${BASE_URL}/user/username`,
+  COMPETITION: `${BASE_URL}/competition/`
 } as const;
 export default URLEnum;

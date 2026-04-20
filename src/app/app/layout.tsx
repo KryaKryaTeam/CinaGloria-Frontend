@@ -1,5 +1,6 @@
 "use client";
 
+import AuthCheck from "@/core/client-check/AuthCheck";
 import container, { TYPES } from "@/core/Container";
 import { LoadState } from "@/state/LoadMachine/LoadState";
 import { GridCardDelayContext } from "@/ui/component/gridCards/GridCard";
@@ -10,15 +11,16 @@ import NotificationButton from "@/ui/widgets/notifications/NotificationButton";
 import { observer } from "mobx-react-lite";
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { PropsWithChildren, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 function Layout({ children }: PropsWithChildren) {
   const [isMounted, setIsMounted] = useState(false);
   const loadState = container.get<LoadState>(TYPES.LoadState);
-
+  const router = useRouter()
+  const check = container.get<AuthCheck>(TYPES.AuthCheck)
   const path = usePathname();
-
+  check.setRouter(router)
   useEffect(() => {
     loadState.mount();
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -28,6 +30,7 @@ function Layout({ children }: PropsWithChildren) {
   const prevScopeRef = useRef<string>(null);
 
   useEffect(() => {
+    check.check();
     const segments = path.split("/");
     if (segments[1] !== "app") return;
 
@@ -43,7 +46,6 @@ function Layout({ children }: PropsWithChildren) {
     loadState.enterInScope(newScope);
     prevScopeRef.current = newScope;
   }, [path, loadState]);
-
   return (
     <SidebarProvider defaultOpen={true}>
       <GridCardDelayContext.Provider value={10}>

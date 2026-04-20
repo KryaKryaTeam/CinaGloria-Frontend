@@ -31,6 +31,10 @@ import { LogoutRequest } from "./requests/network/Logout.request";
 import { UploadFileToAServerRequest } from "./requests/network/UploadFileToAServer.request";
 import { ChangeAvatarRequest } from "./requests/network/ChangeAvatarRequest";
 import { ChangeUsernameRequest } from "./requests/network/ChangeUsernameRequest";
+import CreateCompetitionRequest from "./requests/network/Competion/CreateCompetion.request";
+import CompetitionState from "@/state/CompetitionState";
+import GetPublicCompetitionRequest from "./requests/network/Competion/GetPublicCompetion.request";
+import AuthCheck from "./client-check/AuthCheck";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -68,5 +72,9 @@ container
   .to(ChangeUsernameRequest)
   .inRequestScope();
 
+container.bind(TYPES.CreateCompetitionRequest).to(CreateCompetitionRequest).inRequestScope();
+container.bind(TYPES.CompetitionState).to(CompetitionState).inSingletonScope();
+container.bind(TYPES.GetPublicCompetitionRequest).to(GetPublicCompetitionRequest).inRequestScope();
+container.bind(TYPES.AuthCheck).to(AuthCheck).inSingletonScope()
 export default container;
 export { TYPES };

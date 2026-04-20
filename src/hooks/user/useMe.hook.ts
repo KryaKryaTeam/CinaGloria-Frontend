@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 
 export function useMe(): {
   get(): IUserShortProfile;
+  isAuthed(): boolean;
   fetch(): void;
   logout(): void;
   getAdditionalData(): IUserAdditionalData;
@@ -18,7 +19,6 @@ export function useMe(): {
   const request = container.get<RequestMe>(TYPES.RequestMe);
   const LogoutRequest = container.get<LogoutRequest>(TYPES.LogoutRequest);
   const state = container.get<UserState>(TYPES.UserState);
-
   return {
     get: () => {
       if (!state.User || !state.User.shortProfile) {
@@ -52,6 +52,7 @@ export function useMe(): {
         };
       return state.User?.additionalData;
     },
+    isAuthed: () => state.isAuthorized,
     fetch: () => {
       request.execute();
     },

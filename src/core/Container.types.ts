@@ -1,3 +1,4 @@
+
 export const TYPES = {
   NotificationStore: Symbol.for("NotificationStore"),
   UserState: Symbol.for("UserState"),
@@ -17,4 +18,8 @@ export const TYPES = {
   UploadFileToAServerRequest: Symbol.for("UploadFileToAServerRequest"),
   ChangeAvatarRequest: Symbol.for("ChangeAvatarRequest"),
   ChangeUsernameRequest: Symbol.for("ChangeUsernameRequest"),
+  CreateCompetitionRequest: Symbol.for("CreateCompetitionRequest"),
+  CompetitionState: Symbol.for("CompetitionState"),
+  GetPublicCompetitionRequest: Symbol.for("GetPublicCompetitionRequest"),
+  AuthCheck: Symbol.for("AuthCheck")
 } as const;
