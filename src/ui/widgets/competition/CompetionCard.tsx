@@ -73,7 +73,6 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
   const {
     id,
     name,
-    description,
     avatar,
     banner,
     dateOfStart,
@@ -104,7 +103,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
   return (
     <Card className="w-full max-w-sm overflow-hidden shadow-sm">
       {/* Banner */}
-      <div className="relative h-36 bg-muted overflow-hidden">
+      <div className="relative h-36 bg-muted">
         <Image
           src={banner.toString()}
           alt=""
@@ -126,6 +125,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
               loading="eager"
               width={128}
               height={128}
+              unoptimized
             />
           </div>
         </div>
@@ -138,10 +138,6 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
             {name}
           </h3>
         </div>
-
-        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-          {getFirst100(description)}
-        </p>
 
         <Separator className="my-2" />
 

@@ -60,23 +60,33 @@ function Item({
 }: React.ComponentProps<"div"> &
   VariantProps<typeof itemVariants> & { asChild?: boolean }) {
   const Comp = asChild ? Slot.Root : "div";
-  return (
-    <motion.div
-      className={cn("w-full h-full", className)}
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      <Comp
-        data-slot="item"
-        data-variant={variant}
-        data-size={size}
-        className={cn(itemVariants({ variant, size, className }))}
-        {...props}
-      />
-    </motion.div>
+
+  const content = (
+    <Comp
+      data-slot="item"
+      data-variant={variant}
+      data-size={size}
+      className={cn(itemVariants({ variant, size, className }))}
+      {...props}
+    />
   );
+
+  if (typeof window === "undefined") {
+    return content;
+  }
+
+  if (typeof window !== "undefined")
+    return (
+      <motion.div
+        className={cn("w-full h-full", className)}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {content}
+      </motion.div>
+    );
 }
 
 const itemMediaVariants = cva(

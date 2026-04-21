@@ -1,5 +1,6 @@
 import CompetitionRule from "../value-object/CompetitionRule";
 import Round from "./Round";
+import { Icons } from "@/core/domain/entity/type";
 
 export enum CompetitionStatus {
   DRAFT = "DRAFT",
@@ -16,7 +17,7 @@ export enum CompetitionStatus {
 export interface CompetitionPublicObject {
   id: string;
   name: string;
-  description: string;
+
   avatar: URL;
   banner: URL;
   dateOfStart: Date;
@@ -24,6 +25,14 @@ export interface CompetitionPublicObject {
   dateOfStartRegistration: Date;
   dateOfEndRegistration: Date;
   status: CompetitionStatus;
+}
+export interface CompetitionPublicObjectOnPage extends CompetitionPublicObject {
+  rules: {
+    name: string;
+    description: string;
+    icon: Icons;
+  }[];
+  description: string;
 }
 export interface CompetitionConstructor {
   id: string;
@@ -142,7 +151,7 @@ export default class Competition {
       [CompetitionStatus.SCORING]: [
         CompetitionStatus.ARCHIVED,
         CompetitionStatus.CANCELED,
-        CompetitionStatus.STARTED, 
+        CompetitionStatus.STARTED,
       ],
       [CompetitionStatus.ARCHIVED]: [],
       [CompetitionStatus.CANCELED]: [],
