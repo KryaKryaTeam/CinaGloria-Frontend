@@ -1,46 +1,36 @@
 import useNotification from "@/hooks/notification/useNotification.hook";
 import { Button } from "@/ui/button";
-import { animate, createTimeline } from "animejs";
 import { Bell } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NotificationSheet from "./NotificationSheet";
 import { trace } from "mobx";
+import { useAnimate } from "motion/react";
 
 function NotificationButton() {
   const nt = useNotification();
-  const [AnimationIsPlaying, setAnimationIsPlaying] = useState(false);
-
-  const ref = useRef(null);
+  const [scope, animate] = useAnimate();
 
   useEffect(() => {
-    if (!ref.current) return;
-
-    if (nt.store.shouldPlayAnimation && !AnimationIsPlaying) {
-      const timeline = createTimeline({
-        onBegin: () => {
-          setAnimationIsPlaying(true);
+    console.log(nt);
+    if (nt.shouldPlayAnimation)
+      animate(
+        scope.current,
+        {
+          rotate: [-20, 18, -16, 14, -12, 10, -8, 6, -4, 2, 0],
         },
-        onComplete: () => {
-          setAnimationIsPlaying(false);
-          nt.animationPlayed();
+        {
+          duration: 1.5,
+          ease: "easeInOut",
+          onComplete: () => nt.animationPlayed(),
         },
-      });
-
-      timeline.add(ref.current, {
-        rotate: [0, 20, -20, 10, -10, 0],
-        duration: 500,
-        easing: "easeInOutQuad",
-      });
-
-      timeline.play();
-    }
-  }, [AnimationIsPlaying, nt.shouldPlayAnimation, nt.store.id]);
+      );
+  }, [nt.shouldPlayAnimation, animate, scope]);
 
   return (
     <NotificationSheet>
       <div className="w-12 h-12 bg-background flex justify-center items-center rounded-full hover:bg-accent">
-        <Bell ref={ref} className="w-5 h-5" />
+        <Bell ref={scope} className="w-5 h-5" />
         {nt.haveUnreadedNotifications ? (
           <div className="absolute w-2 h-2 rounded-full bg-chart-1 mb-3 ml-3"></div>
         ) : null}

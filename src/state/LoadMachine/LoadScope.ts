@@ -1,12 +1,12 @@
 import { action, computed, makeObservable, observable } from "mobx";
 
 export enum LoadScopeStates {
-  EMPTY,
-  LOADING,
-  ACTUAL,
-  STALE,
-  ERROR,
-  REFRESHING,
+  EMPTY = "empty",
+  LOADING = "loading",
+  ACTUAL = "actual",
+  STALE = "stale",
+  ERROR = "error",
+  REFRESHING = "refreshing",
 }
 
 export class LoadScope {
@@ -103,7 +103,8 @@ export class LoadScope {
     };
 
     const avalible = flow[this.state];
-    if (!avalible.includes(_new)) throw new Error("Breaks state flow");
+    if (!avalible.includes(_new))
+      throw new Error(`Breaks state flow: from ${this.state} to ${_new}`);
 
     this._state = _new;
   }

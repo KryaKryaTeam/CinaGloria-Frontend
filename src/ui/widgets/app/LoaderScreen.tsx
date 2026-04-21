@@ -1,19 +1,13 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import { useLoadMachine } from "@/hooks/loadMachine/useLoadMachine.hook";
-import { cn } from "@/infrastructure/utils";
-import WaveBackground from "@/ui/backgrounds/WaveBackground";
 import { Card, CardContent, CardHeader } from "@/ui/card";
+import Loader from "@/ui/loader";
 import Logo from "@/ui/logo";
-import { animate } from "animejs";
-import {
-  LampCeiling,
-  LampIcon,
-  Lightbulb,
-  Loader2,
-  LucideLamp,
-} from "lucide-react";
+import { Lightbulb, Loader2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { stagger, useAnimate, usePresence } from "motion/react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
 interface Fact {
   content: string;
@@ -61,108 +55,64 @@ const interestingFacts: string[] = [
 ];
 
 function LoaderScreen() {
+  const [isPresent, safeToRemove] = usePresence();
+  const [isDead, setIsDead] = useState(false);
   const loadMachine = useLoadMachine();
-  const [exitAnimationIsPlaying, setExitAnimationIsPlaying] = useState(false);
-  const [enterAnimationIsPlaying, setEnterAnimationIsPlaying] = useState(false);
   const [fact, setFact] = useState("");
 
-  const ref = useRef<HTMLDivElement>(null);
+  const [scope, animate] = useAnimate();
+
   useEffect(() => {
-    const obj = ref.current;
-    if (!obj) return;
-
     document.getElementById("hidder")!.style.display = "none";
-
-    // 1. FORCE HIDE if we already finished the flow in the past
-    if (
-      loadMachine.loadedBefore &&
-      !loadMachine.isAppBlocking &&
-      !exitAnimationIsPlaying
-    ) {
-      obj.style.display = "none";
+    if (!loadMachine.isAppBlocking) {
+      const run = async () => {
+        await animate(scope.current, {
+          opacity: [1, 0],
+          duration: 0.8,
+          easing: "easeInOutQuad",
+        });
+        setIsDead(true);
+      };
+      run();
       return;
     }
-
-    // 2. EXIT ANIMATION LOGIC
-    // If the store says we should exit, and we aren't already doing it:
-    if (loadMachine.shouldAnimateExit && !exitAnimationIsPlaying) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-
-      animate(obj, {
-        opacity: [1, 0], // Using array syntax for clarity
-        duration: 800,
-        easing: "easeInOutQuad",
-        onBegin: () => {
-          setExitAnimationIsPlaying(true);
-
-          obj.style.display = "flex";
-        },
-        onComplete: () => {
-          obj.style.display = "none";
-          setExitAnimationIsPlaying(false);
-          // CRITICAL: Tell the store we are done so it flips loadedBefore to true
-          loadMachine.exitAnimationClear();
-        },
-      });
-    }
-
-    // 3. ENTER ANIMATION LOGIC
-    if (loadMachine.shouldAnimateEnter && !enterAnimationIsPlaying) {
-      obj.childNodes.forEach((value, key) => {
-        animate(value, {
-          delay: 200 + 100 * key,
-          y: { from: 100, to: 0 },
-          opacity: { from: 0, to: 1 },
-          onComplete: () => {
-            if (key == obj.children.length - 1) {
-              setEnterAnimationIsPlaying(false);
-              loadMachine.enterAnimationClear();
-            }
-          },
-          onBegin: () => {
-            if (key == 0) setEnterAnimationIsPlaying(true);
-          },
-        });
-      });
-    }
-  }, [
-    loadMachine.shouldAnimateExit,
-    loadMachine.shouldAnimateEnter,
-    loadMachine.isAppBlocking,
-  ]);
-
-  const loaderAnim = useCallback((obj: SVGSVGElement) => {
-    if (!obj) return;
-
-    animate(obj, {
-      rotate: {
-        from: "0deg",
-        to: "360deg",
-      },
-      duration: 3000,
-      ease: "inOut",
-      loop: true,
-    });
-  }, []);
+  }, [loadMachine.isAppBlocking]);
 
   useEffect(() => {
-    (() => {
-      setFact(
-        interestingFacts[Math.floor(Math.random() * interestingFacts.length)],
+    if (isPresent) {
+      animate(
+        "#anim",
+        {
+          opacity: [0, 1],
+          y: [100, 0],
+        },
+        {
+          delay: stagger(0.1),
+          duration: 0.3,
+        },
       );
-    })();
+    } else {
+    }
+  }, [isPresent]);
+
+  useEffect(() => {
+    setFact(
+      interestingFacts[Math.floor(Math.random() * interestingFacts.length)],
+    );
   }, []);
+
+  if (isDead) return null;
 
   return (
     <section
-      ref={ref}
+      ref={scope}
       className="w-screen h-screen bg-background justify-center items-center flex flex-col gap-12 fixed top-0 left-0 z-50"
     >
-      <div className="flex flex-row gap-4 items-center opacity-0">
+      <div id="anim" className="flex flex-row gap-4 items-center opacity-0">
         <Logo size={3} />
-        <Loader2 ref={loaderAnim} className="w-12 h-12" />
+        <Loader />
       </div>
-      <Card className="opacity-0">
+      <Card id="anim" className="opacity-0">
         <CardHeader className="flex flex-row">
           <Lightbulb />
           <h3 className="font-lg font-bold">Interesting fact</h3>

@@ -1,7 +1,8 @@
-import SecondDataForm from "@/ui/widgets/auth/SecondDataForm";
+"use client";
+import SecondDataForm from "@/ui/widgets/users/SecondDataForm";
 
 function Page() {
-  return <SecondDataForm />;
+  return <SecondDataForm.onBoarding />;
 }
 
 export default Page;

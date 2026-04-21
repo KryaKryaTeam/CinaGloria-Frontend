@@ -3,11 +3,14 @@
 import AuthCheck from "@/core/client-check/AuthCheck";
 import container, { TYPES } from "@/core/Container";
 import { LoadState } from "@/state/LoadMachine/LoadState";
+import { GridCardDelayContext } from "@/ui/component/gridCards/GridCard";
 import { SidebarProvider } from "@/ui/sidebar";
 import AppSidebar from "@/ui/widgets/app/AppSidebar";
 import LoaderScreen from "@/ui/widgets/app/LoaderScreen";
 import NotificationButton from "@/ui/widgets/notifications/NotificationButton";
 import { observer } from "mobx-react-lite";
+import { AnimatePresence } from "motion/react";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect, useLayoutEffect, useRef, useState } from "react";
 
@@ -45,20 +48,46 @@ function Layout({ children }: PropsWithChildren) {
   }, [path, loadState]);
   return (
     <SidebarProvider defaultOpen={true}>
-      <div
-        className="w-screen h-screen bg-background z-50 absolute top-0 left-0"
-        id="hidder"
-      ></div>
-      <LoaderScreen />
-      <section className="flex flex-row w-screen">
-        <AppSidebar />
-        <section className="bg-foreground h-screen grow p-6">
-          {children}
+      <GridCardDelayContext.Provider value={10}>
+        <div
+          className="w-screen h-screen bg-background z-50 absolute top-0 left-0"
+          id="hidder"
+        ></div>
+        <AnimatePresence>
+          <LoaderScreen />
+        </AnimatePresence>
+        <section className="flex flex-row w-screen">
+          <div className="w-screen h-screen fixed top-0 left-0 bg-foreground -z-20"></div>
+          <Image
+            src={"/bg2.png"}
+            alt="background"
+            className="opacity-5 w-screen h-screen fixed top-0 left-0 -z-10"
+            width={
+              typeof window !== "undefined" && window.innerWidth
+                ? window.innerWidth
+                : 1920
+            }
+            height={
+              typeof window !== "undefined" && window.innerHeight
+                ? window.innerHeight
+                : 1080
+            }
+          />
+
+          <AppSidebar />
+
+          <section
+            key={path}
+            className="flex flex-col h-screen grow p-6 max-w-500 mb-20 mx-auto @container"
+          >
+            <div className="h-12 mb-3 w-full flex justify-end">
+              <NotificationButton />
+            </div>
+            <AnimatePresence mode="wait">{children}</AnimatePresence>
+            <div className="h-15 w-full">.</div>
+          </section>
         </section>
-      </section>
-      <section className="fixed right-0 top-0 w-auto p-8">
-        <NotificationButton />
-      </section>
+      </GridCardDelayContext.Provider>
     </SidebarProvider>
   );
 }

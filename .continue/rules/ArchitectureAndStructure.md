@@ -48,6 +48,7 @@
 
 ## Architecture explanetion
 
-UI handles with hooks to call requests or access state, requests affect on state, state call update on ui. You shouldn't do request in UI, it's bad practice.
-Also we have a scope system, u registering scope in LoadState using LoadScope and after based on `http://.../app/{here}/**` it will be load it from cache or network.
+UI handles with hooks to call requests or access state, requests affect on state, state call update on ui. You shouldn't do request in UI, it's bad practice. UI can
+only call hooks, which is have access to state and requests. State doen't need to call requests because they are update state inside themself.
+Also we have a scope system, u registering scope in LoadState using LoadScope and after based on `http://.../app/{scope}/**` it will be load it from cache or network.
 If scope will be not loaded in the moment of opening a page, ui wait for fully load in layout. Global scope block whole app using `/ui/widgets/app/LoadingScreen.tsx`

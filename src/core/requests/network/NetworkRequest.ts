@@ -6,10 +6,11 @@ import { UserState } from "@/state/UserState";
 import { TYPES } from "@/core/Container.types";
 
 export interface ISubRequestData {
-  init: RequestInit;
-  url: URL;
+  url: URL | string;
+  init: Omit<RequestInit, "body"> & {
+    body?: Record<string, unknown> | BodyInit;
+  };
 }
-
 let refreshPr: undefined | Promise<void>;
 
 @injectable()
@@ -51,29 +52,48 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
   async execute(request_data: Data): Promise<Response> {
     try {
       if (this.retrying > 2) throw new Error("Out of retry counter!");
+
       let mapped = this.mapData(request_data);
+
       if (this.preload) mapped = await this.preload(mapped);
 
       mapped.init.method = this.method;
       mapped.init.credentials = "include";
-      mapped.init.headers = {
-        ...mapped.init.headers,
-        "Content-Type": "application/json",
-      };
+
+      if (!(mapped.url instanceof URL)) mapped.url = new URL(mapped.url);
+
+      const headers = new Headers(mapped.init.headers);
+
+      if (!(mapped.init.body instanceof FormData)) {
+        if (!headers.has("Content-Type")) {
+          headers.set("Content-Type", "application/json");
+        }
+      } else headers.delete("Content-Type");
+
+      if (
+        mapped.init.body &&
+        typeof mapped.init.body === "object" &&
+        !(mapped.init.body instanceof FormData) &&
+        !(mapped.init.body instanceof Blob)
+      ) {
+        mapped.init.body = JSON.stringify(mapped.init.body);
+      }
 
       if (this.withCSRF)
         mapped.url = URLAddValue(mapped.url, "state", await this.getCsrf());
+
       if (this.authorized) {
         const token = this.getAuth();
         if (!token) {
           await this.refresh();
           return await this.execute(request_data);
         }
-        const headers = new Headers(mapped.init.headers);
         headers.set("Authorization", `Bearer ${token}`);
-        mapped.init.headers = headers;
       }
-      return fetch(mapped.url, mapped.init)
+
+      mapped.init.headers = headers;
+
+      return fetch(mapped.url, mapped.init as unknown as RequestInit)
         .then(async (res) => {
           const data = await res.json().catch(() => ({}));
           if (res.ok) return data;
@@ -86,6 +106,7 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
     } catch (error) {
       if ((error as Error).cause == 401) {
         await this.refresh();
+        console.log("REFRESH:", self.name);
         return await this.execute(request_data);
       }
       if (this.onError) this.onError(JSON.stringify((error as Error).message));

@@ -1,11 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { XIcon } from "lucide-react";
 import { Dialog as SheetPrimitive } from "radix-ui";
-
 import { cn } from "@/infrastructure/utils";
-import { animate } from "animejs";
+import { motion, AnimatePresence } from "motion/react";
+
+const variants = {
+  right: { x: "100%" },
+  left: { x: "-100%" },
+  top: { y: "-100%" },
+  bottom: { y: "100%" },
+};
 
 const SheetContext = React.createContext(false);
 
@@ -65,92 +70,52 @@ function SheetContent({
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "right" | "left" | "bottom" | "top";
 }) {
-  // 1. Отримуємо стан open безпосередньо з контексту Radix
   const open = React.useContext(SheetContext);
-
-  // 2. Стан для реального монтування в DOM
-  const [shouldRender, setShouldRender] = React.useState(open);
-  const [container, setContainer] = React.useState<HTMLDivElement | null>(null);
-  const [overlay, setOverlay] = React.useState<HTMLDivElement | null>(null);
-
-  React.useLayoutEffect(() => {
-    if (open) {
-      setShouldRender(true);
-    } else if (shouldRender && container && overlay) {
-      const isHorizontal = side === "left" || side === "right";
-      const axis = isHorizontal ? "translateX" : "translateY";
-      const exitValue =
-        side === "right" || side === "bottom" ? "100%" : "-100%";
-
-      const outAnim = animate(container, {
-        [axis]: exitValue,
-        opacity: 0,
-        duration: 300,
-        easing: "easeInQuint",
-      });
-
-      animate(overlay, {
-        opacity: 0,
-        duration: 300,
-        easing: "linear",
-      });
-
-      outAnim.onComplete = () => {
-        setShouldRender(false);
-      };
-    }
-  }, [container, open, overlay, shouldRender, side]);
-
-  // Ефект для вхідної анімації (спрацьовує відразу після setShouldRender(true))
-  React.useEffect(() => {
-    if (shouldRender && open && container && overlay) {
-      const isHorizontal = side === "left" || side === "right";
-      const axis = isHorizontal ? "translateX" : "translateY";
-      const startValue =
-        side === "right" || side === "bottom" ? "100%" : "-100%";
-
-      animate(container, {
-        [axis]: [startValue, 0],
-        opacity: [0, 1],
-        duration: 450,
-        easing: "spring(1, 80, 13, 0)",
-      });
-
-      animate(overlay, {
-        opacity: [0, 1],
-        duration: 300,
-        easing: "linear",
-      });
-    }
-  }, [shouldRender, open, side, overlay, container]);
-
-  if (!shouldRender) return null;
-
   return (
-    <SheetPortal forceMount>
-      <SheetPrimitive.Overlay
-        forceMount
-        ref={setOverlay}
-        className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-      />
-      <SheetPrimitive.Content
-        forceMount
-        ref={setContainer}
-        className={cn(
-          "fixed z-50 flex flex-col gap-4 bg-background shadow-2xl outline-none",
-          side === "right" &&
-            "inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
-          side === "left" &&
-            "inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
-          side === "top" && "inset-x-0 top-0 h-auto border-b",
-          side === "bottom" && "inset-x-0 bottom-0 h-auto border-t",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </SheetPrimitive.Content>
-    </SheetPortal>
+    <AnimatePresence>
+      {open && (
+        <SheetPrimitive.Portal forceMount>
+          <SheetPrimitive.Overlay asChild forceMount>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+            />
+          </SheetPrimitive.Overlay>
+
+          <SheetPrimitive.Content
+            asChild
+            forceMount
+            className={cn(
+              "fixed z-50 flex flex-col gap-4 bg-background shadow-2xl outline-none",
+              side === "right" &&
+                "inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
+              side === "left" &&
+                "inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
+              side === "top" && "inset-x-0 top-0 h-auto border-b",
+              side === "bottom" && "inset-x-0 bottom-0 h-auto border-t",
+              className,
+            )}
+            {...props}
+          >
+            <motion.div
+              initial={variants[side]}
+              animate={{ x: 0, y: 0 }}
+              exit={variants[side]}
+              transition={{
+                type: "spring",
+                damping: 25,
+                stiffness: 200,
+              }}
+            >
+              {children}
+            </motion.div>
+          </SheetPrimitive.Content>
+        </SheetPrimitive.Portal>
+      )}
+    </AnimatePresence>
   );
 }
 
