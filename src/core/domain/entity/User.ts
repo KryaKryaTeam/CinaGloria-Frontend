@@ -4,7 +4,6 @@ import Email from "../value-object/Email";
 import Username from "../value-object/Username";
 import { RoleEnum } from "./RoleEnum";
 import { Providers } from "./type";
-import { th } from "zod/locales";
 
 export interface IUserContacts {
   telegram: string;

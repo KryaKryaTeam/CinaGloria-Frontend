@@ -26,7 +26,10 @@ export default class JWTChangeRequest extends NetworkRequest<
   withCSRF: boolean = true;
   method: HTTPMethod = "POST";
   authorized: boolean = false;
-
+  mockOutputData: IRequestOutput = { 
+    accessToken: "123456789",
+    userExistsBefore: true,
+  }
   constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }

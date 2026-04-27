@@ -21,7 +21,10 @@ export class RequestLoginWithGoogle extends NetworkRequest<
   authorized: boolean = false;
   withCSRF: boolean = true;
   method: HTTPMethod = "POST";
-
+  mockOutputData: LoginWithGoogleOutput = {
+    accessToken: "1234567890",
+    userExistsBefore: true,
+  };
   constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }
