@@ -1,3 +1,5 @@
+import AdminCheck from "./client-check/AdminCheck";
+
 export const TYPES = {
   NotificationStore: Symbol.for("NotificationStore"),
   UserState: Symbol.for("UserState"),
@@ -22,4 +24,5 @@ export const TYPES = {
   GetPublicCompetitionRequest: Symbol.for("GetPublicCompetitionRequest"),
   AuthCheck: Symbol.for("AuthCheck"),
   GetCompetionByIdRequest: Symbol.for("GetCompetionByIdRequest"),
+  AdminCheck: Symbol.for("AdminCheck"),
 } as const;
