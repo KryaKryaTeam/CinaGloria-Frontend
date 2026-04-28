@@ -14,7 +14,7 @@ interface On401 {
     timestamp: Date;
 }
 @injectable()
-export default class CreateCompetitionRequest extends NetworkRequest<CompetitionConstructor, void, CompetitionConstructor, On401, void> { 
+export default class CreateCompetitionRequest extends NetworkRequest<CompetitionConstructor, void, CompetitionConstructor> { 
     withCSRF: boolean = false;
     method: HTTPMethod = "POST";
     authorized: boolean = true

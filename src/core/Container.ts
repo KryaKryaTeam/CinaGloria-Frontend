@@ -86,6 +86,10 @@ container
   .bind(TYPES.GetCompetionByIdRequest)
   .to(GetCompetionByIdRequest)
   .inRequestScope();
+container
+  .bind(TYPES.GetPrivateCompetitionRequest)
+  .to(GetPublicCompetitionRequest)
+  .inRequestScope(); 
 container.bind(TYPES.AuthCheck).to(AuthCheck).inSingletonScope();
 container.bind(TYPES.AdminCheck).to(AdminCheck).inSingletonScope();
 export default container;
