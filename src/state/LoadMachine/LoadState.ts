@@ -17,8 +17,6 @@ import { WsSocket } from "@/core/initSocket";
 export class LoadState {
   @observable private queue: LoadScope[] = [];
   @observable private activeCount: number = 0;
-  @observable shouldAnimateExit: boolean = false;
-  @observable shouldAnimateEnter: boolean = false;
   @observable loadedBefore: boolean = false;
   @observable currentScope: string = "";
   private readonly MAX_CONCURRENT = 3;
@@ -43,6 +41,13 @@ export class LoadState {
         await notification.execute(0);
       }),
     },
+    profile: {
+      priority: 1,
+      scope: new LoadScope(async () => {
+        const me = container.get<RequestMe>(TYPES.RequestMe);
+        await me.execute();
+      }),
+    },
   };
 
   constructor() {
@@ -64,20 +69,6 @@ export class LoadState {
         }
       },
     );
-
-    reaction(
-      () => this.isAppBlocking,
-
-      (current, previous) => {
-        if (previous === true && current === false) {
-          this.shouldAnimateExit = true;
-        }
-
-        if (previous === false && current === true) {
-          this.shouldAnimateEnter = true;
-        }
-      },
-    );
   }
 
   @action
@@ -89,25 +80,7 @@ export class LoadState {
     runInAction(() => {
       this.scanAndFillQueue();
       this.processNext();
-      this.shouldAnimateEnter = true;
     });
-
-    setTimeout(() => {
-      runInAction(() => {
-        this.shouldAnimateEnter = false;
-      });
-    }, 1000);
-  }
-
-  @action
-  exitAnimationClear() {
-    this.shouldAnimateExit = false;
-    this.loadedBefore = true;
-  }
-
-  @action
-  enterAnimationClear() {
-    this.shouldAnimateEnter = false;
   }
 
   @action
@@ -123,6 +96,19 @@ export class LoadState {
         this.queue.sort((a, b) => this.getPriority(a) - this.getPriority(b));
       }
     });
+  }
+
+  @action
+  forceScope(scope?: string) {
+    if (!scope) scope = this.currentScope;
+
+    console.log("FORCE SCOPE:", scope);
+
+    const item = this.scopes[scope];
+    if (!item) return;
+
+    item.scope.forceToStale();
+    this.queue.push(item.scope);
   }
 
   @action
@@ -217,12 +203,6 @@ export class LoadState {
         (item.scope.state === LoadScopeStates.LOADING ||
           item.scope.state === LoadScopeStates.EMPTY),
     );
-
-    if (!blocking && !this.loadedBefore && !this.shouldAnimateExit) {
-      runInAction(() => {
-        this.shouldAnimateExit = true;
-      });
-    }
 
     return blocking;
   }

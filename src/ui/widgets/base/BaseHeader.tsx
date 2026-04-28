@@ -12,10 +12,10 @@ export default function BaseHeader() {
           <Link className="text-md hover:underline" href={"/"}>
             Home
           </Link>
-          <Link className="text-md hover:underline" href={"/competiotions"}>
+          <Link className="text-md hover:underline" href={"/competitions"}>
             Competitions
           </Link>
-          <Link className="text-md hover:underline" href={"/about"}>
+          <Link className="text-md hover:underline" href={"/#about"}>
             About platform
           </Link>
         </nav>

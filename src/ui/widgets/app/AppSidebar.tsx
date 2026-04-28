@@ -22,7 +22,14 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/ui/sidebar";
-import { Download, HardHat, Swords, User2, UserCog2 } from "lucide-react";
+import {
+  Download,
+  HardHat,
+  LogOut,
+  Swords,
+  User2,
+  UserCog2,
+} from "lucide-react";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
@@ -124,29 +131,26 @@ function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="flex justify-center items-center h-20">
+      <SidebarFooter className="flex justify-center items-center h-20 w-full">
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <article className="flex flex-row gap-4 p-2 rounded-md border-foreground border-1 hover:bg-accent">
+          <DropdownMenuTrigger className="w-full">
+            <article className="flex flex-row gap-4 p-2 w-full rounded-md border-foreground hover:bg-accent items-center justify-center shadow-2xl bg-card">
               <Image
                 key={profile.avatarUrl}
                 src={profile.avatarUrl}
-                width={128}
-                height={128}
+                width={256}
+                height={256}
                 alt="avatar"
                 className="w-12 h-12 rounded-full bg-foreground"
                 unoptimized
                 {...loadMachine.attachToScope("global")}
               ></Image>
-              <div className="flex flex-col gap-1">
-                <h3 className="text-sm font-bold">{profile.username}</h3>
-                <Badge>{profile.role.toLocaleLowerCase()}</Badge>
-              </div>
+              <h3 className="text-sm font-bold">{profile.username}</h3>
             </article>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onClick={() => me.logout()}>
-              Logout
+              <LogOut /> Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

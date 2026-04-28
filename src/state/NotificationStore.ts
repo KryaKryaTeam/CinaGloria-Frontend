@@ -49,6 +49,7 @@ export default class NotificationStore {
       return;
     }
     notification.markAsRead();
+    this.notifications = [...this.notifications];
   }
 
   @computed

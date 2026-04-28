@@ -1,1 +1,0 @@
-export type Providers = "LOCAL" | "GOOGLE" | "GITHUB"
