@@ -1,15 +1,19 @@
-import URLAddValue from "@/infrastructure/URLAddKey";
-import URLEnum from "../URLEnum";
-import { HTTPMethod } from "../type";
-import { inject, injectable } from "inversify";
-import { UserState } from "@/state/UserState";
 import { TYPES } from "@/core/Container.types";
+import { UserState } from "@/state/UserState";
+import { inject, injectable } from "inversify";
+import { HTTPMethod } from "../type";
+import URLEnum from "../URLEnum";
+import URLAddValue from "@/infrastructure/URLAddKey";
 
 export interface ISubRequestData {
   url: URL | string;
   init: Omit<RequestInit, "body"> & {
     body?: Record<string, unknown> | BodyInit;
   };
+}
+
+interface Option {
+  mock: boolean;
 }
 let refreshPr: undefined | Promise<void>;
 
@@ -22,7 +26,7 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
   abstract withCSRF: boolean;
   abstract authorized: boolean;
   abstract method: HTTPMethod;
-
+  abstract mockOutputData: RequestOutput;
   private retrying: number = 0;
 
   async getCsrf(): Promise<string> {
@@ -49,7 +53,12 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
     this.userState.setAuthToken(token);
   }
 
-  async execute(request_data: Data): Promise<Response> {
+  async execute(request_data: Data, option?: Option): Promise<Response> {
+    if (option?.mock) {
+      let mapped = this.mapData(request_data);
+      if (this.preload) mapped = await this.preload(mapped);
+      return this.onSuccess(this.mockOutputData);
+    }
     try {
       if (this.retrying > 2) throw new Error("Out of retry counter!");
 
@@ -104,15 +113,20 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
         })
         .then((json) => this.onSuccess(json));
     } catch (error) {
-      if ((error as Error).cause == 401) {
-        await this.refresh();
-        console.log("REFRESH:", self.name);
-        return await this.execute(request_data);
-      }
-      if (this.onError) this.onError(JSON.stringify((error as Error).message));
+  const err = error as Error;
 
-      throw (error as Error).message;
-    }
+
+  if (Number(err.cause) === 401) {
+    await this.refresh();
+    return await this.execute(request_data);
+  }
+
+  if (this.onError) {
+    this.onError(err.message);
+  }
+
+  throw err;
+}
   }
 
   private async refresh() {
@@ -138,7 +152,9 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
       refreshPr = undefined;
     }
   }
-
+  mockOnError() {
+    if (this.onError) this.onError("Mock error");
+  }
   abstract onSuccess(data: RequestOutput): Response | Promise<Response>;
   abstract mapData(data: Data): ISubRequestData;
   protected async preload?(base: ISubRequestData): Promise<ISubRequestData>;

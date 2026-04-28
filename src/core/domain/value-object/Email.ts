@@ -13,7 +13,7 @@ export default class Email extends ValueObject<string> {
     if (!raw || raw.trim().length === 0)
       throw new ValidationError("Email is required");
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$/;
     if (!emailRegex.test(raw))
       throw new ValidationError("Invalid email format");
 

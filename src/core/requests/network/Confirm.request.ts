@@ -12,6 +12,9 @@ export class RequestConfirm extends NetworkRequest<
   method: HTTPMethod = "POST";
   withCSRF: boolean = true;
   authorized: boolean = false;
+  mockOutputData: { accessToken: string; } = {
+    accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtb2NrLXVzZXItaWQifQ.mock"
+  };
   constructor(@inject(UserState) userState: UserState) {
     super(userState);
   }

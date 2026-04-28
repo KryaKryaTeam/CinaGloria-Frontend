@@ -17,7 +17,6 @@ export default class NotificationStore {
   @observable notificationsIsFetched: boolean = false;
   @observable shouldPlayAnimation: boolean = false;
 
-  public id = Math.random();
 
   @action animationPlayed() {
     this.shouldPlayAnimation = false;

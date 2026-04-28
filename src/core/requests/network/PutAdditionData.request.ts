@@ -21,7 +21,7 @@ export default class RequestPutAdditionData extends NetworkRequest<
   withCSRF: boolean = false;
   method: HTTPMethod = "PATCH";
   authorized: boolean = true;
-
+  mockOutputData: void = undefined;
   constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }

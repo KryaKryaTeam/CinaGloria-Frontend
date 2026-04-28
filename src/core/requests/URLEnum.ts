@@ -1,4 +1,6 @@
-const BASE_URL: string = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "";
+const BASE_URL: string =
+  process.env.NEXT_PUBLIC_BACKEND_BASE_URL ||
+  (typeof window !== "undefined" ? window.location.origin : "http://localhost");
 
 export const URLEnum = {
   LOGIN_LOCAL: `${BASE_URL}/auth/login?provider=LOCAL`,

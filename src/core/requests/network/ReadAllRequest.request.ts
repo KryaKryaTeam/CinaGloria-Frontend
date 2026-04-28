@@ -1,4 +1,4 @@
-import container, { TYPES } from "@/core/Container";
+import { TYPES } from "@/core/Container.types";
 import { HTTPMethod } from "../type";
 import URLEnum from "../URLEnum";
 import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
@@ -10,7 +10,7 @@ export default class ReadAllRequest extends NetworkRequest<void, void, void> {
   method: HTTPMethod = "PUT";
   authorized: boolean = true;
   withCSRF: boolean = false;
-
+  mockOutputData: void = undefined;
   constructor(
     @inject(TYPES.UserState) userState: UserState,
     @inject(TYPES.NotificationStore)
