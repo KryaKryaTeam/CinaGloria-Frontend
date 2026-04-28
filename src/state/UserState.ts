@@ -37,9 +37,7 @@ export class UserState {
     }
   }
   @action clearUserData() {
-    if (this.User != null) {
-      this.User.clearAdditionData();
-    }
+    this.User = null;
   }
   constructor() {
     makeObservable(this);

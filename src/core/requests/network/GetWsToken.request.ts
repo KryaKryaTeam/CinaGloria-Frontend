@@ -13,6 +13,7 @@ export class GetWsTokenRequest extends NetworkRequest<
   authorized: boolean = true;
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
+  mockOutputData: { token: string } = { token: "mocked_token" };
   mapData(data: undefined): ISubRequestData {
     return {
       url: new URL(URLEnum.GET_WS_TOKEN),
@@ -28,3 +29,4 @@ export class GetWsTokenRequest extends NetworkRequest<
     super(userState);
   }
 }
+

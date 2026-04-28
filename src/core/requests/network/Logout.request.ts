@@ -9,7 +9,7 @@ export class LogoutRequest extends NetworkRequest<void, void, void> {
   withCSRF: boolean = false;
   method: HTTPMethod = "PUT";
   authorized: boolean = true;
-
+  mockOutputData: void = undefined;
   constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }

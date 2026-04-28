@@ -9,30 +9,25 @@ export default class Password extends ValueObject<string> {
     return this._value;
   }
 
-  static create(raw: string): Password {
+  static create(userRaw: string): Password {
+    const raw = userRaw.trim();
     if (!raw || raw.trim().length === 0)
-      throw Result.fail(new ValidationError("Password is required"));
+      throw new ValidationError("Password is required");
 
     if (raw.length < 8)
-      throw Result.fail(new ValidationError("Minimum 8 characters"));
+      throw new ValidationError("Minimum 8 characters");
 
     if (!/[A-Z]/.test(raw))
-      throw Result.fail(
-        new ValidationError("Need at least one uppercase letter"),
-      );
+      throw new ValidationError("Need at least one uppercase letter");
 
     if (!/[a-z]/.test(raw))
-      throw Result.fail(
-        new ValidationError("Need at least one lowercase letter"),
-      );
+      throw new ValidationError("Need at least one lowercase letter");
 
     if (!/[0-9]/.test(raw))
-      throw Result.fail(new ValidationError("Need at least one digit"));
+      throw new ValidationError("Need at least one digit");
 
     if (!/[@$!%?&]/.test(raw))
-      throw Result.fail(
-        new ValidationError("Need at least one special character (@$!%?&)"),
-      );
+      throw new ValidationError("Need at least one special character (@$!%?&)");
 
     return new Password(raw);
   }

@@ -15,6 +15,7 @@ export default class ReadedRequest extends NetworkRequest<
   withCSRF: boolean = false;
   authorized: boolean = true;
   method: HTTPMethod = "PUT";
+  mockOutputData: { notificationId: string; } = { notificationId: "1" };
   constructor(
     @inject(TYPES.UserState) userState: UserState,
     @inject(TYPES.NotificationStore)
