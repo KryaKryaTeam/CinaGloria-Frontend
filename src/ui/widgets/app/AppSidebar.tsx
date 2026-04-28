@@ -80,6 +80,7 @@ function AppSidebar() {
       role: [RoleEnum.ADMIN],
       actions: [
         { role: [RoleEnum.ADMIN], name: "Users", link: "/admin/users" },
+        { role: [RoleEnum.ADMIN], name: "Competitions", link: "/admin/competitions" },
       ],
     },
     {

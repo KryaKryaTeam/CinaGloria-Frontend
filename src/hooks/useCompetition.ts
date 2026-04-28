@@ -4,6 +4,5 @@ import { UserState } from "@/state/UserState"
 
 const useCompetition = () => { 
     const userState = container.get<UserState>(TYPES.UserState);
-
-\
+    
 } 
