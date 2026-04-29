@@ -33,7 +33,6 @@ export default class CreateCompetitionRequest extends NetworkRequest<Competition
             }
         }
     }
-
     onSuccess(data: CompetitionConstructor): void | Promise<void> {
         this.competitionState.addNewCompetition(data);
     }

@@ -37,6 +37,9 @@ import GetPublicCompetitionRequest from "./requests/network/Competion/GetPublicC
 import AuthCheck from "./client-check/AuthCheck";
 import GetCompetionByIdRequest from "./requests/network/Competion/GetCompetionById.request";
 import AdminCheck from "./client-check/AdminCheck";
+import RequestGetUsers from "./requests/network/GetUser.request";
+import AdminCompetitionStore from "@/state/AdminCompetitionStore";
+import GetPrivateCompetitionRequest from "./requests/network/Competion/GetPrivateCompetion.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -88,9 +91,11 @@ container
   .inRequestScope();
 container
   .bind(TYPES.GetPrivateCompetitionRequest)
-  .to(GetPublicCompetitionRequest)
+  .to(GetPrivateCompetitionRequest)
   .inRequestScope(); 
+  container.bind(TYPES.RequestGetUsers).to(RequestGetUsers).inRequestScope();
 container.bind(TYPES.AuthCheck).to(AuthCheck).inSingletonScope();
 container.bind(TYPES.AdminCheck).to(AdminCheck).inSingletonScope();
+container.bind(TYPES.AdminCompetitionStore).to(AdminCompetitionStore).inSingletonScope();
 export default container;
 export { TYPES };

@@ -6,7 +6,8 @@ export const usePagination = <PromiseType, E extends Element>(
 ) => {
   const ref = useRef<E>(null);
   const fetchFnRef = useRef(fetchFn);
-  const isExhausted = useRef(false); // 404 = більше не фетчимо
+  const isExhausted = useRef(false);
+  const isLoading = useRef(false); // ← додано
 
   useLayoutEffect(() => {
     fetchFnRef.current = fetchFn;
@@ -14,31 +15,27 @@ export const usePagination = <PromiseType, E extends Element>(
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
-    if (isExhausted.current) return; // елемент змінився, але дані скінчились
+    if (!element || isExhausted.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) return;
-        if (isExhausted.current) {
-          observer.disconnect();
-          return;
-        }
-
-        fetchFnRef.current().catch((error) => {
-          if (error?.status === 404) {
-            isExhausted.current = true;
-            observer.disconnect();
-          }
-        });
+        if (!entry.isIntersecting || isExhausted.current || isLoading.current) return;
+        
+        isLoading.current = true; // ← блокуємо повторні запити
+        fetchFnRef.current()
+          .finally(() => { isLoading.current = false; })
+          .catch((error) => {
+            if (error?.status === 401) {
+              isExhausted.current = true;
+              observer.disconnect();
+            }
+          });
       },
       options
     );
 
     observer.observe(element);
     return () => observer.disconnect();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current, options.root, options.threshold, options.rootMargin]);
 
   return ref;
