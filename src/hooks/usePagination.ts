@@ -25,7 +25,7 @@ export const usePagination = <PromiseType, E extends Element>(
         fetchFnRef.current()
           .finally(() => { isLoading.current = false; })
           .catch((error) => {
-            if (error?.status === 404) {
+            if (error?.status === 401) {
               isExhausted.current = true;
               observer.disconnect();
             }

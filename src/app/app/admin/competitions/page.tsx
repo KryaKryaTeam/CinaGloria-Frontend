@@ -1,12 +1,12 @@
 'use client'
-import { useEffect } from "react";
+import { useDebugValue, useEffect } from "react";
 import useCompetition from "@/hooks/useCompetition";
 import { usePagination } from "@/hooks/usePagination";
 import AdminTable from "@/ui/widgets/admin/adminTable";
 import { useRouter } from "next/navigation";
 
 export default function Page() {        
-    const { get, fetch, reset } = useCompetition({ forAdmin: true });
+    const { get, fetch, reset, page } = useCompetition({ forAdmin: true });
     const router = useRouter();
     const actions = new Map<string, (row: object) => void>([
         ["Edit", (row) => router.push(`/admin/competitions/${(row as any).id}`)],
@@ -16,7 +16,9 @@ export default function Page() {
         () => fetch("all"),
         { threshold: 0.5 }
     );
-
+    useEffect(() => {
+        console.log("Current page:", page);
+    })
     useEffect(() => {
         reset();
         fetch("all");
