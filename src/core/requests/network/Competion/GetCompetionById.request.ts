@@ -9,8 +9,8 @@ import URLEnum from "../../URLEnum";
 
 export default class GetCompetionByIdRequest extends NetworkRequest<
   string,
-  CompetitionPublicObjectOnPage,
-  CompetitionPublicObjectOnPage
+ CompetitionConstructor,
+  CompetitionConstructor
 > {
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
@@ -24,8 +24,8 @@ export default class GetCompetionByIdRequest extends NetworkRequest<
   }
 
   onSuccess(
-    data: CompetitionPublicObjectOnPage,
-  ): CompetitionPublicObjectOnPage | Promise<CompetitionPublicObjectOnPage> {
+    data: CompetitionConstructor,
+  ): CompetitionConstructor | Promise<CompetitionConstructor> {
     return data;
   }
 }

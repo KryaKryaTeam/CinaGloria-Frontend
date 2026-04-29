@@ -4,6 +4,7 @@ import { Icons } from "@/core/domain/entity/type";
 
 export enum CompetitionStatus {
   DRAFT = "DRAFT",
+  // after draft, Regarded as public
   SCHEDULED = "SCHEDULED",
   PUBLISHED = "PUBLISHED",
   REGISTRATION = "REGISTRATION",

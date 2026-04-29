@@ -3,7 +3,7 @@ import { ISubRequestData, NetworkRequest } from "../NetworkRequest";
 import { HTTPMethod } from "../../type";
 import URLEnum from "../../URLEnum";
 
-export default class GetPrivateCompetitionRequest extends NetworkRequest<number, CompetitionConstructor, CompetitionConstructor> {
+export default class GetPrivateCompetitionRequest extends NetworkRequest<number, CompetitionConstructor[], CompetitionConstructor[]> {
     withCSRF: boolean = false;
     method: HTTPMethod = "GET"
     authorized: boolean = true;
@@ -13,7 +13,7 @@ export default class GetPrivateCompetitionRequest extends NetworkRequest<number,
             init: {}
         }
     }
-    onSuccess(data: CompetitionConstructor): CompetitionConstructor | Promise<CompetitionConstructor> {
+    onSuccess(data: CompetitionConstructor[]): CompetitionConstructor[] | Promise<CompetitionConstructor[]> {
         return data;
     }
 }

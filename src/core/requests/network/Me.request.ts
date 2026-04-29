@@ -14,7 +14,8 @@ import AvatarURL from "@/core/domain/value-object/AvatarURL";
 export default class RequestMe extends NetworkRequest<
   void,
   void,
-  IUserEntityData
+  IUserEntityData,
+  void
 > {
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
@@ -66,5 +67,8 @@ export default class RequestMe extends NetworkRequest<
         authorizationProviders: { ...data.authorizationProviders },
       }),
     );
+  }
+  protected onError(error: Error)  {
+    throw new String("Error fetch")
   }
 }

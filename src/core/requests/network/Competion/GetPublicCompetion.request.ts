@@ -6,12 +6,13 @@ import { HTTPMethod } from "../../type";
 export default class GetPublicCompetitionRequest extends NetworkRequest<
   number,
   CompetitionPublicObject[],
-  CompetitionPublicObject[] 
+  CompetitionPublicObject[]
 > {
+
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
   authorized: boolean = false;
-
+  
   mapData(data: number): ISubRequestData {
     return {
       url: new URL(URLEnum.COMPETITION + "public/page/" + data),
@@ -23,4 +24,5 @@ export default class GetPublicCompetitionRequest extends NetworkRequest<
   ): CompetitionPublicObject[] | Promise<CompetitionPublicObject[]> {
     return data;
   }
+
 }

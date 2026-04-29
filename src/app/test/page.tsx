@@ -11,6 +11,7 @@ const initialCompetitions = [
   { title: "Spring AI Challenge",      participants: 98,  deadline: "2025-04-15", prize: "$3,000" },
   { title: "Summer Code Jam",          participants: 310, deadline: "2025-06-01", prize: "$10,000" },
   { title: "Autumn Data Science Cup",  participants: 220, deadline: "2025-09-30", prize: "$7,500" },
+  { asdhsaihd: "djoasojdsa",   participants: 50,  deadline: "2025-12-31", prize: "$1,000" },
 ];
 
 export default function TestPage() {

@@ -18,7 +18,7 @@ interface Option {
 let refreshPr: undefined | Promise<void>;
 
 @injectable()
-export abstract class NetworkRequest<Data, Response, RequestOutput> {
+export abstract class NetworkRequest<Data, Response, RequestOutput, ErrorResponse = string> {
   constructor(
     @inject(TYPES.UserState)
     protected readonly userState: UserState,
@@ -122,7 +122,7 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
   }
 
   if (this.onError) {
-    this.onError(err.message);
+    this.onError(err);
   }
 
   throw err;
@@ -152,11 +152,11 @@ export abstract class NetworkRequest<Data, Response, RequestOutput> {
       refreshPr = undefined;
     }
   }
-  mockOnError() {
-    if (this.onError) this.onError("Mock error");
+  mockOnError(): ErrorResponse | undefined {
+    if (this.onError) return this.onError(new Error("Mock error"));
   }
   abstract onSuccess(data: RequestOutput): Response | Promise<Response>;
   abstract mapData(data: Data): ISubRequestData;
   protected async preload?(base: ISubRequestData): Promise<ISubRequestData>;
-  protected onError?(error: string): void;
+  protected onError?(error: Error): ErrorResponse;
 }
