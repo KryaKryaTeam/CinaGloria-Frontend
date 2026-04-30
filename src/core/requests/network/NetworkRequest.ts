@@ -16,9 +16,13 @@ interface Option {
   mock: boolean;
 }
 let refreshPr: undefined | Promise<void>;
-
 @injectable()
-export abstract class NetworkRequest<Data, Response, RequestOutput, ErrorResponse = string> {
+export abstract class NetworkRequest<
+  Data,
+  Response,
+  RequestOutput,
+  ErrorResponse = string,
+> {
   constructor(
     @inject(TYPES.UserState)
     protected readonly userState: UserState,
@@ -113,20 +117,23 @@ export abstract class NetworkRequest<Data, Response, RequestOutput, ErrorRespons
         })
         .then((json) => this.onSuccess(json));
     } catch (error) {
-  const err = error as Error;
+      const err = error as Error;
 
+      if (Number(err.cause) === 401) {
+        await this.refresh();
+        return await this.execute(request_data);
+      }
 
-  if (Number(err.cause) === 401) {
-    await this.refresh();
-    return await this.execute(request_data);
-  }
+      if (this.onError) {
+        this.onError(err);
+      }
 
-  if (this.onError) {
-    this.onError(err);
-  }
+      if (this.onError) {
+        this.onError(err);
+      }
 
-  throw err;
-}
+      throw err;
+    }
   }
 
   private async refresh() {
