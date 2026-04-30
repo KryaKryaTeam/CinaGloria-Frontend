@@ -62,16 +62,7 @@ function Layout({ children }: PropsWithChildren) {
             src={"/bg2.png"}
             alt="background"
             className="opacity-5 w-screen h-screen fixed top-0 left-0 -z-10"
-            width={
-              typeof window !== "undefined" && window.innerWidth
-                ? window.innerWidth
-                : 1920
-            }
-            height={
-              typeof window !== "undefined" && window.innerHeight
-                ? window.innerHeight
-                : 1080
-            }
+            fill 
           />
 
           <AppSidebar />

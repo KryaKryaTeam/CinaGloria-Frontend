@@ -1,5 +1,5 @@
 import container, { TYPES } from "@/core/Container"
-import { CompetitionStatus } from "@/core/domain/entity/Competion";
+import { Competition, CompetitionStatus } from "@/core/domain/entity/Competion";
 import GetCompetionByIdRequest from "@/core/requests/network/Competion/GetCompetionById.request";
 import GetPrivateCompetitionRequest from "@/core/requests/network/Competion/GetPrivateCompetion.request";
 import GetPublicCompetitionRequest from "@/core/requests/network/Competion/GetPublicCompetion.request"
@@ -15,9 +15,12 @@ interface Option {
     forAdmin?: boolean;
 }
 
-const PRIVATE_STATUSES = new Set([CompetitionStatus.DRAFT]);
-
-const useCompetition = (option: Option) => {
+const useCompetition = (option: Option): {
+    store: AdminCompetitionStore | CompetitionState;
+    fetch(state: GetType | GetByIdType, pageOverride?: number): Promise<void>;
+    reset(): void;
+    page: number;
+} => {
     const userState = container.get<UserState>(TYPES.UserState);
     const getPrivateCompetitionRequest = container.get<GetPrivateCompetitionRequest>(TYPES.GetPrivateCompetitionRequest);
     const getCompetitionByIdRequest = container.get<GetCompetionByIdRequest>(TYPES.GetCompetionByIdRequest);
@@ -27,53 +30,32 @@ const useCompetition = (option: Option) => {
         ? container.get<AdminCompetitionStore>(TYPES.AdminCompetitionStore)
         : container.get<CompetitionState>(TYPES.CompetitionState);
 
-    const [page, setPage] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
 
-    /**
-     * Reads competitions from the store and filters them.
-     * Does NOT trigger any network call.
-     */
-    const get = (state: GetType | GetByIdType) => {
-        const all = store.competitions;
+    return {
+        store,
 
-        if (typeof state === "object" && "id" in state) {
-            return all.filter((c) => c.id === state.id);
-        }
+        fetch: async (state: GetType | GetByIdType, pageOverride?: number): Promise<void> => {
+            const currentPage = pageOverride ?? page;
 
-        if (state === "public") {
-            return all.filter((c) => !PRIVATE_STATUSES.has(c.status));
-        }
+            if (typeof state === "object" && "id" in state) {
+                const data = await getCompetitionByIdRequest.execute(state.id);
+                if (data) store.addNewCompetition(data);
+                return;
+            }
 
-        // "all"
-        return all;
+            const data = await getPrivateCompetitionRequest.execute(currentPage);
+            data?.forEach((c) => store.addNewCompetition(c));
+            setPage(currentPage + 1);
+        },
+
+        reset: () => {
+            store.clearCompetitions();
+            setPage(0);
+        },
+
+        page,
     };
-
-    /**
-     * Fetches competitions from the network and pushes them into the store.
-     * Call this first to populate the store, then use get() to read from it.
-     */
-    const fetch = async (state: GetType | GetByIdType) => {
-    if (typeof state === "object" && "id" in state) {
-        const data = await getCompetitionByIdRequest.execute(state.id);
-        if (data) store.addNewCompetition(data);
-        return;
-    }
-
-    // "all" and "public" both paginate through the same private endpoint
-    const data = await getPrivateCompetitionRequest.execute(page);
-    data?.forEach((c) => store.addNewCompetition(c));
-    setPage((prev) => prev + 1);
-    };
-
-    /**
-     * Clears the store and resets pagination back to 0.
-     */
-    const reset = () => {
-        store.clearCompetitions();
-        setPage(0);
-    };
-
-    return { get, fetch, reset, page };
 };
 
 export default useCompetition;
