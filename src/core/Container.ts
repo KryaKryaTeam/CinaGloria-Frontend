@@ -40,8 +40,8 @@ import AdminCheck from "./client-check/AdminCheck";
 import RequestGetUsers from "./requests/network/GetUser.request";
 import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 import GetPrivateCompetitionRequest from "./requests/network/Competion/GetPrivateCompetion.request";
-import { GetUsersAdminListRequest } from "./requests/network/Competion/GetUsersAdminList";
-import { UpdateUserRoleRequest } from "./requests/network/UpdateUserRole";
+import { GetUsersAdminListRequest } from "./requests/network/GetUsersAdminList.request";
+import { UpdateUserRoleRequest } from "./requests/network/UpdateUserRole.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();

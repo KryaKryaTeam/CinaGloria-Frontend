@@ -1,9 +1,10 @@
 import { injectable, inject } from "inversify";
-import { NetworkRequest, ISubRequestData } from "../NetworkRequest";
+import { NetworkRequest, ISubRequestData } from "./NetworkRequest";
 import { HTTPMethod } from "@/core/requests/type";
 import { TYPES } from "@/core/Container.types";
 import { UserState } from "@/state/UserState";
 import { IUserForAdminList } from "@/core/domain/entity/IUserForAdminList";
+import { URLEnum } from "../URLEnum";
 
 export interface IGetUsersAdminParams {
   page: number;
@@ -26,9 +27,7 @@ export class GetUsersAdminListRequest extends NetworkRequest<
   }
 
   mapData(data: IGetUsersAdminParams): ISubRequestData {
-    const url = new URL(
-      `https://bots.swedka121.com/app/v1/user/users/${data.page}`,
-    );
+    const url = new URL(`${URLEnum.USER}users/${data.page}`);
 
     if (data.email?.trim()) {
       url.searchParams.set("email", data.email.trim());

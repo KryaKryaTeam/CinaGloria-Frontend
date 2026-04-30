@@ -5,7 +5,7 @@ import container from "@/core/Container";
 import { TYPES } from "@/core/Container.types";
 import { RoleEnum } from "@/core/domain/entity/RoleEnum";
 import { IUserForAdminList } from "@/core/domain/entity/IUserForAdminList";
-import { GetUsersAdminListRequest } from "@/core/requests/network/Competion/GetUsersAdminList";
+import { GetUsersAdminListRequest } from "@/core/requests/network/GetUsersAdminList.request";
 import { UpdateUserRoleRequest } from "@/core/requests/network/UpdateUserRole";
 import InputWithDebounce from "@/ui/component/inputs/InputWithDebounce";
 const PAGE_SIZE = 20;

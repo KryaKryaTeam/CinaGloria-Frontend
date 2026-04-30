@@ -4,6 +4,7 @@ import { HTTPMethod } from "../type";
 import { TYPES } from "@/core/Container.types";
 import { UserState } from "@/state/UserState";
 import { RoleEnum } from "@/core/domain/entity/RoleEnum";
+import { URLEnum } from "../URLEnum";
 
 export interface IUpdateRoleDTO {
   userId: string;
@@ -27,7 +28,7 @@ export class UpdateUserRoleRequest extends NetworkRequest<
 
   mapData(data: IUpdateRoleDTO): ISubRequestData {
     return {
-      url: "https://bots.swedka121.com/app/v1/user/role",
+      url: new URL(`${URLEnum.USER}role`),
       init: {
         body: {
           userId: data.userId,
