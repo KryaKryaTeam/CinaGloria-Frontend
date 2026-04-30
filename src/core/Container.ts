@@ -94,9 +94,6 @@ container
 container
   .bind(TYPES.GetPrivateCompetitionRequest)
   .to(GetPrivateCompetitionRequest)
-  .inRequestScope(); 
-  container.bind(TYPES.RequestGetUsers).to(RequestGetUsers).inRequestScope();
-  .to(GetPublicCompetitionRequest)
   .inRequestScope();
 container.bind(TYPES.RequestGetUsers).to(RequestGetUsers).inRequestScope();
 container
@@ -109,6 +106,9 @@ container
   .inRequestScope();
 container.bind(TYPES.AuthCheck).to(AuthCheck).inSingletonScope();
 container.bind(TYPES.AdminCheck).to(AdminCheck).inSingletonScope();
-container.bind(TYPES.AdminCompetitionStore).to(AdminCompetitionStore).inSingletonScope();
+container
+  .bind(TYPES.AdminCompetitionStore)
+  .to(AdminCompetitionStore)
+  .inSingletonScope();
 export default container;
 export { TYPES };
