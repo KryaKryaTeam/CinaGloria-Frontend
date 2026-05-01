@@ -40,6 +40,7 @@ import AdminCheck from "./client-check/AdminCheck";
 import RequestGetUsers from "./requests/network/GetUser.request";
 import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 import GetPrivateCompetitionRequest from "./requests/network/Competion/GetPrivateCompetion.request";
+import DeleteCompetitionRequest from "./requests/network/Competion/DeleteCompetition.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -97,5 +98,6 @@ container
 container.bind(TYPES.AuthCheck).to(AuthCheck).inSingletonScope();
 container.bind(TYPES.AdminCheck).to(AdminCheck).inSingletonScope();
 container.bind(TYPES.AdminCompetitionStore).to(AdminCompetitionStore).inSingletonScope();
+container.bind(TYPES.DeleteCompetitionRequest).to(DeleteCompetitionRequest).inRequestScope();
 export default container;
 export { TYPES };

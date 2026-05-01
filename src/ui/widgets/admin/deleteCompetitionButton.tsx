@@ -1,25 +1,24 @@
 "use client";
 
 import container, { TYPES } from "@/core/Container";
-import { CompetitionStatus } from "@/core/domain/entity/Competion";
-import { UserState } from "@/state/UserState";
+import DeleteCompetitionRequest from "@/core/requests/network/Competion/DeleteCompetition.request";
 import { Button } from "@/ui/button";
-import { useRouter } from "next/navigation";
 
 interface Props {
   id: string;
 }
-export default function GoToCompetitionPageButton(props: Props) {
-  const n = useRouter();
-  const userState = container.get<UserState>(TYPES.UserState);
-  const handle = () => {
-    n.push(`/app/admin/competitions/${props.id}`);
+
+export default function GoToCompetitionPageButton({ id }: Props) {
+  const handle = async () => {
+    const deleteReq = container.get<DeleteCompetitionRequest>(
+      TYPES.DeleteCompetitionRequest
+    );
+    await deleteReq.execute({id: id, isAdmin: true});
   };
+
   return (
-    <>
-      <Button className="w-full" size="sm" onClick={handle}>
-        delete
-      </Button>
-    </>
+    <Button className="w-full" size="sm" onClick={handle}>
+      delete
+    </Button>
   );
 }

@@ -27,4 +27,5 @@ export const TYPES = {
   AdminCheck: Symbol.for("AdminCheck"),
   RequestGetUsers: Symbol.for("RequestGetUsers"),
   AdminCompetitionStore: Symbol.for("AdminCompetitionStore"),
+  DeleteCompetitionRequest: Symbol.for("DeleteCompetitionRequest"),
 } as const;

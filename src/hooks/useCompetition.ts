@@ -1,5 +1,4 @@
 import container, { TYPES } from "@/core/Container"
-import { Competition, CompetitionStatus } from "@/core/domain/entity/Competion";
 import GetCompetionByIdRequest from "@/core/requests/network/Competion/GetCompetionById.request";
 import GetPrivateCompetitionRequest from "@/core/requests/network/Competion/GetPrivateCompetion.request";
 import GetPublicCompetitionRequest from "@/core/requests/network/Competion/GetPublicCompetion.request"

@@ -9,9 +9,10 @@ import { Card, CardContent, CardFooter } from "@/ui/card";
 import { Separator } from "@/ui/separator";
 import { format } from "date-fns";
 import { enGB } from "date-fns/locale";
-import { CalendarDays, Clock, Trophy } from "lucide-react";
+import { CalendarDays, Clock, Delete, Trophy } from "lucide-react";
 import GoToCompetitionEditAdmin from "./GoToCompetitionEditAdmin";
 import Image from "next/image";
+import DeleteCompetitionButton from "./deleteCompetitionButton";
 
 const STATUS_CONFIG: Record<
   CompetitionStatus,
@@ -158,9 +159,9 @@ export function CompetitionAdminCard({ competition }: CompetitionCardProps) {
       </CardContent>
 
       {showCTA && (
-        <CardFooter className="px-4 pt-0">
+        <CardFooter className="px-4 pt-0 flex flex-col gap-2">
           <GoToCompetitionEditAdmin id={id} />
-
+          <DeleteCompetitionButton id={id} />
         </CardFooter>
       )}
     </Card>

@@ -31,8 +31,12 @@ export default class CompetitionState {
   clearCompetitions() {
     this._competitions = [];
   }
-
-  
+  @action
+  deleteCompetition(id: string) {
+    this._competitions = [...this._competitions.filter((c) => c.id !== id)]
+    debugLog(`remove ${id}`)
+  }
+  @action
   getById(id: string): Competition | undefined {
     return this._competitions.find((c) => c.id == id);
   }
