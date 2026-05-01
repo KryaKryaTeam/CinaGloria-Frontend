@@ -1,53 +1,58 @@
-'use client'
-import { useDebugValue, useEffect } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import useCompetition from "@/hooks/useCompetition";
 import { usePagination } from "@/hooks/usePagination";
-import AdminTable from "@/ui/widgets/admin/adminTable";
 import { useRouter } from "next/navigation";
+import { Button } from "@/ui/button";
+import { Plus } from "lucide-react";
+import { CompetitionAdminCard } from "@/ui/widgets/admin/CompetitionAdminCard";
+import { observer } from "mobx-react-lite";
+import debugLog from "@/infrastructure/debugLog";
 
-export default function Page() {        
-    const { get, fetch, reset, page } = useCompetition({ forAdmin: true });
-    const router = useRouter();
-    const actions = new Map<string, (row: object) => void>([
-        ["Edit", (row) => router.push(`/admin/competitions/${(row as any).id}`)],
-        ["Delete", (row) => console.log("Delete", row)],
-    ]);
-    const paginationRef = usePagination<void, HTMLTableRowElement>(
-        () => fetch("all"),
-        { threshold: 0.5 }
-    );
-    useEffect(() => {
-        console.log("Current page:", page);
-    })
-    useEffect(() => {
-        reset();
-        fetch("all");
-    }, []);
+function Page() {
+  const { store, fetch, reset, page } = useCompetition({ forAdmin: true });
+  const router = useRouter();
+  const [initialized, setInitialized] = useState(false);
+  const paginationRef = usePagination<void, HTMLDivElement>(
+    () => fetch("all"),
+    { threshold: 0.5 },
+  );
+  useEffect(() => {
+    debugLog(`${store.competitions}`);
+  }, [store.competitions]);
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-white">Competitions</h1>
+        <Button
+          onClick={() => router.push("/admin/competitions/new")}
+          className="gap-2"
+        >
+          <Plus size={16} />
+          Create Competition
+        </Button>
+      </div>
 
-    const competitions = get("all");
+      { initialized ? (
+        <p className="text-center text-muted-foreground animate-pulse py-12">
+          Loading...
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {store.competitions.map((competition) => (
+            <CompetitionAdminCard
+              key={competition.id}
+              competition={competition.toPublicObject()}
+            />
+          ))}
 
-    const tableData = competitions.map((c) => ({
-        id: c.id,
-        name: c.name ?? "—",
-        status: c.status,
-        dateOfStart: "—",
-        dateOfEnd:  "—",
-    }));
-
-    return (
-        <div className="text-white p-6">
-            {competitions.length === 0 ? (
-                <p className="text-center text-muted-foreground animate-pulse">
-                    Loading...
-                </p>
-            ) : (
-                <AdminTable
-                    caption="Competitions"
-                    data={tableData}
-                    actions={actions}
-                    lastRowRef={paginationRef}
-                />
-            )}
+          <div ref={paginationRef} className="col-span-full h-4" />
         </div>
-    );
+      )}
+    </div>
+  );
 }
+
+
+export default observer(Page);
