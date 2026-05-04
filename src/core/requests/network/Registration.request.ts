@@ -19,7 +19,7 @@ export class RequestRegistartion extends NetworkRequest<
   withCSRF: boolean = true;
   authorized: boolean = false;
   method: HTTPMethod = "POST";
-  mockOutputData: RegisterOutput = { requestId: "123" }
+  mockOutputData: RegisterOutput = { requestId: "123" };
   mapData(data: RegisterData): ISubRequestData {
     return {
       init: {
