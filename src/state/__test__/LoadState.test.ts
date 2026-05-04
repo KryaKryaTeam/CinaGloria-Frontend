@@ -51,17 +51,17 @@ describe("LoadState", () => {
 
     it("should begin loading global scope on mount", async () => {
       loadState.mount();
-      
+
       expect(loadState.shouldAnimateEnter).toBe(true);
-      
+
       // Advance timers to clear the entrance animation timeout
       await vi.advanceTimersByTimeAsync(1000);
       expect(loadState.shouldAnimateEnter).toBe(false);
-      
+
       // Global scope should eventually reach ACTUAL
       // 50ms is the 'breath' inside LoadScope.refresh()
       await vi.advanceTimersByTimeAsync(50);
-      
+
       expect(mockSocket.connect).toHaveBeenCalled();
       expect(mockMe.execute).toHaveBeenCalled();
       expect(loadState.isAppBlocking).toBe(false);
@@ -74,14 +74,17 @@ describe("LoadState", () => {
       // Create additional mock scopes
       const scopes = (loadState as any).scopes;
       for (let i = 1; i <= 5; i++) {
-        scopes[`test_${i}`] = { 
-          priority: 1, 
-          scope: { refresh: vi.fn().mockReturnValue(new Promise(() => {})), state: LoadScopeStates.EMPTY } 
+        scopes[`test_${i}`] = {
+          priority: 1,
+          scope: {
+            refresh: vi.fn().mockReturnValue(new Promise(() => {})),
+            state: LoadScopeStates.EMPTY,
+          },
         };
       }
 
       loadState.mount();
-      
+
       // Check activeCount (1 global + 2 test scopes = 3)
       expect((loadState as any).activeCount).toBeLessThanOrEqual(3);
     });
@@ -90,8 +93,8 @@ describe("LoadState", () => {
   describe("Scope Navigation", () => {
     it("should handle enter and leave scope correctly", () => {
       const globalScope = (loadState as any).scopes.global.scope;
-      const spyEnter = vi.spyOn(globalScope, 'enterScope');
-      const spyExit = vi.spyOn(globalScope, 'exitScope');
+      const spyEnter = vi.spyOn(globalScope, "enterScope");
+      const spyExit = vi.spyOn(globalScope, "exitScope");
 
       loadState.enterInScope("global");
       expect(loadState.currentScope).toBe("global");
@@ -116,11 +119,11 @@ describe("LoadState", () => {
   describe("attachToScope", () => {
     it("should register a promise and release it on onLoad", () => {
       const globalScope = (loadState as any).scopes.global.scope;
-      const spyRegister = vi.spyOn(globalScope, 'registerTask');
-      
+      const spyRegister = vi.spyOn(globalScope, "registerTask");
+
       const { onLoad } = loadState.attachToScope("global");
       expect(spyRegister).toHaveBeenCalled();
-      
+
       // Calling onLoad should resolve the internal promise
       onLoad();
     });

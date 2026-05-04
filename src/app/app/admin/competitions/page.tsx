@@ -34,7 +34,7 @@ function Page() {
         </Button>
       </div>
 
-      { initialized ? (
+      {initialized ? (
         <p className="text-center text-muted-foreground animate-pulse py-12">
           Loading...
         </p>
@@ -53,6 +53,5 @@ function Page() {
     </div>
   );
 }
-
 
 export default observer(Page);

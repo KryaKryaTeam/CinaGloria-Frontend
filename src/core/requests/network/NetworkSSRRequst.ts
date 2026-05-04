@@ -7,7 +7,7 @@ export class NetworkSSRRequestError extends Error {
   constructor(
     message: string,
     public statusCode?: number,
-    public responseData?: unknown
+    public responseData?: unknown,
   ) {
     super(message);
     this.name = "NetworkSSRRequestError";
@@ -49,7 +49,7 @@ export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
         return await this.onSuccess(result);
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
-        
+
         if (this.onError) {
           this.onError(lastError.message);
         }
@@ -60,7 +60,12 @@ export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
         // Don't retry client errors (4xx) except 408/429
         if (error instanceof NetworkSSRRequestError) {
           const status = error.statusCode ?? 0;
-          if (status >= 400 && status < 500 && status !== 408 && status !== 429) {
+          if (
+            status >= 400 &&
+            status < 500 &&
+            status !== 408 &&
+            status !== 429
+          ) {
             break;
           }
         }
@@ -70,7 +75,9 @@ export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
       }
     }
 
-    throw lastError ?? new NetworkSSRRequestError("Request failed after retries");
+    throw (
+      lastError ?? new NetworkSSRRequestError("Request failed after retries")
+    );
   }
 
   private async buildRequest(request_data: Data): Promise<ISubRequestData> {
@@ -104,7 +111,7 @@ export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
       throw new NetworkSSRRequestError(
         data.message || `HTTP ${res.status}: ${res.statusText}`,
         res.status,
-        data
+        data,
       );
     }
 

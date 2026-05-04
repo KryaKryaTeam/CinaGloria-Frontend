@@ -3,9 +3,10 @@
 import { cn } from "@/infrastructure/utils";
 import { useState, useEffect, useRef, InputHTMLAttributes } from "react";
 
-
-interface InputWithDebounceProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+interface InputWithDebounceProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "onChange"
+> {
   debounceCallback: (value: string) => void;
   debounceMs?: number;
 }
@@ -17,7 +18,9 @@ export default function InputWithDebounce({
   className,
   ...props
 }: InputWithDebounceProps) {
-  const [inputValue, setInputValue] = useState<string>((propValue as string) || "");
+  const [inputValue, setInputValue] = useState<string>(
+    (propValue as string) || "",
+  );
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync with external value changes (e.g., clearing from parent)
@@ -59,7 +62,7 @@ export default function InputWithDebounce({
         "flex h-10 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none transition-all",
         "hover:bg-white/[0.05] hover:border-white/15",
         "focus:border-white/25 focus:ring-2 focus:ring-white/10",
-        className
+        className,
       )}
     />
   );

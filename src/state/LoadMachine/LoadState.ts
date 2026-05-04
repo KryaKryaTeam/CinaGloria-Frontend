@@ -53,14 +53,19 @@ export class LoadState {
     },
     admin: {
       priority: 1,
-      scope: new LoadScope(async () => { 
-        const getPrivateCompetitionRequest = container.get<GetPrivateCompetitionRequest>(TYPES.GetPrivateCompetitionRequest);
-        const store = container.get<AdminCompetitionStore>(TYPES.AdminCompetitionStore);
+      scope: new LoadScope(async () => {
+        const getPrivateCompetitionRequest =
+          container.get<GetPrivateCompetitionRequest>(
+            TYPES.GetPrivateCompetitionRequest,
+          );
+        const store = container.get<AdminCompetitionStore>(
+          TYPES.AdminCompetitionStore,
+        );
         const data = await getPrivateCompetitionRequest.execute(0);
         data.forEach((c) => store.addNewCompetition(c));
         debugLog(`Admin competitions loaded ${data.length}`);
       }),
-    }
+    },
   };
 
   constructor() {
@@ -74,7 +79,7 @@ export class LoadState {
     reaction(
       () => ({
         queueLength: this.queue.length,
-        canRunMore: this.activeCount < this.MAX_CONCURRENT,   
+        canRunMore: this.activeCount < this.MAX_CONCURRENT,
       }),
       (status) => {
         if (status.queueLength > 0 && status.canRunMore) {
@@ -110,7 +115,7 @@ export class LoadState {
       }
     });
   }
-  
+
   @action
   forceScope(scope?: string) {
     if (!scope) scope = this.currentScope;
@@ -124,7 +129,7 @@ export class LoadState {
     this.queue.push(item.scope);
   }
 
-  @action 
+  @action
   private async processNext() {
     while (this.activeCount < this.MAX_CONCURRENT && this.queue.length > 0) {
       const scope = this.queue.shift();

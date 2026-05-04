@@ -22,5 +22,6 @@ export const URLEnum = {
   CHANGE_USERNAME: `${BASE_URL}/user/username`,
   COMPETITION: `${BASE_URL}/competition/`,
   USER: `${BASE_URL}/user/`,
+  FILE: `${BASE_URL}/file/`,
 } as const;
 export default URLEnum;

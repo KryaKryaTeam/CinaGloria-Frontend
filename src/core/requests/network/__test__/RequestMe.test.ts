@@ -23,7 +23,9 @@ describe("RequestMe", () => {
     const user = state.User!;
     expect(user.id).toBe(request.mockOutputData.id);
     expect(user.role).toBe(RoleEnum.USER);
-    expect(user.contacts.telegram).toBe(request.mockOutputData.contacts.telegram);
+    expect(user.contacts.telegram).toBe(
+      request.mockOutputData.contacts.telegram,
+    );
     expect(user.contacts.discord).toBe(request.mockOutputData.contacts.discord);
   });
 
