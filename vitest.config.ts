@@ -14,6 +14,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(dirname, "./src"),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
   test: {
@@ -26,14 +27,13 @@ export default defineConfig({
         test: {
           globals: true,
           environment: "jsdom",
-          setupFiles: ["./vitest.setup.ts"],
         },
       },
-      // 2. Закомментируй второй проект (storybook), так как он требует плагины выше
-      /*
       {
         extends: true,
         plugins: [
+          // The plugin will run tests for the stories defined in your Storybook config
+          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
           storybookTest({
             configDir: path.join(dirname, ".storybook"),
           }),

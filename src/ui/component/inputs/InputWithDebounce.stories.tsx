@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import InputWithDebounce from "./InputWithDebounce";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const PLACEHOLDER_TEXT = "Search with debounce...";
 

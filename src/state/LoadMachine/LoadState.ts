@@ -12,6 +12,9 @@ import container, { TYPES } from "@/core/Container";
 import RequestMe from "@/core/requests/network/Me.request";
 import OldNotificationPageRequest from "@/core/requests/network/OldNotificationPage.request";
 import { WsSocket } from "@/core/initSocket";
+import GetPrivateCompetitionRequest from "@/core/requests/network/Competion/GetPrivateCompetion.request";
+import AdminCompetitionStore from "../AdminCompetitionStore";
+import debugLog from "@/infrastructure/debugLog";
 
 @injectable()
 export class LoadState {
@@ -46,6 +49,21 @@ export class LoadState {
       scope: new LoadScope(async () => {
         const me = container.get<RequestMe>(TYPES.RequestMe);
         await me.execute();
+      }),
+    },
+    admin: {
+      priority: 1,
+      scope: new LoadScope(async () => {
+        const getPrivateCompetitionRequest =
+          container.get<GetPrivateCompetitionRequest>(
+            TYPES.GetPrivateCompetitionRequest,
+          );
+        const store = container.get<AdminCompetitionStore>(
+          TYPES.AdminCompetitionStore,
+        );
+        const data = await getPrivateCompetitionRequest.execute(0);
+        data.forEach((c) => store.addNewCompetition(c));
+        debugLog(`Admin competitions loaded ${data.length}`);
       }),
     },
   };
