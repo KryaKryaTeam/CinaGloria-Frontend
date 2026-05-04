@@ -14,8 +14,7 @@ export default class Password extends ValueObject<string> {
     if (!raw || raw.trim().length === 0)
       throw new ValidationError("Password is required");
 
-    if (raw.length < 8)
-      throw new ValidationError("Minimum 8 characters");
+    if (raw.length < 8) throw new ValidationError("Minimum 8 characters");
 
     if (!/[A-Z]/.test(raw))
       throw new ValidationError("Need at least one uppercase letter");

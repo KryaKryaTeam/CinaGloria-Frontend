@@ -11,9 +11,9 @@ interface Props {
 export default function GoToCompetitionPageButton({ id }: Props) {
   const handle = async () => {
     const deleteReq = container.get<DeleteCompetitionRequest>(
-      TYPES.DeleteCompetitionRequest
+      TYPES.DeleteCompetitionRequest,
     );
-    await deleteReq.execute({id: id, isAdmin: true});
+    await deleteReq.execute({ id: id, isAdmin: true });
   };
 
   return (

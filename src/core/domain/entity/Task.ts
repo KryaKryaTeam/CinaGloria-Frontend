@@ -5,14 +5,14 @@ export default class Task {
   private _name: string;
   private _description: string;
   private _color: Color;
-  
-  constructor(id: string, name: string, description: string, color: Color) { 
+
+  constructor(id: string, name: string, description: string, color: Color) {
     this.id = id;
     this._name = name;
     this._description = description;
     this._color = color;
   }
-  get name() { 
+  get name() {
     return this._name;
   }
   get description() {
@@ -21,5 +21,4 @@ export default class Task {
   get color() {
     return this._color;
   }
-  
 }

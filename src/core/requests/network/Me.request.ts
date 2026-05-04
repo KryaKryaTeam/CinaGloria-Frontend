@@ -68,7 +68,7 @@ export default class RequestMe extends NetworkRequest<
       }),
     );
   }
-  protected onError(error: Error)  {
-    throw new String("Error fetch")
+  protected onError(error: Error) {
+    throw new String("Error fetch");
   }
 }

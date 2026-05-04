@@ -14,7 +14,7 @@ describe("UserState", () => {
       "user-123",
       Email.create("test@example.com"),
       Username.create("ValidUsername"),
-      AvatarURL.create("https://avatar.com")
+      AvatarURL.create("https://avatar.com"),
     );
   };
 
@@ -52,13 +52,18 @@ describe("UserState", () => {
 
     it("should update user entity internals via changeUserData", () => {
       const user = createMockUser();
-      
+
       // Initialize optional fields for the test since User.create sets them to null
       // and changeUserData requires them to exist to update them in your current code
       // Note: In your User class, updateAge and updateFullName only run if this._age/this._fullName exist
-      user['_age'] = { value: 0, birthDay: new Date() };
-      user['_fullName'] = { value: "", firstName: "", lastName: "", surName: "" };
-      
+      user["_age"] = { value: 0, birthDay: new Date() };
+      user["_fullName"] = {
+        value: "",
+        firstName: "",
+        lastName: "",
+        surName: "",
+      };
+
       userState.setUser(user);
 
       const data: AdditionData = {
@@ -67,7 +72,7 @@ describe("UserState", () => {
         birthDay: new Date("1995-05-05"),
         firstName: "John",
         lastName: "Doe",
-        surName: "Smith"
+        surName: "Smith",
       };
 
       userState.changeUserData(data);

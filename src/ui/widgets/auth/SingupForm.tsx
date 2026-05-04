@@ -22,20 +22,20 @@ import { Checkbox } from "@/ui/checkbox";
 import { useRouter } from "next/navigation";
 
 export function SingupForm() {
-  const router = useRouter()
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { submit, register, errors, setValue } = useSignup();
   return (
     <Card className="w-full max-w-md border-border/60 shadow-lg">
       <CardHeader className="pb-4 text-center">
-          <Button
-            size={"icon-lg"}
-            variant={"secondary"}
-            className="cursor-pointer"
-            onClick={() => router.back()}
-          >
-            <ArrowLeft />
-          </Button>
+        <Button
+          size={"icon-lg"}
+          variant={"secondary"}
+          className="cursor-pointer"
+          onClick={() => router.back()}
+        >
+          <ArrowLeft />
+        </Button>
 
         <CardTitle className="text-2xl font-bold tracking-tight text-balance">
           Create your account

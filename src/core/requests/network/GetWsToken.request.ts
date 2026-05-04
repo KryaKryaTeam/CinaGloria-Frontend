@@ -29,4 +29,3 @@ export class GetWsTokenRequest extends NetworkRequest<
     super(userState);
   }
 }
-

@@ -9,7 +9,6 @@ import {
 } from "@/ui/table";
 import { ReactNode } from "react";
 
-
 export type ColumnDef<T> = {
   key: string;
   header: string;
@@ -129,7 +128,6 @@ export default function AdminTable<T>({
           </TableBody>
         </Table>
       </div>
-
     </div>
   );
 }
