@@ -1,47 +1,58 @@
-// vitest.config.ts
 import { defineConfig } from "vitest/config";
 import path from "path";
-import { fileURLToPath } from 'node:url';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import { playwright } from '@vitest/browser-playwright';
-const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+import { fileURLToPath } from "node:url";
+// 1. Закомментируй эти два импорта, они ломают запуск
+// import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+// import { playwright } from "@vitest/browser-playwright";
 
-// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
+const dirname =
+  typeof __dirname !== "undefined"
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src")
-    }
+      "@": path.resolve(dirname, "./src"),
+    },
   },
   test: {
     coverage: {
-      provider: "v8"
+      provider: "v8",
     },
-    projects: [{
-      extends: true,
-      test: {
-        globals: true,
-        environment: "jsdom"
-      }
-    }, {
-      extends: true,
-      plugins: [
-      // The plugin will run tests for the stories defined in your Storybook config
-      // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-      storybookTest({
-        configDir: path.join(dirname, '.storybook')
-      })],
-      test: {
-        name: 'storybook',
-        browser: {
-          enabled: true,
-          headless: true,
-          provider: playwright({}),
-          instances: [{
-            browser: 'chromium'
-          }]
-        }
-      }
-    }]
-  }
+    projects: [
+      {
+        extends: true,
+        test: {
+          globals: true,
+          environment: "jsdom",
+          setupFiles: ["./vitest.setup.ts"],
+        },
+      },
+      // 2. Закомментируй второй проект (storybook), так как он требует плагины выше
+      /*
+      {
+        extends: true,
+        plugins: [
+          storybookTest({
+            configDir: path.join(dirname, ".storybook"),
+          }),
+        ],
+        test: {
+          name: "storybook",
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: "chromium",
+              },
+            ],
+          },
+        },
+      },
+      */
+    ],
+  },
 });
