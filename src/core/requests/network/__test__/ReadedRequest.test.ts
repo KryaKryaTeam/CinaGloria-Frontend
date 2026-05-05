@@ -5,7 +5,6 @@ import NotificationStatus from "@/core/domain/entity/NotificationType.enum";
 import { beforeEach, describe, expect, test } from "vitest";
 import ReadedRequest from "../ReadedRequest.request";
 
-
 const mockNotification: INotification = {
   id: "1",
   title: "Test notification",
@@ -34,7 +33,9 @@ describe("ReadedRequest", () => {
 
     await request.execute("1", { mock: true });
 
-    const notification = notificationStore.notifications.find((n) => n.id === "1");
+    const notification = notificationStore.notifications.find(
+      (n) => n.id === "1",
+    );
     expect(notification?.status).toBe(NotificationStatus.readed);
   });
 
@@ -44,12 +45,19 @@ describe("ReadedRequest", () => {
   });
 
   test("does not throw if notification id does not exist in store", async () => {
-    await expect(request.execute("non-existent-id", { mock: true })).resolves.toBe(true);
+    await expect(
+      request.execute("non-existent-id", { mock: true }),
+    ).resolves.toBe(true);
   });
 
   test("does not mark other notifications as read", async () => {
     notificationStore.addNew(mockNotification);
-    notificationStore.addNew({ ...mockNotification, id: "2", read: false, status: NotificationStatus.sended });
+    notificationStore.addNew({
+      ...mockNotification,
+      id: "2",
+      read: false,
+      status: NotificationStatus.sended,
+    });
 
     await request.execute("1", { mock: true });
 

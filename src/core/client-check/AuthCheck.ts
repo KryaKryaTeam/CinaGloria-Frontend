@@ -8,28 +8,28 @@ import RequestMe from "../requests/network/Me.request";
 
 @injectable()
 export default class AuthCheck extends ClientCheck<UserState> {
-    private router?: AppRouterInstance
-    private request: RequestMe
-    condition = (data: UserState): boolean => data.isAuthorized
-    
-    onFailure = () => {
-        try {   
-            this.request.execute();
-        } catch (error) {
-            this.router?.push('/auth/login')
-        }
-    }
+  private router?: AppRouterInstance;
+  private request: RequestMe;
+  condition = (data: UserState): boolean => data.isAuthorized;
 
-    setRouter(router: AppRouterInstance): this {
-        this.router = router
-        return this  
+  onFailure = () => {
+    try {
+      this.request.execute();
+    } catch (error) {
+      this.router?.push("/auth/login");
     }
+  };
 
-    constructor(
-        @inject(TYPES.UserState) userState: UserState,
-        @inject(TYPES.RequestMe) request: RequestMe,
-    ) {
-        super(userState);
-        this.request = request
-    }
+  setRouter(router: AppRouterInstance): this {
+    this.router = router;
+    return this;
+  }
+
+  constructor(
+    @inject(TYPES.UserState) userState: UserState,
+    @inject(TYPES.RequestMe) request: RequestMe,
+  ) {
+    super(userState);
+    this.request = request;
+  }
 }

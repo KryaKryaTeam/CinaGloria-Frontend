@@ -30,7 +30,7 @@ export abstract class NetworkRequest<
   abstract withCSRF: boolean;
   abstract authorized: boolean;
   abstract method: HTTPMethod;
-  abstract mockOutputData: RequestOutput;
+  abstract mockOutputData?: RequestOutput;
   private retrying: number = 0;
 
   async getCsrf(): Promise<string> {
@@ -59,6 +59,7 @@ export abstract class NetworkRequest<
 
   async execute(request_data: Data, option?: Option): Promise<Response> {
     if (option?.mock) {
+      if (!this.mockOutputData) throw Error();
       let mapped = this.mapData(request_data);
       if (this.preload) mapped = await this.preload(mapped);
       return this.onSuccess(this.mockOutputData);

@@ -1,79 +1,95 @@
-import container, { TYPES } from "@/core/Container"
-import { CompetitionStatus } from "@/core/domain/entity/Competion";
+import container, { TYPES } from "@/core/Container";
+import { CompetitionConstructor } from "@/core/domain/entity/Competion";
+import CreateCompetitionRequest, {
+  Rule,
+} from "@/core/requests/network/Competion/CreateCompetion.request";
 import GetCompetionByIdRequest from "@/core/requests/network/Competion/GetCompetionById.request";
 import GetPrivateCompetitionRequest from "@/core/requests/network/Competion/GetPrivateCompetion.request";
-import GetPublicCompetitionRequest from "@/core/requests/network/Competion/GetPublicCompetion.request"
+import GetPublicCompetitionRequest from "@/core/requests/network/Competion/GetPublicCompetion.request";
 import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 import CompetitionState from "@/state/CompetitionState";
-import { UserState } from "@/state/UserState"
 import { useState } from "react";
-
+type CreateCompetitionData = {
+  name: string;
+  description: string;
+  dateOfEnd: Date;
+  dateOfEndRegistration: Date;
+  dateOfStart: Date;
+  dateOfStartRegistration: Date;
+  socialMedia: string;
+  ultraWideBanner: string;
+  rules: Array<Rule>;
+  avatar: string;
+  banner: string;
+};
 type GetType = "all" | "public";
 type GetByIdType = { id: string };
 
 interface Option {
-    forAdmin?: boolean;
+  forAdmin?: boolean;
 }
 
-const PRIVATE_STATUSES = new Set([CompetitionStatus.DRAFT]);
-
 const useCompetition = (option: Option) => {
-    const userState = container.get<UserState>(TYPES.UserState);
-    const getPrivateCompetitionRequest = container.get<GetPrivateCompetitionRequest>(TYPES.GetPrivateCompetitionRequest);
-    const getCompetitionByIdRequest = container.get<GetCompetionByIdRequest>(TYPES.GetCompetionByIdRequest);
-    const getPublicCompetitionRequest = container.get<GetPublicCompetitionRequest>(TYPES.GetPublicCompetitionRequest);
+  const getPrivateCompetitionRequest =
+    container.get<GetPrivateCompetitionRequest>(
+      TYPES.GetPrivateCompetitionRequest,
+    );
+  const getCompetitionByIdRequest = container.get<GetCompetionByIdRequest>(
+    TYPES.GetCompetionByIdRequest,
+  );
+  const getPublicCompetitionRequest =
+    container.get<GetPublicCompetitionRequest>(
+      TYPES.GetPublicCompetitionRequest,
+    );
+  const createCompetitionRequest = container.get<CreateCompetitionRequest>(
+    TYPES.CreateCompetitionRequest,
+  );
+  const store = option.forAdmin
+    ? container.get<AdminCompetitionStore>(TYPES.AdminCompetitionStore)
+    : container.get<CompetitionState>(TYPES.CompetitionState);
 
-    const store = option.forAdmin
-        ? container.get<AdminCompetitionStore>(TYPES.AdminCompetitionStore)
-        : container.get<CompetitionState>(TYPES.CompetitionState);
+  const [page, setPage] = useState<number>(1);
 
-    const [page, setPage] = useState<number>(0);
+  return {
+    store,
 
-    /**
-     * Reads competitions from the store and filters them.
-     * Does NOT trigger any network call.
-     */
-    const get = (state: GetType | GetByIdType) => {
-        const all = store.competitions;
+    fetch: async (
+      state: GetType | GetByIdType,
+      pageOverride?: number,
+    ): Promise<void> => {
+      const currentPage = pageOverride ?? page;
 
-        if (typeof state === "object" && "id" in state) {
-            return all.filter((c) => c.id === state.id);
-        }
-
-        if (state === "public") {
-            return all.filter((c) => !PRIVATE_STATUSES.has(c.status));
-        }
-
-        // "all"
-        return all;
-    };
-
-    /**
-     * Fetches competitions from the network and pushes them into the store.
-     * Call this first to populate the store, then use get() to read from it.
-     */
-    const fetch = async (state: GetType | GetByIdType) => {
-    if (typeof state === "object" && "id" in state) {
+      if (typeof state === "object" && "id" in state) {
         const data = await getCompetitionByIdRequest.execute(state.id);
         if (data) store.addNewCompetition(data);
         return;
-    }
+      }
 
-    // "all" and "public" both paginate through the same private endpoint
-    const data = await getPrivateCompetitionRequest.execute(page);
-    data?.forEach((c) => store.addNewCompetition(c));
-    setPage((prev) => prev + 1);
-    };
+      if (state === "public") {
+        const data = await getPublicCompetitionRequest.execute(currentPage);
+        data?.forEach((c) =>
+          store.addNewCompetition(c as unknown as CompetitionConstructor),
+        );
+      } else {
+        const data = await getPrivateCompetitionRequest.execute(currentPage);
+        data?.forEach((c) =>
+          store.addNewCompetition(c as unknown as CompetitionConstructor),
+        );
+      }
+      setPage(currentPage + 1);
+    },
 
-    /**
-     * Clears the store and resets pagination back to 0.
-     */
-    const reset = () => {
-        store.clearCompetitions();
-        setPage(0);
-    };
+    create: async (data: CreateCompetitionData): Promise<void> => {
+      await createCompetitionRequest.execute(data);
+    },
 
-    return { get, fetch, reset, page };
+    reset: () => {
+      store.clearCompetitions();
+      setPage(1);
+    },
+
+    page,
+  };
 };
 
 export default useCompetition;

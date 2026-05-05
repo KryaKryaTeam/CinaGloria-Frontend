@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cn } from "@/infrastructure/utils"
+import * as React from "react";
+import { cn } from "@/infrastructure/utils";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
@@ -15,7 +15,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
         {...props}
       />
     </div>
-  )
+  );
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
@@ -25,17 +25,20 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
       className={cn("border-b border-white/10 bg-white/5", className)}
       {...props}
     />
-  )
+  );
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
   return (
     <tbody
       data-slot="table-body"
-      className={cn("[&_tr:last-child]:border-0 divide-y divide-white/5", className)}
+      className={cn(
+        "[&_tr:last-child]:border-0 divide-y divide-white/5",
+        className,
+      )}
       {...props}
     />
-  )
+  );
 }
 
 function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
@@ -44,11 +47,11 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
       data-slot="table-footer"
       className={cn(
         "border-t border-white/10 bg-white/5 font-medium [&>tr]:last:border-b-0",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
@@ -59,11 +62,11 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
         "border-b border-white/5 transition-colors duration-150",
         "hover:bg-white/5 cursor-pointer",
         "data-[state=selected]:bg-indigo-500/10 data-[state=selected]:border-indigo-500/20",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TableHead({ className, ...props }: React.ComponentProps<"th">) {
@@ -74,11 +77,11 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
         "h-11 px-4 text-left align-middle text-xs font-semibold uppercase tracking-wider",
         "text-white/40 whitespace-nowrap",
         "[&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TableCell({ className, ...props }: React.ComponentProps<"td">) {
@@ -88,11 +91,11 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
       className={cn(
         "px-4 py-3 align-middle text-white/70 whitespace-nowrap",
         "[&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TableCaption({
@@ -105,7 +108,7 @@ function TableCaption({
       className={cn("mt-4 text-sm text-white/30", className)}
       {...props}
     />
-  )
+  );
 }
 
 export {
@@ -117,4 +120,4 @@ export {
   TableRow,
   TableCell,
   TableCaption,
-}
+};

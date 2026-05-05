@@ -5,7 +5,9 @@ class TestValueObject extends ValueObject<string> {
   constructor(value: string) {
     super(value);
   }
-  get value(): string { return this._value; }
+  get value(): string {
+    return this._value;
+  }
   equals(other: ValueObject<string>): boolean {
     return this.toString() === other.toString();
   }

@@ -1,0 +1,31 @@
+<style>
+  /* 1. Constrain the Docs content width for better readability */
+  .sbdocs-content {
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+  }
+
+  /* 2. Fix the height for components in Canvas (Preview) tab */
+  /* Only target the Canvas view, not the Docs view */
+  body.sb-main-padded #storybook-root,
+  body.sb-main-fullscreen #storybook-root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 3. Style the story containers within the Docs page */
+  .docs-story {
+    background: white;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 3px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  /* 4. Fix for Absolute positioned components (like Avatars) */
+  .innerZoomElementWrapper > div {
+    min-height: inherit;
+  }
+</style>

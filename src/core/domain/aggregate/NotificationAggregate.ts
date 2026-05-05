@@ -11,11 +11,11 @@ export class NotificationAggregate {
   }
 
   async markAsRead(notification: Notification, actorId: string): Promise<void> {
-    notification.markAsRead(actorId); 
+    notification.markAsRead(actorId);
 
     const events = notification.pullEvents();
     events.forEach((e) => this.dispatcher.addEvent(e));
 
-    await this.dispatcher.dispatchEvents(); 
+    await this.dispatcher.dispatchEvents();
   }
 }

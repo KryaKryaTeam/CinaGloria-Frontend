@@ -1,33 +1,33 @@
-'use client'
+"use client";
 
-import { useMe } from "@/hooks/user/useMe.hook"
-import { Button } from "@/ui/button"
-import { ArrowRight, UserRoundPlus } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useMe } from "@/hooks/user/useMe.hook";
+import { Button } from "@/ui/button";
+import { ArrowRight, UserRoundPlus } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface RegistrationButtonProps {
-  isRegistrationOpen: boolean
-  id: string
+  isRegistrationOpen: boolean;
+  id: string;
 }
 
 export default function RegistrationButton({
   isRegistrationOpen,
-  id
+  id,
 }: RegistrationButtonProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const {isAuthed} = useMe();
-  if (!isRegistrationOpen) return null
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { isAuthed } = useMe();
+  if (!isRegistrationOpen) return null;
 
   function handleClick() {
     if (isAuthed()) {
-      router.push(`/competitions/${id}/register`)
-      return
+      router.push(`/competitions/${id}/register`);
+      return;
     }
 
-    const modal = searchParams.get('modal')
-    const next = modal === 'true' ? 'false' : 'true'
-    router.push(`?modal=${next}`)
+    const modal = searchParams.get("modal");
+    const next = modal === "true" ? "false" : "true";
+    router.push(`?modal=${next}`);
   }
 
   return (
@@ -40,5 +40,5 @@ export default function RegistrationButton({
       Go to Registration
       <ArrowRight className="h-4 w-4" />
     </Button>
-  )
+  );
 }

@@ -1,3 +1,4 @@
+import LoadFileRequest from "./requests/network/File/LoadFile.request";
 
 export const TYPES = {
   NotificationStore: Symbol.for("NotificationStore"),
@@ -27,6 +28,10 @@ export const TYPES = {
   AdminCheck: Symbol.for("AdminCheck"),
   RequestGetUsers: Symbol.for("RequestGetUsers"),
   AdminCompetitionStore: Symbol.for("AdminCompetitionStore"),
+  DeleteCompetitionRequest: Symbol.for("DeleteCompetitionRequest"),
   GetUsersAdminListRequest: Symbol.for("GetUsersAdminListRequest"),
   UpdateUserRoleRequest: Symbol.for("UpdateUserRoleRequest"),
+  FileStore: Symbol.for("FileStore"),
+  LoadFileRequest: Symbol.for("LoadFileRequest"),
+  GetFileURLRequest: Symbol.for("GetImageURLRequest"),
 } as const;
