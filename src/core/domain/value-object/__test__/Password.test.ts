@@ -18,19 +18,27 @@ describe("Password", () => {
     });
 
     it("should throw error if missing uppercase letter", () => {
-      expect(() => Password.create("password123!")).toThrow("Need at least one uppercase letter");
+      expect(() => Password.create("password123!")).toThrow(
+        "Need at least one uppercase letter",
+      );
     });
 
     it("should throw error if missing lowercase letter", () => {
-      expect(() => Password.create("PASSWORD123!")).toThrow("Need at least one lowercase letter");
+      expect(() => Password.create("PASSWORD123!")).toThrow(
+        "Need at least one lowercase letter",
+      );
     });
 
     it("should throw error if missing a digit", () => {
-      expect(() => Password.create("Password!")).toThrow("Need at least one digit");
+      expect(() => Password.create("Password!")).toThrow(
+        "Need at least one digit",
+      );
     });
 
     it("should throw error if missing a special character", () => {
-      expect(() => Password.create("Password123")).toThrow("Need at least one special character");
+      expect(() => Password.create("Password123")).toThrow(
+        "Need at least one special character",
+      );
     });
   });
 

@@ -106,11 +106,11 @@ export default class Round {
   }
 
   get startOfRound(): Date | string {
-    return this._startOfRound ?? '';
+    return this._startOfRound ?? "";
   }
 
   get endOfRound(): Date | string {
-    return this._endOfRound ?? '';
+    return this._endOfRound ?? "";
   }
 
   get relatedTasks() {

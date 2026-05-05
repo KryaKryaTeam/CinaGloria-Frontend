@@ -48,7 +48,9 @@ describe("Email", () => {
     });
 
     test("throws ValidationError with 'Invalid email format' message", () => {
-      expect(() => Email.create("not-an-email")).toThrow("Invalid email format");
+      expect(() => Email.create("not-an-email")).toThrow(
+        "Invalid email format",
+      );
     });
   });
 

@@ -1,8 +1,8 @@
 // import { INotification } from "@/core/domain/entity/Notification";
 // import { Mail, Users } from "lucide-react";
 
-// export default function NotificationDetailList({ notification }: { notification: INotification }) { 
-//     return ( 
+// export default function NotificationDetailList({ notification }: { notification: INotification }) {
+//     return (
 //               <div className="px-6 py-5 border-b border-zinc-100 space-y-3">
 //         <div className="flex items-center gap-3">
 //           <div className="w-24 shrink-0">

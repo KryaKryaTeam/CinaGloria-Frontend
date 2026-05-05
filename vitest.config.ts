@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 import path from "path";
 import { fileURLToPath } from "node:url";
-// 1. Закомментируй эти два импорта, они ломают запуск
+//
 // import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 // import { playwright } from "@vitest/browser-playwright";
 
@@ -29,7 +29,7 @@ export default defineConfig({
           setupFiles: ["./vitest.setup.ts"],
         },
       },
-      // 2. Закомментируй второй проект (storybook), так как он требует плагины выше
+      // 2.
       /*
       {
         extends: true,

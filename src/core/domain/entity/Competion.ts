@@ -402,4 +402,17 @@ export default class Competition {
   get rounds(): Round[] {
     return this._rounds;
   }
+  public toPublicObject(): CompetitionPublicObject {
+    return {
+      id: this.id,
+      name: this._name || "<Name>",
+      avatar: this._avatar || new URL("https://picsum.photos/200"),
+      banner: this._banner || new URL("https://picsum.photos/600/200"),
+      dateOfStart: this._dateOfStart || new Date(),
+      dateOfEnd: this._dateOfEnd || new Date(),
+      dateOfStartRegistration: this._dateOfStartRegistration || new Date(),
+      dateOfEndRegistration: this._dateOfEndRegistration || new Date(),
+      status: this._status,
+    };
+  }
 }

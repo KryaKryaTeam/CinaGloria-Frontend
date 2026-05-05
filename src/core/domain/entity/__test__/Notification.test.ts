@@ -2,7 +2,9 @@ import { describe, expect, test, beforeEach } from "vitest";
 import { Notification, INotification } from "../Notification";
 import NotificationStatus from "../NotificationType.enum";
 
-const makeNotification = (overrides: Partial<INotification> = {}): INotification => ({
+const makeNotification = (
+  overrides: Partial<INotification> = {},
+): INotification => ({
   id: "notif-1",
   title: "Test title",
   content: "Test content",
@@ -41,12 +43,16 @@ describe("Notification", () => {
     });
 
     test("defaults status to sended when not provided", () => {
-      const n = new Notification(makeNotification({ status: undefined as never }));
+      const n = new Notification(
+        makeNotification({ status: undefined as never }),
+      );
       expect(n.status).toBe(NotificationStatus.sended);
     });
 
     test("parses createdAt as a Date", () => {
-      const n = new Notification(makeNotification({ createdAt: new Date("2020-06-15") }));
+      const n = new Notification(
+        makeNotification({ createdAt: new Date("2020-06-15") }),
+      );
       expect(n.createdAt).toBeInstanceOf(Date);
       expect(n.createdAt.getFullYear()).toBe(2020);
     });
@@ -60,7 +66,9 @@ describe("Notification", () => {
     });
 
     test("is true when status is readed", () => {
-      const n = new Notification(makeNotification({ status: NotificationStatus.readed }));
+      const n = new Notification(
+        makeNotification({ status: NotificationStatus.readed }),
+      );
       expect(n.read).toBe(true);
     });
   });
@@ -90,7 +98,9 @@ describe("Notification", () => {
     });
 
     test("does not change status when already readed", () => {
-      const n = new Notification(makeNotification({ status: NotificationStatus.readed }));
+      const n = new Notification(
+        makeNotification({ status: NotificationStatus.readed }),
+      );
       n.markAsRead();
       expect(n.status).toBe(NotificationStatus.readed);
     });
