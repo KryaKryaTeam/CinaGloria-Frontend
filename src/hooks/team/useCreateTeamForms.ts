@@ -6,7 +6,7 @@ import {
   MAX_TEAM_NAME_LENGTH,
 } from "@/core/models/create-team.request";
 import { useTeamState } from "@/state/team.state";
-import { useCreateTeamApi } from "./use-create-team-api";
+import { useCreateTeamApi } from "./useCreateTeamApi";
 
 const schema = z.object({
   name: z.string().min(1).max(MAX_TEAM_NAME_LENGTH),

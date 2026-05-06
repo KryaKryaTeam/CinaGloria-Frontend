@@ -4,6 +4,7 @@ import { inject, injectable } from "inversify";
 import { HTTPMethod } from "../type";
 import URLEnum from "../URLEnum";
 import URLAddValue from "@/infrastructure/URLAddKey";
+import { CreateTeamRequest } from "@/core/models/create-team.request";
 
 export interface ISubRequestData {
   url: URL | string;
@@ -23,6 +24,9 @@ export abstract class NetworkRequest<
   RequestOutput,
   ErrorResponse = string,
 > {
+  static post(arg0: string, data: CreateTeamRequest) {
+    throw new Error("Method not implemented.");
+  }
   constructor(
     @inject(TYPES.UserState)
     protected readonly userState: UserState,
