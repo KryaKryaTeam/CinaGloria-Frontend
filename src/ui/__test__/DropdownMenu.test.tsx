@@ -9,31 +9,31 @@ import {
 } from "../dropdown-menu";
 
 describe("DropdownMenu Component", () => {
-  it("має відкривати меню при натисканні на тригер", async () => {
+  it("should open the menu when the trigger is clicked", async () => {
     render(
       <DropdownMenu>
-        <DropdownMenuTrigger>Відкрити</DropdownMenuTrigger>
+        <DropdownMenuTrigger>Open</DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Профіль</DropdownMenuItem>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>,
     );
 
-    const trigger = screen.getByText("Відкрити");
+    const trigger = screen.getByText("Open");
 
     fireEvent.pointerDown(trigger, { button: 0 });
     fireEvent.click(trigger);
 
-    const item = await screen.findByText("Профіль");
+    const item = await screen.findByText("Profile");
     expect(item).toBeDefined();
   });
 
-  it("має відображати стан вибраного чекбокса", () => {
+  it("should display the state of a checked checkbox item", () => {
     render(
       <DropdownMenu open={true}>
         <DropdownMenuContent>
           <DropdownMenuCheckboxItem checked={true}>
-            Опція
+            Option
           </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
       </DropdownMenu>,
@@ -43,16 +43,16 @@ describe("DropdownMenu Component", () => {
     expect(checkbox.getAttribute("data-state")).toBe("checked");
   });
 
-  it("має застосовувати деструктивний варіант", () => {
+  it("should apply the destructive variant correctly", () => {
     render(
       <DropdownMenu open={true}>
         <DropdownMenuContent>
-          <DropdownMenuItem variant="destructive">Видалити</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>,
     );
 
-    const item = screen.getByText("Видалити");
+    const item = screen.getByText("Delete");
     expect(item.getAttribute("data-variant")).toBe("destructive");
   });
 });

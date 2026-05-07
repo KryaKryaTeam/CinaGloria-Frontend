@@ -9,7 +9,7 @@ import {
 } from "../sheet";
 
 describe("Sheet Component", () => {
-  it("має відкривати панель при кліку на тригер", async () => {
+  it("should open the panel when trigger is clicked", async () => {
     render(
       <Sheet>
         <SheetTrigger>Open Sheet</SheetTrigger>
@@ -29,7 +29,7 @@ describe("Sheet Component", () => {
     expect(screen.getByText("Title")).toBeDefined();
   });
 
-  it("має рендерити контент з правильної сторони", async () => {
+  it("should render content on the correct side", async () => {
     render(
       <Sheet open={true}>
         <SheetContent side="left">

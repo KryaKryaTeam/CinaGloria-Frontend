@@ -3,20 +3,20 @@ import { describe, it, expect } from "vitest";
 import { Field, FieldLabel, FieldError, FieldDescription } from "../field";
 
 describe("Field System", () => {
-  it("має рендерити повну структуру поля з описом", () => {
+  it("should render the full field structure with a description", () => {
     render(
       <Field>
-        <FieldLabel>Електронна пошта</FieldLabel>
-        <FieldDescription>Ми не ділимося вашим email</FieldDescription>
+        <FieldLabel>Email Address</FieldLabel>
+        <FieldDescription>We do not share your email</FieldDescription>
       </Field>,
     );
 
-    expect(screen.getByText("Електронна пошта")).toBeInTheDocument();
-    expect(screen.getByText("Ми не ділимося вашим email")).toBeInTheDocument();
+    expect(screen.getByText("Email Address")).toBeInTheDocument();
+    expect(screen.getByText("We do not share your email")).toBeInTheDocument();
   });
 
-  it("має відображати помилку, якщо передано пропс errors", () => {
-    const errors = [{ message: "Невірний формат" }];
+  it("should display an error when the errors prop is provided", () => {
+    const errors = [{ message: "Invalid format" }];
     render(
       <Field>
         <FieldError errors={errors} />
@@ -24,14 +24,14 @@ describe("Field System", () => {
     );
 
     const errorElement = screen.getByRole("alert");
-    expect(errorElement).toHaveTextContent("Невірний формат");
+    expect(errorElement).toHaveTextContent("Invalid format");
     expect(errorElement).toHaveClass("text-destructive");
   });
 
-  it("має коректно відображати декілька помилок списком", () => {
+  it("should correctly display multiple errors as a list", () => {
     const errors = [
-      { message: "Надто коротко" },
-      { message: "Має містити цифру" },
+      { message: "Too short" },
+      { message: "Must contain a digit" },
     ];
     render(<FieldError errors={errors} />);
 
@@ -39,7 +39,7 @@ describe("Field System", () => {
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
   });
 
-  it("застосовує правильну орієнтацію через cva", () => {
+  it("should apply the correct orientation via cva", () => {
     const { container } = render(<Field orientation="horizontal" />);
     const field = container.querySelector('[data-slot="field"]');
     expect(field).toHaveClass("flex-row");

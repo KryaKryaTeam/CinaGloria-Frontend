@@ -10,36 +10,36 @@ import {
 } from "../dialog";
 
 describe("Dialog Component", () => {
-  it("має відкривати вікно при натисканні на тригер", async () => {
+  it("should open the dialog when the trigger is clicked", async () => {
     render(
       <Dialog>
         <DialogTrigger asChild>
-          <button>Відкрити</button>
+          <button>Open</button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Заголовок</DialogTitle>
-            <DialogDescription>Опис</DialogDescription>
+            <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
           </DialogHeader>
-          <div data-testid="dialog-content">Контент</div>
+          <div data-testid="dialog-content">Content</div>
         </DialogContent>
       </Dialog>,
     );
 
-    const trigger = screen.getByText("Відкрити");
+    const trigger = screen.getByText("Open");
     fireEvent.click(trigger);
 
     const content = await screen.findByTestId("dialog-content");
     expect(content).toBeDefined();
-    expect(screen.getByText("Заголовок")).toBeDefined();
+    expect(screen.getByText("Title")).toBeDefined();
   });
 
-  it("має закривати вікно при натисканні на кнопку закриття", async () => {
+  it("should close the dialog when the close button is clicked", async () => {
     render(
       <Dialog defaultOpen>
         <DialogContent>
-          <DialogTitle>Заголовок</DialogTitle>
-          <div data-testid="close-target">Контент</div>
+          <DialogTitle>Title</DialogTitle>
+          <div data-testid="close-target">Content</div>
         </DialogContent>
       </Dialog>,
     );
@@ -51,11 +51,11 @@ describe("Dialog Component", () => {
     expect(content).toBeNull();
   });
 
-  it("має рендерити портал для діалогу", () => {
+  it("should render a portal for the dialog", () => {
     render(
       <Dialog defaultOpen>
         <DialogContent>
-          <DialogTitle>Заголовок</DialogTitle>
+          <DialogTitle>Title</DialogTitle>
           <div>Portal Test</div>
         </DialogContent>
       </Dialog>,

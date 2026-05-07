@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import { Checkbox } from "../checkbox";
 
 describe("Checkbox Component", () => {
-  it("має змінювати стан при кліку", () => {
+  it("should change state when clicked", () => {
     render(<Checkbox />);
     const checkbox = screen.getByRole("checkbox");
     expect(checkbox.getAttribute("data-state")).toBe("unchecked");

@@ -9,12 +9,12 @@ describe("DatePickerInput Component", () => {
     onBlur: vi.fn(),
   };
 
-  it("має рендерити інпут з плейсхолдером", () => {
+  it("should render input with placeholder", () => {
     render(<DatePickerInput {...defaultProps} />);
     expect(screen.getByPlaceholderText("Select date")).toBeDefined();
   });
 
-  it("має відкривати поповер з календарем при кліку на іконку", () => {
+  it("should open popover with calendar on icon click", () => {
     const { container } = render(<DatePickerInput {...defaultProps} />);
 
     const trigger = container.querySelector("button");
@@ -26,7 +26,7 @@ describe("DatePickerInput Component", () => {
     expect(calendar).toBeDefined();
   });
 
-  it("має відображати початкове значення, якщо передано value", () => {
+  it("should display initial value when value prop is provided", () => {
     const testDate = new Date("2024-05-20");
     render(<DatePickerInput {...defaultProps} value={testDate} />);
 

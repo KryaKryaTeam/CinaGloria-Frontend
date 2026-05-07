@@ -9,14 +9,12 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "../sidebar";
-
-// Мокаємо хук, щоб не було проблем з медіа-запитами в JSDOM
 vi.mock("@/hooks/use-mobile", () => ({
   useIsMobile: () => false,
 }));
 
 describe("Sidebar Component", () => {
-  it("має змінювати стан (expanded/collapsed) при кліку на тригер", () => {
+  it("should toggle state (expanded/collapsed) when trigger is clicked", () => {
     const { container } = render(
       <SidebarProvider defaultOpen={true}>
         <SidebarTrigger data-testid="sidebar-toggle" />
@@ -31,8 +29,6 @@ describe("Sidebar Component", () => {
         </Sidebar>
       </SidebarProvider>,
     );
-
-    // Шукаємо через селектор атрибута, бо це надійніше для data-slot
     const sidebar = container.querySelector('[data-slot="sidebar"]');
     expect(sidebar?.getAttribute("data-state")).toBe("expanded");
 
@@ -42,7 +38,7 @@ describe("Sidebar Component", () => {
     expect(sidebar?.getAttribute("data-state")).toBe("collapsed");
   });
 
-  it("має відображати внутрішній контент", () => {
+  it("should render inner content correctly", () => {
     render(
       <SidebarProvider>
         <Sidebar>

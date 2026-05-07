@@ -3,14 +3,14 @@ import { describe, it, expect } from "vitest";
 import { Badge } from "../badge";
 
 describe("Badge Component", () => {
-  it("має рендерити текст всередині", () => {
-    render(<Badge>Активно</Badge>);
-    expect(screen.getByText("Активно")).toBeTruthy();
+  it("should render the text inside", () => {
+    render(<Badge>Active</Badge>);
+    expect(screen.getByText("Active")).toBeTruthy();
   });
 
-  it("має застосовувати правильний variant", () => {
-    render(<Badge variant="destructive">Помилка</Badge>);
-    const badge = screen.getByText("Помилка");
+  it("should apply the correct variant", () => {
+    render(<Badge variant="destructive">Error</Badge>);
+    const badge = screen.getByText("Error");
     expect(badge.getAttribute("data-variant")).toBe("destructive");
   });
 });

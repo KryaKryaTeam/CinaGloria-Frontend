@@ -3,16 +3,16 @@ import { describe, it, expect, vi } from "vitest";
 import { Button } from "../button";
 
 describe("Button Component", () => {
-  it(() => {
-    render(<Button>Натисніть</Button>);
+  it("should render the button with the correct text", () => {
+    render(<Button>Click me</Button>);
     expect(
-      screen.getByRole("button", { name: /натисніть/i }),
+      screen.getByRole("button", { name: /click me/i }),
     ).toBeInTheDocument();
   });
 
-  it(() => {
+  it("should call the onClick handler when clicked", () => {
     const handleClick = vi.fn();
-    render(<Button onClick={handleClick}>Клік</Button>);
+    render(<Button onClick={handleClick}>Click</Button>);
 
     const button = screen.getByRole("button");
     fireEvent.click(button);
@@ -20,16 +20,16 @@ describe("Button Component", () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it(() => {
-    render(<Button disabled>Заблоковано</Button>);
+  it("should be disabled when the disabled prop is provided", () => {
+    render(<Button disabled>Disabled</Button>);
     const button = screen.getByRole("button");
     expect(button).toBeDisabled();
   });
 
-  it(() => {
+  it("should apply the correct variant and size attributes", () => {
     render(
       <Button variant="destructive" size="lg">
-        Видалити
+        Delete
       </Button>,
     );
     const button = screen.getByRole("button");
@@ -38,21 +38,21 @@ describe("Button Component", () => {
     expect(button).toHaveAttribute("data-size", "lg");
   });
 
-  it(() => {
+  it("should render as a child component when asChild is provided", () => {
     render(
       <Button asChild>
-        <a href="/test">Посилання-кнопки</a>
+        <a href="/test">Link Button</a>
       </Button>,
     );
 
-    const link = screen.getByRole("link", { name: /посилання-кнопки/i });
+    const link = screen.getByRole("link", { name: /link button/i });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute("data-slot", "button");
   });
 
-  it( () => {
+  it("should apply a custom className", () => {
     const customClass = "my-custom-class";
-    render(<Button className={customClass}>Кнопка</Button>);
+    render(<Button className={customClass}>Button</Button>);
     expect(screen.getByRole("button")).toHaveClass(customClass);
   });
 });

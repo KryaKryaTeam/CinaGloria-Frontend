@@ -9,32 +9,32 @@ import {
 } from "../popover";
 
 describe("Popover Component", () => {
-  it("має рендерити контент після натискання на тригер", async () => {
+  it("should render content after clicking the trigger", async () => {
     render(
       <Popover>
-        <PopoverTrigger>Інфо</PopoverTrigger>
+        <PopoverTrigger>Info</PopoverTrigger>
         <PopoverContent>
-          <PopoverTitle>Заголовок</PopoverTitle>
-          <PopoverDescription>Детальний опис</PopoverDescription>
+          <PopoverTitle>Title</PopoverTitle>
+          <PopoverDescription>Detailed description</PopoverDescription>
         </PopoverContent>
       </Popover>,
     );
 
-    const trigger = screen.getByText("Інфо");
+    const trigger = screen.getByText("Info");
     fireEvent.click(trigger);
 
-    expect(await screen.findByText("Детальний опис")).toBeInTheDocument();
-    expect(screen.getByText("Заголовок")).toBeInTheDocument();
+    expect(await screen.findByText("Detailed description")).toBeInTheDocument();
+    expect(screen.getByText("Title")).toBeInTheDocument();
   });
 
-  it("має мати правильний data-slot для контенту", () => {
+  it("should have the correct data-slot for the content", () => {
     render(
       <Popover open={true}>
-        <PopoverContent>Контент</PopoverContent>
+        <PopoverContent>Content</PopoverContent>
       </Popover>,
     );
 
-    const content = screen.getByText("Контент");
+    const content = screen.getByText("Content");
     expect(content).toHaveAttribute("data-slot", "popover-content");
   });
 });
