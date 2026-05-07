@@ -110,22 +110,22 @@ export default function Page() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Basic Info */}
               <div className="space-y-4">
-                <Label htmlFor="name">name</Label>
+                <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
-                  placeholder="Summer hackton"
+                  placeholder="Summer hackton( Maximum 250 symbols )"
                   {...register("name", { required: "Name is required" })}
                 />
 
-                <Label htmlFor="description">description</Label>
-                <Textarea id="description" {...register("description")} />
+                <Label htmlFor="description">Description</Label>
+                <Textarea id="description" placeholder="Maxium 1000 symbols" {...register("description")} />
               </div>
 
               <Separator />
 
               {/* Dates */}
               <div className="space-y-2">
-                <Label>date of end registration:</Label>
+                <Label>Date of end registration:</Label>
                 <Controller
                   name="dateOfEndRegistration"
                   control={control}
@@ -142,9 +142,26 @@ export default function Page() {
                   </p>
                 )}
               </div>
-
+               <div className="space-y-2">
+                <Label>Date of start registration:</Label>
+                <Controller
+                  name="dateOfStartRegistration"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePickerPopover
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+                {form.formState.errors.dateOfStartRegistration && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.dateOfStartRegistration.message}
+                  </p>
+                )}
+              </div>
               <div className="space-y-2">
-                <Label>date of start:</Label>
+                <Label>Date of start:</Label>
                 <Controller
                   name="dateOfStart"
                   control={control}
@@ -163,7 +180,7 @@ export default function Page() {
               </div>
 
               <div className="space-y-2">
-                <Label>date of end:</Label>
+                <Label>Date of end:</Label>
                 <Controller
                   name="dateOfEnd"
                   control={control}
@@ -186,7 +203,7 @@ export default function Page() {
               {/* Media */}
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>avatar:</Label>
+                  <Label>Avatar:</Label>
                   <Controller
                     name="avatar"
                     control={control}
@@ -199,7 +216,7 @@ export default function Page() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>banner:</Label>
+                  <Label>Banner:</Label>
                   <Controller
                     name="banner"
                     control={control}
