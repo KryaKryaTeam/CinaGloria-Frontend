@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { CreateTeamRequest } from "@/core/models/create-team.request";
 
 interface TeamState {
   isSubmitting: boolean;
@@ -8,11 +7,9 @@ interface TeamState {
   setError: (error: string | null) => void;
 }
 
-export const useTeamState = create<TeamState>(
-  (set: (arg0: { isSubmitting?: boolean; error?: string | null }) => any) => ({
-    isSubmitting: false,
-    error: null,
-    setSubmitting: (status: boolean) => set({ isSubmitting: status }),
-    setError: (error: string | null) => set({ error }),
-  }),
-);
+export const useTeamState = create<TeamState>((set) => ({
+  isSubmitting: false,
+  error: null,
+  setSubmitting: (status) => set({ isSubmitting: status }),
+  setError: (error) => set({ error }),
+}));

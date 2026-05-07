@@ -3,7 +3,7 @@
 import { Controller } from "react-hook-form";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
-import { useCreateTeamForm } from "@/hooks/team/useCreateTeamForms";
+import { useCreateTeamForm } from "@/hooks/team/useCreateTeamForm";
 import { useTeamState } from "@/state/team.state";
 import DragAndDropInput from "../dragAndDropInput";
 interface SystemDragDropProps {
