@@ -26,5 +26,6 @@ export const URLEnum = {
   CREATE_TEAM: `${BASE_URL}/teams`,
   USER: `${BASE_URL}/user/`,
   FILE: `${BASE_URL}/file/`,
+  CREATE_TEAM: `${BASE_URL}/team/create`,
 } as const;
 export default URLEnum;

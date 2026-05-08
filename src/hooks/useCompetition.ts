@@ -6,10 +6,13 @@ import CreateCompetitionRequest, {
 import GetCompetionByIdRequest from "@/core/requests/network/Competion/GetCompetionById.request";
 import GetPrivateCompetitionRequest from "@/core/requests/network/Competion/GetPrivateCompetion.request";
 import GetPublicCompetitionRequest from "@/core/requests/network/Competion/GetPublicCompetion.request";
+import JoinCompetitionRequest from "@/core/requests/network/Competion/JoinCompetition.request";
+import UnjoinCompetitionRequest from "@/core/requests/network/Competion/UnjoinCompetition.request";
 import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 import CompetitionState from "@/state/CompetitionState";
 import { useState } from "react";
-type CreateCompetitionData = {
+
+export type CreateCompetitionData = {
   name: string;
   description: string;
   dateOfEnd: Date;
@@ -22,10 +25,11 @@ type CreateCompetitionData = {
   avatar: string;
   banner: string;
 };
-type GetType = "all" | "public";
-type GetByIdType = { id: string };
 
-interface Option {
+export type GetType = "all" | "public";
+export type GetByIdType = { id: string };
+
+export interface Option {
   forAdmin?: boolean;
 }
 
@@ -44,6 +48,14 @@ const useCompetition = (option: Option) => {
   const createCompetitionRequest = container.get<CreateCompetitionRequest>(
     TYPES.CreateCompetitionRequest,
   );
+
+  const joinCompetitionRequest = container.get<JoinCompetitionRequest>(
+    TYPES.JoinCompetitionRequest,
+  );
+  const unjoinCompetitionRequest = container.get<UnjoinCompetitionRequest>(
+    TYPES.UnjoinCompetitionRequest,
+  );
+
   const store = option.forAdmin
     ? container.get<AdminCompetitionStore>(TYPES.AdminCompetitionStore)
     : container.get<CompetitionState>(TYPES.CompetitionState);
@@ -52,13 +64,21 @@ const useCompetition = (option: Option) => {
 
   return {
     store,
+    page,
+
+    join: async (teamId: string): Promise<void> => {
+      await joinCompetitionRequest.execute(teamId);
+    },
+
+    unjoin: async (teamId: string): Promise<void> => {
+      await unjoinCompetitionRequest.execute(teamId);
+    },
 
     fetch: async (
       state: GetType | GetByIdType,
       pageOverride?: number,
     ): Promise<void> => {
       const currentPage = pageOverride ?? page;
-
       if (typeof state === "object" && "id" in state) {
         const data = await getCompetitionByIdRequest.execute(state.id);
         if (data) store.addNewCompetition(data);
@@ -87,8 +107,6 @@ const useCompetition = (option: Option) => {
       store.clearCompetitions();
       setPage(1);
     },
-
-    page,
   };
 };
 

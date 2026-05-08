@@ -17,6 +17,7 @@ export default class DeleteCompetitionRequest extends NetworkRequest<
   void,
   boolean
 > {
+  mockOutputData?: void | undefined;
   withCSRF: boolean = false;
   method: HTTPMethod = "DELETE";
   authorized: boolean = true;
