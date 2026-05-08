@@ -4,7 +4,7 @@ import { inject, injectable } from "inversify";
 import { HTTPMethod } from "../type";
 import URLEnum from "../URLEnum";
 import URLAddValue from "@/infrastructure/URLAddKey";
-import { CreateTeamRequest } from "@/core/models/create-team.request";
+import { CreateTeamRequest } from "@/core/requests/network/CreateTeam.request";
 
 export interface ISubRequestData {
   url: URL | string;

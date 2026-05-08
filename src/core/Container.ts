@@ -47,6 +47,8 @@ import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 import FileStore from "@/state/FileStore";
 import LoadFileRequest from "./requests/network/File/LoadFile.request";
 import GetFileURLRequest from "./requests/network/File/GetImageURl.request";
+import JoinCompetitionRequest from "@/core/requests/network/Competion/JoinCompetition.request";
+import UnjoinCompetitionRequest from "@/core/requests/network/Competion/UnjoinCompetition.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -122,5 +124,11 @@ container
 container.bind(TYPES.FileStore).to(FileStore).inSingletonScope();
 container.bind(TYPES.LoadFileRequest).to(LoadFileRequest).inRequestScope();
 container.bind(TYPES.GetFileURLRequest).to(GetFileURLRequest).inRequestScope();
+container
+  .bind<JoinCompetitionRequest>(TYPES.JoinCompetitionRequest)
+  .to(JoinCompetitionRequest);
+container
+  .bind<UnjoinCompetitionRequest>(TYPES.UnjoinCompetitionRequest)
+  .to(UnjoinCompetitionRequest);
 export default container;
 export { TYPES };
