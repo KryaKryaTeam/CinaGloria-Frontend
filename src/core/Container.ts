@@ -15,6 +15,10 @@ container
 container.bind(TYPES.UserState).to(UserState).inSingletonScope();
 container.bind(TYPES.LoadState).to(LoadState).inSingletonScope();
 container.bind(TYPES.WsSocket).to(WsSocket).inSingletonScope();
+container
+  .bind(TYPES.AdminUsersListState)
+  .to(AdminUsersListState)
+  .inSingletonScope();
 
 // --- REQUEST SCOPE (Transient-like) ---
 import JWTChangeRequest from "./requests/network/JWT.request";
@@ -44,6 +48,7 @@ import DeleteCompetitionRequest from "./requests/network/Competion/DeleteCompeti
 import { GetUsersAdminListRequest } from "./requests/network/GetUsersAdminList.request";
 import { UpdateUserRoleRequest } from "./requests/network/UpdateUserRole.request";
 import AdminCompetitionStore from "@/state/AdminCompetitionStore";
+import { AdminUsersListState } from "@/state/AdminUserState";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -108,8 +113,14 @@ container
   .inRequestScope();
 container.bind(TYPES.AuthCheck).to(AuthCheck).inSingletonScope();
 container.bind(TYPES.AdminCheck).to(AdminCheck).inSingletonScope();
-container.bind(TYPES.AdminCompetitionStore).to(AdminCompetitionStore).inSingletonScope();
-container.bind(TYPES.DeleteCompetitionRequest).to(DeleteCompetitionRequest).inRequestScope();
+container
+  .bind(TYPES.AdminCompetitionStore)
+  .to(AdminCompetitionStore)
+  .inSingletonScope();
+container
+  .bind(TYPES.DeleteCompetitionRequest)
+  .to(DeleteCompetitionRequest)
+  .inRequestScope();
 
 export default container;
 export { TYPES };

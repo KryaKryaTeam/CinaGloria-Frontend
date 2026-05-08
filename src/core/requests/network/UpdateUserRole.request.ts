@@ -28,7 +28,7 @@ export class UpdateUserRoleRequest extends NetworkRequest<
 
   mapData(data: IUpdateRoleDTO): ISubRequestData {
     return {
-      url: new URL(`${URLEnum.USER}role`),
+      url: new URL(`${URLEnum.CHANGE_USER_ROLE}`),
       init: {
         body: {
           userId: data.userId,

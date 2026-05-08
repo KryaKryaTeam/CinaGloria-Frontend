@@ -5,6 +5,7 @@ import { TYPES } from "@/core/Container.types";
 import { UserState } from "@/state/UserState";
 import { IUserForAdminList } from "@/core/domain/entity/IUserForAdminList";
 import { URLEnum } from "../URLEnum";
+import { AdminUsersListState } from "@/state/AdminUserState";
 
 export interface IGetUsersAdminParams {
   page: number;
@@ -14,20 +15,25 @@ export interface IGetUsersAdminParams {
 @injectable()
 export class GetUsersAdminListRequest extends NetworkRequest<
   IGetUsersAdminParams,
+  void,
   IUserForAdminList[],
-  IUserForAdminList[]
+  void
 > {
   withCSRF = false;
   method: HTTPMethod = "GET";
   authorized = true;
   mockOutputData: IUserForAdminList[] = [];
 
-  constructor(@inject(TYPES.UserState) userState: UserState) {
+  constructor(
+    @inject(TYPES.UserState) userState: UserState,
+    @inject(TYPES.AdminUsersListState)
+    private readonly adminUsersListState: AdminUsersListState,
+  ) {
     super(userState);
   }
 
   mapData(data: IGetUsersAdminParams): ISubRequestData {
-    const url = new URL(`${URLEnum.USER}users/${data.page}`);
+    const url = new URL(`${URLEnum.ADMIN_USER}${data.page}`);
 
     if (data.email?.trim()) {
       url.searchParams.set("email", data.email.trim());
@@ -39,7 +45,11 @@ export class GetUsersAdminListRequest extends NetworkRequest<
     };
   }
 
-  onSuccess(data: IUserForAdminList[]): IUserForAdminList[] {
-    return data;
+  onSuccess(data: IUserForAdminList[]) {
+    data.forEach((usr) => this.adminUsersListState.addUser(usr));
+    this.adminUsersListState.updateEncounter();
+  }
+  protected onError(error: Error): void {
+    this.adminUsersListState.stop();
   }
 }

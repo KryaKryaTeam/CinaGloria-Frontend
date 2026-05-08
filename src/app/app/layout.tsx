@@ -12,15 +12,21 @@ import { observer } from "mobx-react-lite";
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { PropsWithChildren, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  PropsWithChildren,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 function Layout({ children }: PropsWithChildren) {
   const [isMounted, setIsMounted] = useState(false);
   const loadState = container.get<LoadState>(TYPES.LoadState);
-  const router = useRouter()
-  const check = container.get<AuthCheck>(TYPES.AuthCheck)
+  const router = useRouter();
+  const check = container.get<AuthCheck>(TYPES.AuthCheck);
   const path = usePathname();
-  check.setRouter(router)
+  check.setRouter(router);
   useEffect(() => {
     loadState.mount();
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -56,14 +62,9 @@ function Layout({ children }: PropsWithChildren) {
         <AnimatePresence>
           <LoaderScreen />
         </AnimatePresence>
-        <section className="flex flex-row w-screen">
+        <section className="flex flex-row w-screen ">
           <div className="w-screen h-screen fixed top-0 left-0 bg-foreground -z-20"></div>
-          <Image
-            src={"/bg2.png"}
-            alt="background"
-            className="opacity-5 w-screen h-screen fixed top-0 left-0 -z-10"
-            fill 
-          />
+          <div className="w-screen h-screen fixed top-0 left-0 bg-[url('/bg2.png')] -z-15 opacity-20"></div>
 
           <AppSidebar />
 
@@ -75,7 +76,6 @@ function Layout({ children }: PropsWithChildren) {
               <NotificationButton />
             </div>
             <AnimatePresence mode="wait">{children}</AnimatePresence>
-            <div className="h-15 w-full">.</div>
           </section>
         </section>
       </GridCardDelayContext.Provider>
