@@ -4,7 +4,7 @@ import z from "zod";
 import Username from "@/core/domain/value-object/Username";
 import container, { TYPES } from "@/core/Container";
 import { UploadFileToAServerRequest } from "@/core/requests/network/UploadFileToAServer.request";
-import { ChangeAvatarRequest } from "@/core/requests/network/ChangeAvatarRequest";
+import { ChangeAvatarRequest } from "@/core/requests/network/User/ChangeAvatarRequest";
 import { LoadState } from "@/state/LoadMachine/LoadState";
 import { useState } from "react";
 import { ChangeUsernameRequest } from "@/core/requests/network/ChangeUsernameRequest";

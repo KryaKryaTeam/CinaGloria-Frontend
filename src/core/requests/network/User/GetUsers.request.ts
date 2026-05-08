@@ -1,7 +1,7 @@
 import User, { IUserEntityData } from "@/core/domain/entity/User";
-import { ISubRequestData, NetworkRequest } from "./NetworkRequest";
+import { ISubRequestData, NetworkRequest } from "../NetworkRequest";
 import { inject, injectable } from "inversify";
-import { HTTPMethod } from "../type";
+import { HTTPMethod } from "../../type";
 import { RoleEnum } from "@/core/domain/entity/RoleEnum";
 import { UserState } from "@/state/UserState";
 import Username from "@/core/domain/value-object/Username";

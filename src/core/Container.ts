@@ -29,7 +29,7 @@ import OldNotificationPageRequest from "./requests/network/OldNotificationPage.r
 import ReadAllRequest from "./requests/network/ReadAllRequest.request";
 import { LogoutRequest } from "./requests/network/Logout.request";
 import { UploadFileToAServerRequest } from "./requests/network/UploadFileToAServer.request";
-import { ChangeAvatarRequest } from "./requests/network/ChangeAvatarRequest";
+import { ChangeAvatarRequest } from "./requests/network/User/ChangeAvatarRequest";
 import { ChangeUsernameRequest } from "./requests/network/ChangeUsernameRequest";
 import CreateCompetitionRequest from "./requests/network/Competion/CreateCompetion.request";
 import CompetitionState from "@/state/CompetitionState";
@@ -47,6 +47,8 @@ import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 import FileStore from "@/state/FileStore";
 import LoadFileRequest from "./requests/network/File/LoadFile.request";
 import GetFileURLRequest from "./requests/network/File/GetImageURl.request";
+import ChangeAdditionRequest from "./requests/network/User/ChangeAddition.request";
+import ChangeUserRoleRequest from "./requests/network/User/ChangeUserRole.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -122,5 +124,7 @@ container
 container.bind(TYPES.FileStore).to(FileStore).inSingletonScope();
 container.bind(TYPES.LoadFileRequest).to(LoadFileRequest).inRequestScope();
 container.bind(TYPES.GetFileURLRequest).to(GetFileURLRequest).inRequestScope();
+container.bind(TYPES.ChangeAdditionRequest).(ChangeAdditionRequest).inRequestScope();
+container.bind(TYPES.ChangeUserRoleRequest).to(ChangeUserRoleRequest).inRequestScope();
 export default container;
 export { TYPES };
