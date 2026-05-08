@@ -2,7 +2,6 @@ import { Notification, INotification } from "@/core/domain/entity/Notification";
 import NotificationStatus from "@/core/domain/entity/NotificationType.enum";
 import { describe, it, expect } from "vitest";
 
-
 describe("Notification Entity", () => {
   const mockProps: INotification = {
     id: "notif-123",
@@ -36,7 +35,7 @@ describe("Notification Entity", () => {
   describe("markAsRead", () => {
     it("should change status to readed and update read property", () => {
       const notification = new Notification(mockProps);
-      
+
       notification.markAsRead();
 
       expect(notification.status).toBe(NotificationStatus.readed);
@@ -57,15 +56,15 @@ describe("Notification Entity", () => {
   describe("Reactivity (MobX)", () => {
     it("should have observable status and computed read property", () => {
       const notification = new Notification(mockProps);
-      
+
       // We check if properties are defined as getters (standard for computed/observable)
       const statusDescriptor = Object.getOwnPropertyDescriptor(
-        Object.getPrototypeOf(notification), 
-        'status'
+        Object.getPrototypeOf(notification),
+        "status",
       );
       const readDescriptor = Object.getOwnPropertyDescriptor(
-        Object.getPrototypeOf(notification), 
-        'read'
+        Object.getPrototypeOf(notification),
+        "read",
       );
 
       expect(statusDescriptor?.get).toBeDefined();

@@ -36,7 +36,9 @@ describe("ReadAllRequest", () => {
     await request.execute(undefined, { mock: true });
 
     expect(
-      notificationStore.notifications.every((n) => n.status === NotificationStatus.readed)
+      notificationStore.notifications.every(
+        (n) => n.status === NotificationStatus.readed,
+      ),
     ).toBe(true);
   });
 
@@ -55,6 +57,8 @@ describe("ReadAllRequest", () => {
   });
 
   test("does not throw when store is empty", async () => {
-    await expect(request.execute(undefined, { mock: true })).resolves.toBeUndefined();
+    await expect(
+      request.execute(undefined, { mock: true }),
+    ).resolves.toBeUndefined();
   });
 });

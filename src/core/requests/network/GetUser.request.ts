@@ -67,18 +67,19 @@ export default class RequestGetUsers extends NetworkRequest<
   }
 
   onSuccess(data: IUserEntityData[]): User[] {
-    return data.map((item) =>
-      new User({
-        id: item.id,
-        username: Username.create(item.username),
-        email: Email.create(item.email),
-        avatarUrl: AvatarURL.create(item.avatarURL),
-        role: item.role,
-        contacts: { ...item.contacts },
-        age: { ...item.age },
-        fullName: { ...item.fullName },
-        authorizationProviders: { ...item.authorizationProviders },
-      })
+    return data.map(
+      (item) =>
+        new User({
+          id: item.id,
+          username: Username.create(item.username),
+          email: Email.create(item.email),
+          avatarUrl: AvatarURL.create(item.avatarURL),
+          role: item.role,
+          contacts: { ...item.contacts },
+          age: { ...item.age },
+          fullName: { ...item.fullName },
+          authorizationProviders: { ...item.authorizationProviders },
+        }),
     );
   }
 }

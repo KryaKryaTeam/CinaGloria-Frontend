@@ -1,3 +1,1 @@
-export default abstract class LocalRequest {
-    
-}
+export default abstract class LocalRequest {}
