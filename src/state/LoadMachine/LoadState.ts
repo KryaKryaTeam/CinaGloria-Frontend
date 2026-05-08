@@ -15,6 +15,7 @@ import { WsSocket } from "@/core/initSocket";
 import GetPrivateCompetitionRequest from "@/core/requests/network/Competion/GetPrivateCompetion.request";
 import AdminCompetitionStore from "../AdminCompetitionStore";
 import debugLog from "@/infrastructure/debugLog";
+import { GetUsersAdminListRequest } from "@/core/requests/network/GetUsersAdminList.request";
 
 @injectable()
 export class LoadState {
@@ -58,12 +59,18 @@ export class LoadState {
           container.get<GetPrivateCompetitionRequest>(
             TYPES.GetPrivateCompetitionRequest,
           );
-        const store = container.get<AdminCompetitionStore>(
+        const admCompStore = container.get<AdminCompetitionStore>(
           TYPES.AdminCompetitionStore,
         );
         const data = await getPrivateCompetitionRequest.execute(0);
-        data.forEach((c) => store.addNewCompetition(c));
-        debugLog(`Admin competitions loaded ${data.length}`);
+        data.forEach((c) => admCompStore.addNewCompetition(c));
+
+        const getUsersAdminListRequest =
+          container.get<GetUsersAdminListRequest>(
+            TYPES.GetUsersAdminListRequest,
+          );
+
+        getUsersAdminListRequest.execute({ page: 0 });
       }),
     },
   };

@@ -7,7 +7,7 @@ export const usePagination = <PromiseType, E extends Element>(
   const ref = useRef<E>(null);
   const fetchFnRef = useRef(fetchFn);
   const isExhausted = useRef(false);
-  const isLoading = useRef(false); // ← додано
+  const isLoading = useRef(false);
 
   useLayoutEffect(() => {
     fetchFnRef.current = fetchFn;
@@ -37,7 +37,7 @@ export const usePagination = <PromiseType, E extends Element>(
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [ref.current, options.root, options.threshold, options.rootMargin]);
+  }, [options.root, options.threshold, options.rootMargin, options]);
 
   return ref;
 };

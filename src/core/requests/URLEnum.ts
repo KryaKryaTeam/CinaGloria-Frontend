@@ -21,6 +21,9 @@ export const URLEnum = {
   CHANGE_USER_AVATAR: `${BASE_URL}/user/avatar`,
   CHANGE_USERNAME: `${BASE_URL}/user/username`,
   COMPETITION: `${BASE_URL}/competition/`,
+  ADMIN_USER: `${BASE_URL}/user/users/`,
+  CHANGE_USER_ROLE: `${BASE_URL}/user/role`,
+  CREATE_TEAM: `${BASE_URL}/teams`,
   USER: `${BASE_URL}/user/`,
   FILE: `${BASE_URL}/file/`,
 } as const;

@@ -1,4 +1,5 @@
 import { cn } from "@/infrastructure/utils";
+import GridCard from "@/ui/component/gridCards/GridCard";
 import {
   Table,
   TableBody,
@@ -31,43 +32,35 @@ export default function AdminTable<T>({
   caption,
   columns,
   data,
-  isLoading = false,
-  emptyMessage = "No data",
   actions,
   className,
 }: AdminTableProps<T>) {
-  if (!isLoading && data.length === 0) {
+  if (data.length == 0) {
     return (
-      <div className={cn("space-y-4", className)}>
-        {caption && (
-          <h1 className="text-2xl font-semibold tracking-tight text-center text-white">
-            {caption}
-          </h1>
-        )}
-        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-12 text-center">
-          <p className="text-sm text-white/40">{emptyMessage}</p>
-        </div>
+      <div className="h-10 w-full">
+        <p className="w-full text-center font-light text-foreground">
+          Users with this email are undefined
+        </p>
       </div>
     );
   }
-
   return (
     <div className={cn("space-y-4", className)}>
       {caption && (
-        <h1 className="text-2xl font-semibold tracking-tight text-center text-white">
+        <h1 className="text-2xl font-semibold tracking-tight text-center ">
           {caption}
         </h1>
       )}
 
-      <div className="rounded-xl border border-white/10 bg-white/[0.02] overflow-hidden">
-        <Table>
+      <div className="overflow-hidden">
+        <Table className="bg-transparent">
           <TableHeader>
-            <TableRow className="border-b border-white/10 hover:bg-transparent">
+            <TableRow className="border-b border-black/10 hover:bg-transparent">
               {columns.map((col) => (
                 <TableHead
                   key={col.key}
                   className={cn(
-                    "h-11 px-4 text-xs font-medium text-white/50 uppercase tracking-wider",
+                    "h-11 px-4 text-xs font-medium uppercase tracking-wider bg-transparent",
                     col.align === "right" && "text-right",
                     col.align === "center" && "text-center",
                     col.className,
@@ -77,54 +70,38 @@ export default function AdminTable<T>({
                 </TableHead>
               ))}
               {actions && (
-                <TableHead className="h-11 px-4 text-xs font-medium text-white/50 uppercase tracking-wider text-right">
+                <TableHead className="h-11 px-4 text-xs font-medium text-black/50 uppercase tracking-wider text-right bg-transparent">
                   Actions
                 </TableHead>
               )}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length + (actions ? 1 : 0)}
-                  className="h-32 text-center"
-                >
-                  <div className="flex items-center justify-center gap-3">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-white/60" />
-                    <span className="text-sm text-white/40">Loading...</span>
-                  </div>
-                </TableCell>
+            {data.map((row, rowIndex) => (
+              <TableRow
+                key={rowIndex}
+                className="border-b border-black/10 hover:bg-transparent"
+              >
+                {columns.map((col) => (
+                  <TableCell
+                    key={col.key}
+                    className={cn(
+                      "px-4 py-3 text-sm bg-transparent",
+                      col.align === "right" && "text-right",
+                      col.align === "center" && "text-center",
+                      col.className,
+                    )}
+                  >
+                    {col.cell(row)}
+                  </TableCell>
+                ))}
+                {actions && (
+                  <TableCell className="px-4 py-3 text-right bg-transparent">
+                    <div className="flex justify-end gap-2">{actions(row)}</div>
+                  </TableCell>
+                )}
               </TableRow>
-            ) : (
-              data.map((row, rowIndex) => (
-                <TableRow
-                  key={rowIndex}
-                  className="border-b border-white/[0.04] transition-colors hover:bg-white/[0.04] data-[state=selected]:bg-white/[0.06]"
-                >
-                  {columns.map((col) => (
-                    <TableCell
-                      key={col.key}
-                      className={cn(
-                        "px-4 py-3 text-sm",
-                        col.align === "right" && "text-right",
-                        col.align === "center" && "text-center",
-                        col.className,
-                      )}
-                    >
-                      {col.cell(row)}
-                    </TableCell>
-                  ))}
-                  {actions && (
-                    <TableCell className="px-4 py-3 text-right">
-                      <div className="flex justify-end gap-2">
-                        {actions(row)}
-                      </div>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))
-            )}
+            ))}
           </TableBody>
         </Table>
       </div>

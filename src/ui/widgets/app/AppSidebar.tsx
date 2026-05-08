@@ -53,16 +53,6 @@ function AppSidebar() {
           link: "/competitions/active",
         },
         { role: "all", name: "History", link: "/competitions/history" },
-        {
-          role: [RoleEnum.ADMIN, RoleEnum.ORGANIZER],
-          name: "Create competition",
-          link: "/competitions/create",
-        },
-        {
-          role: [RoleEnum.ADMIN, RoleEnum.ORGANIZER],
-          name: "Manage competitions",
-          link: "/competitions/manage",
-        },
       ],
     },
     {

@@ -1,7 +1,6 @@
 "use client";
-import AdminTable from "@/ui/widgets/admin/adminTable";
-import { useState } from "react";
 
+import Roadmap from "@/ui/component/inputs/Roadmap";
 const mockActions = new Map([
   [
     "participants",
@@ -57,12 +56,12 @@ export default function TestPage() {
     ]);
   };
 
+function Page() {
   return (
-    <AdminTable
-      caption="Competitions"
-      data={competitions}
-      actions={mockActions}
-      loadMore={handleLoadMore}
-    />
+    <div className="w-full h-screen p-8 bg-foreground">
+      <Roadmap />
+    </div>
   );
 }
+
+export default Page;

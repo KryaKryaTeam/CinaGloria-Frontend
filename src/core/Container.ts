@@ -15,6 +15,10 @@ container
 container.bind(TYPES.UserState).to(UserState).inSingletonScope();
 container.bind(TYPES.LoadState).to(LoadState).inSingletonScope();
 container.bind(TYPES.WsSocket).to(WsSocket).inSingletonScope();
+container
+  .bind(TYPES.AdminUsersListState)
+  .to(AdminUsersListState)
+  .inSingletonScope();
 
 // --- REQUEST SCOPE (Transient-like) ---
 import JWTChangeRequest from "./requests/network/JWT.request";
@@ -44,6 +48,7 @@ import DeleteCompetitionRequest from "./requests/network/Competion/DeleteCompeti
 import { GetUsersAdminListRequest } from "./requests/network/GetUsersAdminList.request";
 import { UpdateUserRoleRequest } from "./requests/network/UpdateUserRole.request";
 import AdminCompetitionStore from "@/state/AdminCompetitionStore";
+import { AdminUsersListState } from "@/state/AdminUserState";
 import FileStore from "@/state/FileStore";
 import LoadFileRequest from "./requests/network/File/LoadFile.request";
 import GetFileURLRequest from "./requests/network/File/GetImageURl.request";
@@ -119,6 +124,7 @@ container
   .bind(TYPES.DeleteCompetitionRequest)
   .to(DeleteCompetitionRequest)
   .inRequestScope();
+
 container.bind(TYPES.FileStore).to(FileStore).inSingletonScope();
 container.bind(TYPES.LoadFileRequest).to(LoadFileRequest).inRequestScope();
 container.bind(TYPES.GetFileURLRequest).to(GetFileURLRequest).inRequestScope();

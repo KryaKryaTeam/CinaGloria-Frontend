@@ -62,14 +62,9 @@ function Layout({ children }: PropsWithChildren) {
         <AnimatePresence>
           <LoaderScreen />
         </AnimatePresence>
-        <section className="flex flex-row w-screen">
+        <section className="flex flex-row w-screen ">
           <div className="w-screen h-screen fixed top-0 left-0 bg-foreground -z-20"></div>
-          <Image
-            src={"/bg2.png"}
-            alt="background"
-            className="opacity-5 w-screen h-screen fixed top-0 left-0 -z-10"
-            fill
-          />
+          <div className="w-screen h-screen fixed top-0 left-0 bg-[url('/bg2.png')] -z-15 opacity-20"></div>
 
           <AppSidebar />
 
@@ -81,7 +76,6 @@ function Layout({ children }: PropsWithChildren) {
               <NotificationButton />
             </div>
             <AnimatePresence mode="wait">{children}</AnimatePresence>
-            <div className="h-15 w-full">.</div>
           </section>
         </section>
       </GridCardDelayContext.Provider>
