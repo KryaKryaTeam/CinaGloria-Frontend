@@ -8,35 +8,52 @@ import { TYPES } from "@/core/Container.types";
 import CompetitionState from "@/state/CompetitionState";
 import debugLog from "@/infrastructure/debugLog";
 interface On401 {
-    code: number;
-    message: string;
-    cause: string;
-    timestamp: Date;
+  code: number;
+  message: string;
+  cause: string;
+  timestamp: Date;
+}
+
+interface ICreateCompetition {
+  name?: string;
+  description?: string;
+  avatar?: string;
+  banner?: string;
+  ultraWideBanner?: string;
+  socialMedia?: string;
+  dateOfStart?: Date;
+  dateOfEnd?: Date;
+  dateOfEndRegistration?: Date;
+  dateOfStartRegistration?: Date;
 }
 @injectable()
-export default class CreateCompetitionRequest extends NetworkRequest<CompetitionConstructor, void, CompetitionConstructor> { 
-    withCSRF: boolean = false;
-    method: HTTPMethod = "POST";
-    authorized: boolean = true
-    constructor(
-        @inject(TYPES.UserState) userState: UserState,
-        @inject(TYPES.CompetitionState) private readonly competitionState: CompetitionState
-    ) {
-        super(userState);
-        this.competitionState = competitionState;
-    }   
-    mapData(data: CompetitionConstructor): ISubRequestData { 
-        return {
-            url: new URL(URLEnum.COMPETITION + "/create"),
-            init: { 
-                body: JSON.stringify(data)
-            }
-        }
-    }
-    onSuccess(data: CompetitionConstructor): void | Promise<void> {
-        this.competitionState.addNewCompetition(data);
-    }
-    protected onError(error: string): void {
-        throw new Error(`Unauthorized: ${error}`);
-    }
+export default class CreateCompetitionRequest extends NetworkRequest<
+  ICreateCompetition,
+  void,
+  CompetitionConstructor,
+  null
+> {
+  mockOutputData: CompetitionConstructor | undefined;
+  withCSRF: boolean = false;
+  method: HTTPMethod = "POST";
+  authorized: boolean = true;
+  constructor(
+    @inject(TYPES.UserState) userState: UserState,
+    @inject(TYPES.CompetitionState)
+    private readonly competitionState: CompetitionState,
+  ) {
+    super(userState);
+    this.competitionState = competitionState;
+  }
+  mapData(data: ICreateCompetition): ISubRequestData {
+    return {
+      url: new URL(URLEnum.COMPETITION_CREATE),
+      init: {
+        body: JSON.stringify({ ...data, rules: [] }),
+      },
+    };
+  }
+  onSuccess(data: CompetitionConstructor): void | Promise<void> {
+    this.competitionState.addNewCompetition(data);
+  }
 }

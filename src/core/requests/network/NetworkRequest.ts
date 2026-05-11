@@ -30,7 +30,7 @@ export abstract class NetworkRequest<
   abstract withCSRF: boolean;
   abstract authorized: boolean;
   abstract method: HTTPMethod;
-  abstract mockOutputData: RequestOutput;
+  abstract mockOutputData: RequestOutput | undefined;
   private retrying: number = 0;
 
   async getCsrf(): Promise<string> {
@@ -61,7 +61,9 @@ export abstract class NetworkRequest<
     if (option?.mock) {
       let mapped = this.mapData(request_data);
       if (this.preload) mapped = await this.preload(mapped);
-      return this.onSuccess(this.mockOutputData);
+      return this.onSuccess(
+        this.mockOutputData ?? ({} as unknown as RequestOutput),
+      );
     }
     try {
       if (this.retrying > 2) throw new Error("Out of retry counter!");

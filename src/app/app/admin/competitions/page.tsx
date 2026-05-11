@@ -36,7 +36,7 @@ function Page() {
           </div>
         </div>
         <Button
-          onClick={() => router.push("/admin/competitions/new")}
+          onClick={() => router.push("/app/admin/competitions/create")}
           className="gap-2"
           variant={"secondary"}
         >
@@ -56,9 +56,7 @@ function Page() {
               className="w-full h-full flex justify-center items-center"
               key={competition.id}
             >
-              <CompetitionAdminCard
-                competition={competition.toPublicObject()}
-              />
+              <CompetitionAdminCard competition={competition} />
             </div>
           ))}
 
