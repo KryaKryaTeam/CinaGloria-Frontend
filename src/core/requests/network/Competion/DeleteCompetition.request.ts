@@ -10,6 +10,8 @@ import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 interface Data {
   id: string;
   isAdmin?: boolean;
+  id: string;
+  isAdmin?: boolean;
 }
 export default class DeleteCompetitionRequest extends NetworkRequest<
   Data,

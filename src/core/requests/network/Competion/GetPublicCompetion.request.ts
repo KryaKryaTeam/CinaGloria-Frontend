@@ -12,7 +12,6 @@ export default class GetPublicCompetitionRequest extends NetworkSSRRequest<
   CompetitionPublicObject[],
   CompetitionPublicObject[]
 > {
-
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
   authorized: boolean = false;
@@ -28,5 +27,4 @@ export default class GetPublicCompetitionRequest extends NetworkSSRRequest<
   ): CompetitionPublicObject[] | Promise<CompetitionPublicObject[]> {
     return data;
   }
-
 }

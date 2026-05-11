@@ -10,7 +10,6 @@ export default function AuthLayout({
 }) {
   return (
     <>
-
       <WaveBackground />
       <div className="flex items-center justify-center h-screen">
         {children}

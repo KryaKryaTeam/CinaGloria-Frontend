@@ -46,7 +46,7 @@ enum NotificationIcons {
   LIGHTBULB = "LIGHTBULB", // Tips or hints
 }
 export enum NotificationStatus {
-  readed = 'READED',
-  sended = 'SENDED',
+  readed = "READED",
+  sended = "SENDED",
 }
 export default NotificationStatus;

@@ -13,7 +13,7 @@ import NetworkSSRRequest from "../NetworkSSRRequst";
 
 export default class GetCompetionByIdRequest extends NetworkSSRRequest<
   string,
- CompetitionConstructor,
+  CompetitionConstructor,
   CompetitionConstructor
 > {
   withCSRF: boolean = false;

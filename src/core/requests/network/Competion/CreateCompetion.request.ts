@@ -57,3 +57,4 @@ export default class CreateCompetitionRequest extends NetworkRequest<
     this.competitionState.addNewCompetition(data);
   }
 }
+

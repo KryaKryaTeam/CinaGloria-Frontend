@@ -13,7 +13,6 @@ export class ReadedDispatcher extends EventDispatcher {
   private handle = async (event: Event<unknown>): Promise<void> => {
     const { id } = (event as ReadedEvent).payload;
 
-    await this.request.execute(id)
-
+    await this.request.execute(id);
   };
 }

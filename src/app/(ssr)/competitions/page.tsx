@@ -1,11 +1,9 @@
-
 import {
   CompetitionPublicObject,
   CompetitionStatus,
 } from "@/core/domain/entity/Competion";
 import GetPublicCompetitionRequest from "@/core/requests/network/Competion/GetPublicCompetion.request";
 import { CompetitionCard } from "@/ui/widgets/competition/CompetionCard";
-
 
 export default async function CompetitionPage() {
   const request = new GetPublicCompetitionRequest();

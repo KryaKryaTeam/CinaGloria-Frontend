@@ -49,6 +49,9 @@ import { GetUsersAdminListRequest } from "./requests/network/GetUsersAdminList.r
 import { UpdateUserRoleRequest } from "./requests/network/UpdateUserRole.request";
 import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 import { AdminUsersListState } from "@/state/AdminUserState";
+import FileStore from "@/state/FileStore";
+import LoadFileRequest from "./requests/network/File/LoadFile.request";
+import GetFileURLRequest from "./requests/network/File/GetImageURl.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -122,5 +125,8 @@ container
   .to(DeleteCompetitionRequest)
   .inRequestScope();
 
+container.bind(TYPES.FileStore).to(FileStore).inSingletonScope();
+container.bind(TYPES.LoadFileRequest).to(LoadFileRequest).inRequestScope();
+container.bind(TYPES.GetFileURLRequest).to(GetFileURLRequest).inRequestScope();
 export default container;
 export { TYPES };

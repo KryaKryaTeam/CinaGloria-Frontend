@@ -11,18 +11,18 @@ export default function NotificationWidget({
 
   return (
     <div className="flex items-center gap-3 rounded-lg border bg-card p-3 transition-colors hover:bg-accent/50">
-
       <div
         className={`size-2 shrink-0 rounded-full ${
           isRead ? "bg-emerald-400" : "bg-blue-500"
         }`}
       />
 
-
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-foreground">{title}</p>
         <p className="truncate text-xs text-muted-foreground">From: {from}</p>
-        <p className="truncate text-xs text-muted-foreground">Content: {content}</p>
+        <p className="truncate text-xs text-muted-foreground">
+          Content: {content}
+        </p>
       </div>
 
       <span

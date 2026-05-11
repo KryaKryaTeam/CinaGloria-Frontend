@@ -30,4 +30,7 @@ export const TYPES = {
   GetUsersAdminListRequest: Symbol.for("GetUsersAdminListRequest"),
   UpdateUserRoleRequest: Symbol.for("UpdateUserRoleRequest"),
   AdminUsersListState: Symbol.for("AdminUsersListState"),
+  FileStore: Symbol.for("FileStore"),
+  LoadFileRequest: Symbol.for("LoadFileRequest"),
+  GetFileURLRequest: Symbol.for("GetImageURLRequest"),
 } as const;

@@ -10,7 +10,6 @@ export class EventDispatcher {
     this._events.push(event);
   }
 
-  
   public register<T>(eventType: string, handler: Handler<T>): void {
     if (!this._handlers.has(eventType)) {
       this._handlers.set(eventType, []);
@@ -24,6 +23,6 @@ export class EventDispatcher {
       handlers.forEach((handler) => handler(event));
     });
 
-    this._events = []; 
+    this._events = [];
   }
 }
