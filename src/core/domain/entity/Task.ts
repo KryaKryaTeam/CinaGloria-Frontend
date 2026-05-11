@@ -1,5 +1,12 @@
 import Color from "../value-object/Color";
 
+export interface ITaskEntityData {
+  id: string;
+  name: string;
+  description: string;
+  color: Color;
+}
+
 export default class Task {
   public readonly id: string;
   private _name: string;

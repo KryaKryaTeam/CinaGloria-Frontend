@@ -1,4 +1,4 @@
-import Task from "./Task";
+import Task, { ITaskEntityData } from "./Task";
 import { Icons } from "./type";
 
 interface RoundConstructor {
@@ -10,6 +10,19 @@ interface RoundConstructor {
   startOfRound?: Date;
   endOfRound?: Date;
   relatedTasks?: Task[];
+  status: RoundStatus;
+}
+
+export interface IRoundEntityData {
+  id: string;
+  name: string;
+  hidden: boolean;
+  description: string;
+  icon: Icons;
+  startOfRound: Date;
+  endOfRound: Date;
+  taskTimeout: Date;
+  relatedTasks: ITaskEntityData[];
   status: RoundStatus;
 }
 

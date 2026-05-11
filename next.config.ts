@@ -1,9 +1,3 @@
-import {
-  NetworkRequest,
-  ISubRequestData,
-} from "@/core/requests/network/NetworkRequest";
-import { HTTPMethod } from "@/core/requests/type";
-import { UserState } from "@/state/UserState";
 import type { NextConfig } from "next";
 import { Header } from "next/dist/lib/load-custom-routes";
 
@@ -67,34 +61,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-export class JoinCompetitionRequest extends NetworkRequest<
-  any,
-  any,
-  any,
-  string
-> {
-  method!: HTTPMethod;
-  mockOutputData?: any;
-  onSuccess(data: any) {
-    throw new Error("Method not implemented.");
-  }
-  mapData(data: any): ISubRequestData {
-    throw new Error("Method not implemented.");
-  }
-  constructor(
-    private teamId: string,
-    userState: UserState,
-  ) {
-    super(userState);
-  }
-
-  public withCSRF = true;
-  public authorized = true;
-
-  protected getSubRequestData(): ISubRequestData {
-    return {
-      method: "POST" as any as HTTPMethod,
-      url: `/teams/${this.teamId}/registration`,
-    };
-  }
-}

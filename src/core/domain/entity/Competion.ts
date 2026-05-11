@@ -1,5 +1,5 @@
 import CompetitionRule from "../value-object/CompetitionRule";
-import Round from "./Round";
+import Round, { IRoundEntityData } from "./Round";
 import { Icons } from "@/core/domain/entity/type";
 
 export enum CompetitionStatus {
@@ -52,12 +52,32 @@ export interface CompetitionConstructor {
   rules: CompetitionRule[];
   rounds: Round[];
 }
+
+export interface ICompetitionEntityData {
+  id: string;
+  name?: string;
+  description?: string;
+  ultraWideBanner?: URL;
+  banner?: URL;
+  avatar?: URL;
+  socialMedia?: URL;
+  dateOfStart?: Date;
+  dateOfEnd?: Date;
+  dateOfStartRegistration?: Date;
+  dateOfEndRegistration?: Date;
+  publishAt?: Date;
+  status: CompetitionStatus;
+  rules: CompetitionRule[];
+  rounds: IRoundEntityData[];
+}
+
 interface ICompetitionSettings {
   showRoundsOneByOne: boolean;
   minTeamMembers: number;
   maxTeamMembers: number;
   maxTeams: number;
 }
+
 export default class Competition {
   public readonly id: string;
 
