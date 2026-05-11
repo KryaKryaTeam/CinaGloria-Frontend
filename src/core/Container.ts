@@ -54,6 +54,22 @@ import LoadFileRequest from "./requests/network/File/LoadFile.request";
 import GetFileURLRequest from "./requests/network/File/GetImageURl.request";
 import JoinCompetitionRequest from "@/core/requests/network/Competion/JoinCompetition.request";
 import UnjoinCompetitionRequest from "@/core/requests/network/Competion/UnjoinCompetition.request";
+import CreateRoundReviewRequest from "./requests/RoundReview/CreateRoundReview.request";
+import GetMyTeamsRequest from "./requests/network/Teams/GetTeams.request";
+import { CreateTeamRequest } from "./requests/network/CreateTeam.request";
+import UpdateTeamRequest from "./requests/network/Teams/UpdateTeams.request";
+import DeleteTeamRequest from "./requests/network/Teams/DeleteTeam.request";
+import AddMemberRequest from "./requests/network/Teams/members/AddMember.request";
+import DeleteMemberRequest from "./requests/network/Teams/members/DeleteMember.request";
+import GiveCaptainRequest from "./requests/network/Teams/members/GiveCaptain.request";
+import TeamRegistrationRequest from "./requests/network/Teams/RegistretionTeam.request";
+import DeleteTeamRegistrationRequest from "./requests/network/Teams/DeleteTeamRegistretion.request";
+import AcceptTeamRequest from "./requests/network/Teams/AcceptTeam.request";
+import CreateScoreRequest from "./requests/network/Score/CreateScore.request";
+import CreateSubmissionRequest from "./requests/network/Submisssion/CreateSubmission.request";
+import DeleteSubmissionRequest from "./requests/network/Submisssion/DeleteSubmission.request";
+import FindSubmissionRequest from "./requests/network/Submisssion/GetSubmission.request";
+import UpdateSubmissionRequest from "./requests/network/Submisssion/UpdateSubmission.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -136,5 +152,30 @@ container
 container
   .bind<UnjoinCompetitionRequest>(TYPES.UnjoinCompetitionRequest)
   .to(UnjoinCompetitionRequest);
+container.bind(TYPES.CreateCompetitionRequest).to(CreateRoundReviewRequest);
+
+// Teams
+container.bind(TYPES.GetMyTeamsRequest).to(GetMyTeamsRequest);
+container.bind(TYPES.CreateTeamRequest).to(CreateTeamRequest);
+container.bind(TYPES.UpdateTeamRequest).to(UpdateTeamRequest);
+container.bind(TYPES.DeleteTeamRequest).to(DeleteTeamRequest);
+container.bind(TYPES.AddMemberRequest).to(AddMemberRequest);
+container.bind(TYPES.DeleteTeamMemberRequest).to(DeleteMemberRequest);
+container.bind(TYPES.GiveCaptainRequest).to(GiveCaptainRequest);
+container.bind(TYPES.TeamRegistrationRequest).to(TeamRegistrationRequest);
+container.bind(TYPES.DeleteTeamRegistrationRequest).to(DeleteTeamRegistrationRequest);
+container.bind(TYPES.AcceptTeamRequest).to(AcceptTeamRequest);
+
+// Score
+container.bind(TYPES.CreateScoreRequest).to(CreateScoreRequest);
+
+// Round Review
+container.bind(TYPES.CreateRoundReviewRequest).to(CreateRoundReviewRequest);
+
+// Submission
+container.bind(TYPES.CreateSubmissionRequest).to(CreateSubmissionRequest);
+container.bind(TYPES.DeleteSubmissionRequest).to(DeleteSubmissionRequest);
+container.bind(TYPES.FindSubmissionRequest).to(FindSubmissionRequest);
+container.bind(TYPES.UpdateSubmissionRequest).to(UpdateSubmissionRequest);  
 export default container;
 export { TYPES };

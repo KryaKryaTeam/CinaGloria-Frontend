@@ -35,4 +35,22 @@ export const TYPES = {
   GetFileURLRequest: Symbol.for("GetImageURLRequest"),
   JoinCompetitionRequest: Symbol.for("JoinCompetitionRequest"),
   UnjoinCompetitionRequest: Symbol.for("UnjoinCompetitionRequest"),
+  CreateScoreRequest: Symbol.for("CreateScoreRequest"),
+  CreateSubmissionRequest: Symbol.for("CreateSubmissionRequest"),
+  DeleteSubmissionRequest: Symbol.for("DeleteSubmissionRequest"),
+  FindSubmissionRequest: Symbol.for("FindSubmissionRequest"),
+  UpdateSubmissionRequest: Symbol.for("UpdateSubmissionRequest"),
+  // Teams
+  GetMyTeamsRequest: Symbol.for("GetMyTeamsRequest"),
+  CreateTeamRequest: Symbol.for("CreateTeamRequest"),
+  UpdateTeamRequest: Symbol.for("UpdateTeamRequest"),
+  DeleteTeamRequest: Symbol.for("DeleteTeamRequest"),
+  AddMemberRequest: Symbol.for("AddMemberRequest"),
+  DeleteTeamMemberRequest: Symbol.for("DeleteTeamMemberRequest"),
+  GiveCaptainRequest: Symbol.for("GiveCaptainRequest"),
+  TeamRegistrationRequest: Symbol.for("TeamRegistrationRequest"),
+  DeleteTeamRegistrationRequest: Symbol.for("DeleteTeamRegistrationRequest"),
+  AcceptTeamRequest: Symbol.for("AcceptTeamRequest"),
+  // Round Review
+  CreateRoundReviewRequest: Symbol.for("CreateRoundReviewRequest"),
 } as const;

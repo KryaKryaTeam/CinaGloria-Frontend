@@ -24,9 +24,6 @@ export abstract class NetworkRequest<
   RequestOutput,
   ErrorResponse = string,
 > {
-  static post(arg0: string, data: CreateTeamRequest) {
-    throw new Error("Method not implemented.");
-  }
   constructor(
     @inject(TYPES.UserState)
     protected readonly userState: UserState,

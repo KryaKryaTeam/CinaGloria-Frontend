@@ -71,5 +71,10 @@ export const URLEnum = {
   // --- FILES ---
   UPLOAD_FILE: `${BASE_URL}/file/upload/`,
   GET_FILE_LINK: `${BASE_URL}/file/link/`,
+
+  TEAMS: `${BASE_URL}/teams/`,
+  SUBMISSION: `${BASE_URL}/submission/`,
+  SCORE: `${BASE_URL}/score/`,
+  ROUND_REVIEW: `${BASE_URL}/round_review/`
 } as const;
 export default URLEnum;
