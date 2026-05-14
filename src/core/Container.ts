@@ -59,6 +59,8 @@ import { CreateTaskRequest } from "./requests/network/Task/CreateTask.request";
 import { DeleteTaskRequest } from "./requests/network/Task/DeleteTask.request";
 import { UpdateSettingRequest } from "./requests/network/Competion/UpdateSettitngs.request";
 import { PublishCompetitionRequest } from "./requests/network/Competion/PublishCompetition.request";
+import JoinCompetitionRequest from "@/core/requests/network/Competion/JoinCompetition.request";
+import UnjoinCompetitionRequest from "@/core/requests/network/Competion/UnjoinCompetition.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -157,5 +159,10 @@ container
   .bind(TYPES.PublishCompetitionRequest)
   .to(PublishCompetitionRequest)
   .inRequestScope();
+  .bind<JoinCompetitionRequest>(TYPES.JoinCompetitionRequest)
+  .to(JoinCompetitionRequest);
+container
+  .bind<UnjoinCompetitionRequest>(TYPES.UnjoinCompetitionRequest)
+  .to(UnjoinCompetitionRequest);
 export default container;
 export { TYPES };

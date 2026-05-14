@@ -40,4 +40,6 @@ export const TYPES = {
   DeleteTaskRequest: Symbol.for("DeleteTaskRequest"),
   UpdateSettingsRequest: Symbol.for("UpdateSettingsRequest"),
   PublishCompetitionRequest: Symbol.for("PublishCompetitionRequest"),
+  JoinCompetitionRequest: Symbol.for("JoinCompetitionRequest"),
+  UnjoinCompetitionRequest: Symbol.for("UnjoinCompetitionRequest"),
 } as const;
