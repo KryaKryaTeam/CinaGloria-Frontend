@@ -52,6 +52,13 @@ import { AdminUsersListState } from "@/state/AdminUserState";
 import FileStore from "@/state/FileStore";
 import LoadFileRequest from "./requests/network/File/LoadFile.request";
 import GetFileURLRequest from "./requests/network/File/GetImageURl.request";
+import { UpdateCompetitionRequest } from "./requests/network/Competion/UpdateCompetition.request";
+import { CreateRoundRequest } from "./requests/network/Round/CreateRound.request";
+import { DeleteRoundRequest } from "./requests/network/Round/DeleteRound.request";
+import { CreateTaskRequest } from "./requests/network/Task/CreateTask.request";
+import { DeleteTaskRequest } from "./requests/network/Task/DeleteTask.request";
+import { UpdateSettingRequest } from "./requests/network/Competion/UpdateSettitngs.request";
+import { PublishCompetitionRequest } from "./requests/network/Competion/PublishCompetition.request";
 import JoinCompetitionRequest from "@/core/requests/network/Competion/JoinCompetition.request";
 import UnjoinCompetitionRequest from "@/core/requests/network/Competion/UnjoinCompetition.request";
 
@@ -131,6 +138,27 @@ container.bind(TYPES.FileStore).to(FileStore).inSingletonScope();
 container.bind(TYPES.LoadFileRequest).to(LoadFileRequest).inRequestScope();
 container.bind(TYPES.GetFileURLRequest).to(GetFileURLRequest).inRequestScope();
 container
+  .bind(TYPES.UpdateCompetitionRequest)
+  .to(UpdateCompetitionRequest)
+  .inRequestScope();
+container
+  .bind(TYPES.CreateRoundRequest)
+  .to(CreateRoundRequest)
+  .inRequestScope();
+container
+  .bind(TYPES.DeleteRoundRequest)
+  .to(DeleteRoundRequest)
+  .inRequestScope();
+container.bind(TYPES.CreateTaskRequest).to(CreateTaskRequest).inRequestScope();
+container.bind(TYPES.DeleteTaskRequest).to(DeleteTaskRequest).inRequestScope();
+container
+  .bind(TYPES.UpdateSettingsRequest)
+  .to(UpdateSettingRequest)
+  .inRequestScope();
+container
+  .bind(TYPES.PublishCompetitionRequest)
+  .to(PublishCompetitionRequest)
+  .inRequestScope();
   .bind<JoinCompetitionRequest>(TYPES.JoinCompetitionRequest)
   .to(JoinCompetitionRequest);
 container

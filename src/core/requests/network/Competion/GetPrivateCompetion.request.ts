@@ -11,16 +11,17 @@ export default class GetPrivateCompetitionRequest extends NetworkRequest<
   CompetitionConstructor[],
   CompetitionConstructor[]
 > {
+  mockOutputData: CompetitionConstructor[] | undefined;
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
   authorized: boolean = true;
 
-  constructor(@inject(TYPES.UserState) private userState: UserState) {
+  constructor(@inject(TYPES.UserState) readonly userState: UserState) {
     super(userState);
   }
   mapData(data: number): ISubRequestData {
     return {
-      url: new URL(URLEnum.COMPETITION + "private/" + data),
+      url: new URL(URLEnum.COMPETITION_PRIVATE + data),
       init: {},
     };
   }

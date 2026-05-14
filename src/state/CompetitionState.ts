@@ -25,6 +25,7 @@ export default class CompetitionState {
   @action
   addNewCompetition(competition: CompetitionConstructor) {
     debugLog(`Adding competition with id: ${competition.id}`);
+    debugLog(JSON.stringify(competition));
     const exists = this._competitions.some((c) => c.id === competition.id);
     if (!exists)
       this._competitions = [...this.competitions, new Competition(competition)];

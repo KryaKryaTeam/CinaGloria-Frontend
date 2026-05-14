@@ -14,30 +14,14 @@ export class NetworkSSRRequestError extends Error {
   }
 }
 
+const allowCodes = ["COMPETITION_015"];
+
 @injectable()
 export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
   constructor() {}
 
-  abstract withCSRF: boolean;
   abstract method: HTTPMethod;
-  abstract authorized: boolean;
-
   private maxRetries = 2;
-
-  async getCsrf(): Promise<string> {
-    try {
-      const response = await fetch(URLEnum.CSRF, {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await response.json();
-      if (data?.csrf) return data.csrf;
-      console.warn("CSRF token not found in response");
-    } catch (error) {
-      console.error("Error fetching CSRF token:", error);
-    }
-    return "";
-  }
 
   async execute(request_data: Data): Promise<Response> {
     let lastError: Error | null = null;
@@ -50,6 +34,12 @@ export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
 
+        // Вивід помилки в консоль
+        console.error(
+          `[NetworkSSRRequest] Attempt ${attempt + 1} failed:`,
+          lastError.message,
+        );
+
         if (this.onError) {
           this.onError(lastError.message);
         }
@@ -57,7 +47,7 @@ export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
         const isLastAttempt = attempt === this.maxRetries;
         if (isLastAttempt) break;
 
-        // Don't retry client errors (4xx) except 408/429
+        // Не ретраїмо клієнтські помилки (4xx), крім 408 та 429
         if (error instanceof NetworkSSRRequestError) {
           const status = error.statusCode ?? 0;
           if (
@@ -70,7 +60,6 @@ export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
           }
         }
 
-        // Exponential backoff before retry
         await this.delay(Math.pow(2, attempt) * 100);
       }
     }
@@ -85,34 +74,35 @@ export default abstract class NetworkSSRRequest<Data, Response, RequestOutput> {
     if (this.preload) mapped = await this.preload(mapped);
 
     mapped.init.method = this.method;
-    mapped.init.headers = {
-      ...mapped.init.headers,
-      "Content-Type": "application/json",
-    };
 
-    // SSR-safe: only include credentials if explicitly needed
-    if (this.authorized) {
-      mapped.init.credentials = "include";
+    // Встановлюємо базові заголовки
+    const headers = new Headers(mapped.init.headers);
+    if (!headers.has("Content-Type")) {
+      headers.set("Content-Type", "application/json");
     }
-
-    if (this.withCSRF) {
-      const csrf = await this.getCsrf();
-      mapped.url.searchParams.set("state", csrf);
-    }
+    mapped.init.headers = headers;
 
     return mapped;
   }
 
   private async performFetch(mapped: ISubRequestData): Promise<RequestOutput> {
-    const res = await fetch(mapped.url, mapped.init);
-    const data = await res.json().catch(() => ({}));
+    const res = await fetch(mapped.url, mapped.init as unknown as RequestInit);
+
+    // Безпечне отримання JSON
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      data = {};
+    }
 
     if (!res.ok) {
-      throw new NetworkSSRRequestError(
-        data.message || `HTTP ${res.status}: ${res.statusText}`,
-        res.status,
-        data,
-      );
+      if (!allowCodes.includes(data.code))
+        throw new NetworkSSRRequestError(
+          data.message || `HTTP ${res.status}: ${res.statusText}`,
+          res.status,
+          data,
+        );
     }
 
     return data as RequestOutput;

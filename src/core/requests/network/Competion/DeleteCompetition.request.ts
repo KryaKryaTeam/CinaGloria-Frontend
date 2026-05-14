@@ -10,6 +10,8 @@ import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 interface Data {
   id: string;
   isAdmin?: boolean;
+  id: string;
+  isAdmin?: boolean;
 }
 export default class DeleteCompetitionRequest extends NetworkRequest<
   Data,
@@ -17,7 +19,7 @@ export default class DeleteCompetitionRequest extends NetworkRequest<
   void,
   boolean
 > {
-  mockOutputData?: void | undefined;
+  mockOutputData: void | undefined;
   withCSRF: boolean = false;
   method: HTTPMethod = "DELETE";
   authorized: boolean = true;
@@ -42,7 +44,7 @@ export default class DeleteCompetitionRequest extends NetworkRequest<
     this.isAdmin = data.isAdmin ? true : false;
     debugLog(`${data}`);
     return {
-      url: new URL(URLEnum.COMPETITION + "delete/" + data.id),
+      url: new URL(URLEnum.COMPETITION_DELETE + data.id),
       init: {},
     };
   }

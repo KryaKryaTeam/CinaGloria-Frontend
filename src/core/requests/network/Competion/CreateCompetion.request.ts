@@ -6,60 +6,61 @@ import { inject, injectable } from "inversify";
 import { UserState } from "@/state/UserState";
 import { TYPES } from "@/core/Container.types";
 import CompetitionState from "@/state/CompetitionState";
-export interface Rule {
-  name: string;
-  description: string;
-  icon: string;
-}
-interface Response {
-  name: string;
-  description: string;
-  dateOfEnd: Date;
-  dateOfEndRegistration: Date;
-  dateOfStart: Date;
-  dateOfStartRegistration: Date;
-  socialMedia: string;
-  ultraWideBanner: string;
-  rules: Array<Rule>;
-  avatar: string;
-  banner: string;
+import debugLog from "@/infrastructure/debugLog";
+interface On401 {
+  code: number;
+  message: string;
+  cause: string;
+  timestamp: Date;
 }
 
+interface ICreateCompetition {
+  name?: string;
+  description?: string;
+  avatar?: string;
+  banner?: string;
+  ultraWideBanner?: string;
+  socialMedia?: string;
+  dateOfStart?: Date;
+  dateOfEnd?: Date;
+  dateOfEndRegistration?: Date;
+  dateOfStartRegistration?: Date;
+}
 @injectable()
 export default class CreateCompetitionRequest extends NetworkRequest<
-  Response,
+  ICreateCompetition,
   void,
-  CompetitionConstructor
+  CompetitionConstructor,
+  null
 > {
+  mockOutputData: CompetitionConstructor | undefined;
   withCSRF: boolean = false;
   method: HTTPMethod = "POST";
   authorized: boolean = true;
-  mockOutputData?: CompetitionConstructor | undefined;
   constructor(
     @inject(TYPES.UserState) userState: UserState,
     @inject(TYPES.CompetitionState)
     private readonly competitionState: CompetitionState,
   ) {
     super(userState);
+    this.competitionState = competitionState;
   }
-
-  mapData(data: Response): ISubRequestData {
-    // strip trailing slash to avoid v1/competition//create
-    const base = (URLEnum.COMPETITION as string).replace(/\/$/, "");
+  mapData(data: ICreateCompetition): ISubRequestData {
     return {
-      url: new URL(`${base}/create`),
+      url: new URL(URLEnum.COMPETITION_CREATE),
       init: {
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: JSON.stringify({
+          ...data,
+          dateOfStart: data.dateOfStart?.toISOString(),
+          dateOfEnd: data.dateOfEnd?.toISOString(),
+          dateOfStartRegistration: data.dateOfStartRegistration?.toISOString(),
+          dateOfEndRegistration: data.dateOfEndRegistration?.toISOString(),
+          rules: [],
+        }),
       },
     };
   }
-
   onSuccess(data: CompetitionConstructor): void | Promise<void> {
-    this.competitionState.addNewCompetition(
-      data as unknown as CompetitionConstructor,
-    );
+    this.competitionState.addNewCompetition(data);
   }
 }

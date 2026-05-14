@@ -19,6 +19,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { Toaster } from "sonner";
 
 function Layout({ children }: PropsWithChildren) {
   const [isMounted, setIsMounted] = useState(false);
@@ -54,6 +55,7 @@ function Layout({ children }: PropsWithChildren) {
   }, [path, loadState]);
   return (
     <SidebarProvider defaultOpen={true}>
+      <Toaster position="top-center" />
       <GridCardDelayContext.Provider value={10}>
         <div
           className="w-screen h-screen bg-background z-50 absolute top-0 left-0"
