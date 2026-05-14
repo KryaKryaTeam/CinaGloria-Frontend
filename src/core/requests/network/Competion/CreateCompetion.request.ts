@@ -49,7 +49,14 @@ export default class CreateCompetitionRequest extends NetworkRequest<
     return {
       url: new URL(URLEnum.COMPETITION_CREATE),
       init: {
-        body: JSON.stringify({ ...data, rules: [] }),
+        body: JSON.stringify({
+          ...data,
+          dateOfStart: data.dateOfStart?.toISOString(),
+          dateOfEnd: data.dateOfEnd?.toISOString(),
+          dateOfStartRegistration: data.dateOfStartRegistration?.toISOString(),
+          dateOfEndRegistration: data.dateOfEndRegistration?.toISOString(),
+          rules: [],
+        }),
       },
     };
   }
@@ -57,4 +64,3 @@ export default class CreateCompetitionRequest extends NetworkRequest<
     this.competitionState.addNewCompetition(data);
   }
 }
-

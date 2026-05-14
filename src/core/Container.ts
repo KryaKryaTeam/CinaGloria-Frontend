@@ -57,6 +57,8 @@ import { CreateRoundRequest } from "./requests/network/Round/CreateRound.request
 import { DeleteRoundRequest } from "./requests/network/Round/DeleteRound.request";
 import { CreateTaskRequest } from "./requests/network/Task/CreateTask.request";
 import { DeleteTaskRequest } from "./requests/network/Task/DeleteTask.request";
+import { UpdateSettingRequest } from "./requests/network/Competion/UpdateSettitngs.request";
+import { PublishCompetitionRequest } from "./requests/network/Competion/PublishCompetition.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -147,5 +149,13 @@ container
   .inRequestScope();
 container.bind(TYPES.CreateTaskRequest).to(CreateTaskRequest).inRequestScope();
 container.bind(TYPES.DeleteTaskRequest).to(DeleteTaskRequest).inRequestScope();
+container
+  .bind(TYPES.UpdateSettingsRequest)
+  .to(UpdateSettingRequest)
+  .inRequestScope();
+container
+  .bind(TYPES.PublishCompetitionRequest)
+  .to(PublishCompetitionRequest)
+  .inRequestScope();
 export default container;
 export { TYPES };

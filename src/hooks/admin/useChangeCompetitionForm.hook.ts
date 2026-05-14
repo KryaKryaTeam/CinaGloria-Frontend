@@ -25,6 +25,9 @@ import { CreateTaskRequest } from "@/core/requests/network/Task/CreateTask.reque
 import Task from "@/core/domain/entity/Task";
 import { DeleteRoundRequest } from "@/core/requests/network/Round/DeleteRound.request";
 import { DeleteTaskRequest } from "@/core/requests/network/Task/DeleteTask.request";
+import { UpdateSettingRequest } from "@/core/requests/network/Competion/UpdateSettitngs.request";
+import { PublishCompetitionRequest } from "@/core/requests/network/Competion/PublishCompetition.request";
+import { LoadState } from "@/state/LoadMachine/LoadState";
 
 // --- SCHEMAS ---
 
@@ -40,11 +43,15 @@ export function useChangeCompetitionForm() {
 
   const general = useGeneral({ competition });
   const rounds = useRoundAndTask({ competition });
+  const settings = useSettings({ competition });
+  const publishing = usePublishing({ competition });
 
   return {
     competition,
     general,
+    settings,
     rounds,
+    publishing,
   };
 }
 
@@ -382,3 +389,104 @@ export function useRoundAndTask({
     },
   };
 }
+
+const settingsSch = z
+  .object({
+    showRoundsOneByOne: z.boolean(),
+    maxTeamMembers: z.number().min(1, "At least 1 member required"),
+    minTeamMembers: z.number().min(1, "At least 1 member required"),
+    maxTeams: z.number().min(2, "At least 2 teams required"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.minTeamMembers > data.maxTeamMembers) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Min members cannot be greater than max members",
+        path: ["minTeamMembers"],
+      });
+    }
+  });
+
+type SettingsFormValues = z.infer<typeof settingsSch>;
+
+function useSettings({ competition }: { competition?: Competition }) {
+  const formSettings = useForm<SettingsFormValues>({
+    resolver: zodResolver(settingsSch),
+    defaultValues: {
+      showRoundsOneByOne: competition?.settings?.showRoundsOneByOne ?? false,
+      maxTeamMembers: competition?.settings?.maxTeamMembers ?? 5,
+      minTeamMembers: competition?.settings?.minTeamMembers ?? 1,
+      maxTeams: competition?.settings?.maxTeams ?? 50,
+    },
+  });
+
+  useEffect(() => {
+    if (competition?.settings) {
+      formSettings.reset({
+        showRoundsOneByOne: competition.settings.showRoundsOneByOne,
+        maxTeamMembers: competition.settings.maxTeamMembers,
+        minTeamMembers: competition.settings.minTeamMembers,
+        maxTeams: competition.settings.maxTeams,
+      });
+    }
+  }, [competition?.settings]);
+
+  const onSubmitSettings = async (data: SettingsFormValues) => {
+    if (!competition) return;
+
+    try {
+      const request = container.get<UpdateSettingRequest>(
+        TYPES.UpdateSettingsRequest,
+      );
+
+      await request.execute({
+        competitionId: competition.id,
+        ...data,
+      });
+
+      debugLog("Settings updated successfully");
+    } catch (e) {
+      console.error("Failed to update settings", e);
+    }
+  };
+
+  return {
+    ...formSettings,
+    errors: formSettings.formState.errors,
+    submit: formSettings.handleSubmit(onSubmitSettings),
+    isDirty: formSettings.formState.isDirty,
+  };
+}
+
+const usePublishing = ({
+  competition,
+}: {
+  competition: Competition | undefined;
+}) => {
+  const router = useRouter();
+  const compStore = container.get<AdminCompetitionStore>(
+    TYPES.AdminCompetitionStore,
+  );
+  const loadState = container.get<LoadState>(TYPES.LoadState);
+
+  async function publishCompetition() {
+    if (!competition) return;
+
+    const request = container.get<PublishCompetitionRequest>(
+      TYPES.PublishCompetitionRequest,
+    );
+
+    await request.execute(competition.id);
+
+    compStore.clearCompetitions();
+    loadState.forceScope("admin");
+
+    router.back();
+  }
+
+  return {
+    utils: {
+      publishCompetition,
+    },
+  };
+};

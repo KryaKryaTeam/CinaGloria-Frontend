@@ -38,4 +38,6 @@ export const TYPES = {
   DeleteRoundRequest: Symbol.for("DeleteRoundRequest"),
   CreateTaskRequest: Symbol.for("CreateTaskRequest"),
   DeleteTaskRequest: Symbol.for("DeleteTaskRequest"),
+  UpdateSettingsRequest: Symbol.for("UpdateSettingsRequest"),
+  PublishCompetitionRequest: Symbol.for("PublishCompetitionRequest"),
 } as const;

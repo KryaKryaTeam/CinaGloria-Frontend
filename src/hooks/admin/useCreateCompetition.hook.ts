@@ -2,6 +2,8 @@ import container from "@/core/Container";
 import { TYPES } from "@/core/Container.types";
 import CreateCompetitionRequest from "@/core/requests/network/Competion/CreateCompetion.request";
 import { UploadFileToAServerRequest } from "@/core/requests/network/UploadFileToAServer.request";
+import AdminCompetitionStore from "@/state/AdminCompetitionStore";
+import { LoadState } from "@/state/LoadMachine/LoadState";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { da } from "date-fns/locale";
 import { useRouter } from "next/navigation";
@@ -107,6 +109,11 @@ export function useCreateCompetition() {
     TYPES.UploadFileToAServerRequest,
   );
 
+  const loadState = container.get<LoadState>(TYPES.LoadState);
+  const compStore = container.get<AdminCompetitionStore>(
+    TYPES.AdminCompetitionStore,
+  );
+
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -151,12 +158,6 @@ export function useCreateCompetition() {
         }
       }
 
-      function nullToUndefined<T>(value: null | undefined | T): T | undefined {
-        if (typeof value == "undefined") return undefined;
-        if (value === null) return undefined;
-        return value;
-      }
-
       await createCompetitionRequest.execute({
         ...data,
         description: data.desc,
@@ -164,12 +165,14 @@ export function useCreateCompetition() {
         banner: files[1].url as string,
         ultraWideBanner: files[2].url as string,
         socialMedia: files[3].url as string,
-        dateOfEnd: nullToUndefined<Date>(data.battleEnd),
-        dateOfEndRegistration: nullToUndefined<Date>(data.registrationEnd),
-        dateOfStart: nullToUndefined<Date>(data.battleStart),
-        dateOfStartRegistration: nullToUndefined<Date>(data.registrationStart),
+        dateOfEnd: data.battleEnd ?? undefined,
+        dateOfEndRegistration: data.registrationEnd ?? undefined,
+        dateOfStart: data.battleStart ?? undefined,
+        dateOfStartRegistration: data.registrationStart ?? undefined,
       });
 
+      compStore.clearCompetitions();
+      loadState.forceScope("admin");
       router.back();
     } catch (err) {
       form.control.setError("root", { message: (err as Error).message });

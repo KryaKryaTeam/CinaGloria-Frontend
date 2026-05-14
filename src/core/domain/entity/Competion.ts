@@ -1,6 +1,7 @@
 import { makeObservable, observable, action, computed } from "mobx";
 import CompetitionRule from "../value-object/CompetitionRule";
-import Round from "./Round";
+import Round, { IRoundConstructor } from "./Round";
+import type { ICompetitionSettings } from "@/core/requests/network/Competion/UpdateSettitngs.request";
 
 export enum CompetitionStatus {
   DRAFT = "DRAFT",
@@ -30,6 +31,7 @@ export interface CompetitionConstructor {
   status: CompetitionStatus;
   rules: CompetitionRule[];
   rounds: Round[];
+  settings: Omit<ICompetitionSettings, "competitionId">;
 }
 
 export default class Competition {
@@ -54,6 +56,13 @@ export default class Competition {
   @observable public status: CompetitionStatus;
   @observable public rules: CompetitionRule[] = [];
   @observable public rounds: Round[] = [];
+
+  @observable public settings: Omit<ICompetitionSettings, "competitionId"> = {
+    showRoundsOneByOne: false,
+    maxTeamMembers: 5,
+    minTeamMembers: 1,
+    maxTeams: 50,
+  };
 
   constructor(props: CompetitionConstructor) {
     this.id = props.id;
@@ -84,7 +93,14 @@ export default class Competition {
 
     if (json.status) this.status = json.status;
     if (json.rules) this.rules = json.rules;
-    if (json.rounds) this.rounds = json.rounds.map((el) => new Round(el));
+    if (json.rounds)
+      this.rounds = json.rounds.map(
+        (el) => new Round(el as unknown as IRoundConstructor),
+      );
+
+    if (json.settings) {
+      this.settings = { ...this.settings, ...json.settings };
+    }
   }
 
   @computed
@@ -92,6 +108,13 @@ export default class Competition {
     return [CompetitionStatus.DRAFT, CompetitionStatus.PUBLISHED].includes(
       this.status,
     );
+  }
+
+  @action
+  public updateSettings(
+    newSettings: Partial<Omit<ICompetitionSettings, "competitionId">>,
+  ) {
+    this.settings = { ...this.settings, ...newSettings };
   }
 
   @computed

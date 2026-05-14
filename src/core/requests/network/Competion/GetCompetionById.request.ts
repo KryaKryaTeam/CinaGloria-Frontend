@@ -1,7 +1,5 @@
 import Competition, {
   CompetitionConstructor,
-  CompetitionPublicObject,
-  CompetitionPublicObjectOnPage,
 } from "@/core/domain/entity/Competion";
 import { ISubRequestData, NetworkRequest } from "../NetworkRequest";
 import { HTTPMethod } from "../../type";
@@ -22,7 +20,7 @@ export default class GetCompetionByIdRequest extends NetworkSSRRequest<
 
   mapData(data: string): ISubRequestData {
     return {
-      url: new URL(URLEnum.COMPETITION + "public/single/" + data),
+      url: new URL(URLEnum.COMPETITION_PUBLIC_SINGLE + data),
       init: {},
     };
   }

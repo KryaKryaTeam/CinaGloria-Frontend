@@ -29,7 +29,7 @@ import { useChangeCompetitionForm } from "@/hooks/admin/useChangeCompetitionForm
 import { useMemo } from "react";
 
 export const CompetitionEditPublishingTab = observer(() => {
-  const { competition } = useChangeCompetitionForm();
+  const { competition, publishing } = useChangeCompetitionForm();
   const canPublish =
     competition?.isDatesFilled && competition?.name && competition?.description;
   const defaultMinDate = useMemo(
@@ -53,8 +53,9 @@ export const CompetitionEditPublishingTab = observer(() => {
               </p>
             </div>
             <Button
-              className="w-full bg-indigo-600 hover:bg-indigo-700"
+              className="w-full"
               disabled={!canPublish}
+              onClick={publishing.utils.publishCompetition}
             >
               <SendIcon className="mr-2 h-4 w-4" /> Go Live
             </Button>

@@ -5,11 +5,12 @@ import { Card, CardContent, CardFooter } from "@/ui/card";
 import { Separator } from "@/ui/separator";
 import { format } from "date-fns";
 import { enGB } from "date-fns/locale";
-import { CalendarDays, Clock, Trophy } from "lucide-react";
+import { CalendarDays, Clock, EyeIcon, Trophy } from "lucide-react";
 import GoToCompetitionEditAdmin from "./GoToCompetitionEditAdmin";
 import Image from "next/image";
 import DeleteCompetitionButton from "./deleteCompetitionButton";
 import { observer } from "mobx-react-lite";
+import { Button } from "@/ui/button";
 
 const STATUS_CONFIG: Record<
   CompetitionStatus,
@@ -94,7 +95,7 @@ export const CompetitionAdminCard = observer(
     const showCTA = !isCanceled && !isArchived;
 
     return (
-      <Card className="w-full max-w-sm overflow-hidden shadow-sm">
+      <Card className="w-full max-w-sm overflow-hidden shadow-sm h-full">
         {/* Banner */}
         <div className="relative h-36 bg-muted">
           <Image
@@ -156,10 +157,16 @@ export const CompetitionAdminCard = observer(
           </div>
         </CardContent>
 
-        {showCTA && (
+        {competition.status == CompetitionStatus.DRAFT ? (
           <CardFooter className="px-4 pt-0 flex flex-col gap-2">
             <GoToCompetitionEditAdmin id={id} />
             <DeleteCompetitionButton id={id} />
+          </CardFooter>
+        ) : (
+          <CardFooter className="px-4 pt-0 flex flex-col gap-2">
+            <Button className="w-full">
+              <EyeIcon /> Go to competition page
+            </Button>
           </CardFooter>
         )}
       </Card>

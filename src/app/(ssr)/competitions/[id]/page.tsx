@@ -16,16 +16,14 @@ import {
   ChartNoAxesColumnIncreasing,
   Archive,
   Shield,
+  StarIcon,
 } from "lucide-react";
 import { format, intervalToDuration, formatDuration } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
-import {
-  CompetitionPublicObject,
-  CompetitionStatus,
-} from "@/core/domain/entity/Competion";
+import { CompetitionStatus } from "@/core/domain/entity/Competion";
 import RegistrationButton from "@/ui/widgets/competition/RegistrationButton";
 import ModalGoToAuth from "@/ui/widgets/competition/modalGoToAuth";
 import Image from "next/image";
@@ -38,6 +36,13 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/ui/item";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/ui/card";
 
 // const MockData: CompetitionPublicObject = {
 //   id: "1",
@@ -237,6 +242,7 @@ export default async function Page({
     dateOfStartRegistration,
     dateOfEndRegistration,
     rules,
+    rounds,
   } = data;
   const { modal } = await searchParams;
   const isModalOpen = modal === "true";
@@ -251,7 +257,7 @@ export default async function Page({
         <Image
           width={1280}
           height={720}
-          src={banner.toString()}
+          src={banner?.toString() ?? ""}
           alt=""
           className="w-full h-full object-cover"
         />
@@ -263,9 +269,9 @@ export default async function Page({
         {/* Avatar — overlaps banner */}
         <div className="-mt-12 sm:-mt-14 mb-3">
           <Avatar className="h-24 w-24 sm:h-28 sm:w-28 border-4 border-background shadow-lg shrink-0 rounded-2xl">
-            <AvatarImage src={avatar.toString()} alt={name} />
+            <AvatarImage src={avatar?.toString() ?? ""} alt={name} />
             <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary rounded-2xl">
-              {getInitials(name)}
+              {getInitials(name ?? "Competition")}
             </AvatarFallback>
           </Avatar>
         </div>
@@ -310,10 +316,65 @@ export default async function Page({
               </h2>
               <article className="flex flex-col py-2 space-y-2">
                 {rules.map((rule) => (
-                  <RuleItem key={rule.name} {...rule}></RuleItem>
+                  <RuleItem
+                    key={rule.name}
+                    name={rule.name}
+                    description={rule.description}
+                    icon={rule.icon}
+                  ></RuleItem>
                 ))}
               </article>
             </div>
+            <section className="space-y-4">
+              <h2 className="text-base font-semibold flex items-center gap-2">
+                <StarIcon className="h-4 w-4 text-primary" />
+                Rounds
+              </h2>
+              <div className="flex flex-col space-y-2">
+                {rounds && rounds.length ? (
+                  rounds.map((round, index) => (
+                    <Card key={round.id || index} className="bg-slate-50/50">
+                      <CardHeader>
+                        <CardTitle className="flex flex-row items-center gap-2">
+                          {IconsLucide[round.icon as Icons]}
+                          {round.name}
+                        </CardTitle>
+                        <CardDescription>
+                          {new Date(round.startOfRound!).toLocaleDateString()} —{" "}
+                          {new Date(round.endOfRound!).toLocaleDateString()}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                        {round.relatedTasks.map((item) => (
+                          <Item
+                            key={item.id}
+                            variant={"outline"}
+                            className="relative cursor-default"
+                          >
+                            <ItemContent className="px-8">
+                              <div
+                                className="absolute h-full rounded-s-md w-4 top-0 left-0"
+                                style={{ backgroundColor: item.hexColor }}
+                              ></div>
+                              <ItemTitle className="pr-4">
+                                {item.name}
+                              </ItemTitle>
+                              <ItemDescription className="pr-4">
+                                {item.description}
+                              </ItemDescription>
+                            </ItemContent>
+                          </Item>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <div className="w-full h-40 flex flex-col items-center justify-center border-2 border-dashed border-slate-100 rounded-xl text-slate-400">
+                    <p>No rounds avalible yet.</p>
+                  </div>
+                )}
+              </div>
+            </section>
           </div>
 
           {/* Right – dates sidebar */}
@@ -326,17 +387,21 @@ export default async function Page({
                 <DateRow
                   icon={<CalendarCheck2 className="h-3.5 w-3.5" />}
                   label="Start"
-                  value={fmt(dateOfStart)}
+                  value={dateOfStart ? fmt(dateOfStart) : "--"}
                 />
                 <DateRow
                   icon={<CalendarX2 className="h-3.5 w-3.5" />}
                   label="End"
-                  value={fmt(dateOfEnd)}
+                  value={dateOfEnd ? fmt(dateOfEnd) : "--"}
                 />
                 <DateRow
                   icon={<Clock3 className="h-3.5 w-3.5" />}
                   label="Duration"
-                  value={duration(dateOfStart, dateOfEnd)}
+                  value={
+                    dateOfStart && dateOfEnd
+                      ? duration(dateOfStart, dateOfEnd)
+                      : "--"
+                  }
                 />
               </SidebarSection>
               <Separator />
@@ -348,12 +413,18 @@ export default async function Page({
                 <DateRow
                   icon={<CalendarCheck2 className="h-3.5 w-3.5" />}
                   label="Opens"
-                  value={fmt(dateOfStartRegistration)}
+                  value={
+                    dateOfStartRegistration
+                      ? fmt(dateOfStartRegistration)
+                      : "--"
+                  }
                 />
                 <DateRow
                   icon={<CalendarClock className="h-3.5 w-3.5" />}
                   label="Closes"
-                  value={fmt(dateOfEndRegistration)}
+                  value={
+                    dateOfEndRegistration ? fmt(dateOfEndRegistration) : "--"
+                  }
                 />
               </SidebarSection>
             </div>

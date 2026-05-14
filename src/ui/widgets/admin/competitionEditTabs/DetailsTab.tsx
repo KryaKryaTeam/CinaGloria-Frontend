@@ -9,7 +9,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/ui/item";
-import { IconsLucide } from "@/core/domain/entity/type";
+import { Icons, IconsLucide } from "@/core/domain/entity/type";
 import { Badge } from "@/ui/badge";
 import {
   InfoIcon,
@@ -23,6 +23,13 @@ import { format } from "date-fns";
 import { useChangeCompetitionForm } from "@/hooks/admin/useChangeCompetitionForm.hook";
 import { TabsContent } from "@/ui/tabs";
 import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/ui/card";
 
 export const CompetitionEditDetailsTab = observer(() => {
   const { competition } = useChangeCompetitionForm();
@@ -123,6 +130,58 @@ export const CompetitionEditDetailsTab = observer(() => {
                 </div>
               )}
             </div>
+          </GridCard>
+
+          <GridCard name="Rounds">
+            <section className="space-y-4">
+              <div className="flex flex-col space-y-2">
+                {competition?.rounds.length ? (
+                  competition.rounds.map((round, index) => (
+                    <Card key={round.id || index} className="bg-slate-50/50">
+                      <CardHeader>
+                        <CardTitle className="flex flex-row items-center gap-2">
+                          {IconsLucide[round.icon as Icons]}
+                          {round.name}
+                        </CardTitle>
+                        <CardDescription>
+                          {new Date(round.startOfRound!).toLocaleDateString()} —{" "}
+                          {new Date(round.endOfRound!).toLocaleDateString()}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                        {round.relatedTasks.map((item) => (
+                          <Item
+                            key={item.id}
+                            variant={"outline"}
+                            className="relative cursor-default"
+                          >
+                            <ItemContent className="px-8">
+                              <div
+                                className="absolute h-full rounded-s-md w-4 top-0 left-0"
+                                style={{ backgroundColor: item.hexColor }}
+                              ></div>
+                              <ItemTitle className="pr-4">
+                                {item.name}
+                              </ItemTitle>
+                              <ItemDescription className="pr-4">
+                                {item.description}
+                              </ItemDescription>
+                            </ItemContent>
+                          </Item>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <div className="w-full h-40 flex flex-col items-center justify-center border-2 border-dashed border-slate-100 rounded-xl text-slate-400">
+                    <p>No rounds added yet.</p>
+                    <p className="text-xs">
+                      Rounds will appear here after they are created.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </section>
           </GridCard>
         </div>
 
