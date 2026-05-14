@@ -52,6 +52,11 @@ import { AdminUsersListState } from "@/state/AdminUserState";
 import FileStore from "@/state/FileStore";
 import LoadFileRequest from "./requests/network/File/LoadFile.request";
 import GetFileURLRequest from "./requests/network/File/GetImageURl.request";
+import { UpdateCompetitionRequest } from "./requests/network/Competion/UpdateCompetition.request";
+import { CreateRoundRequest } from "./requests/network/Round/CreateRound.request";
+import { DeleteRoundRequest } from "./requests/network/Round/DeleteRound.request";
+import { CreateTaskRequest } from "./requests/network/Task/CreateTask.request";
+import { DeleteTaskRequest } from "./requests/network/Task/DeleteTask.request";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -128,5 +133,19 @@ container
 container.bind(TYPES.FileStore).to(FileStore).inSingletonScope();
 container.bind(TYPES.LoadFileRequest).to(LoadFileRequest).inRequestScope();
 container.bind(TYPES.GetFileURLRequest).to(GetFileURLRequest).inRequestScope();
+container
+  .bind(TYPES.UpdateCompetitionRequest)
+  .to(UpdateCompetitionRequest)
+  .inRequestScope();
+container
+  .bind(TYPES.CreateRoundRequest)
+  .to(CreateRoundRequest)
+  .inRequestScope();
+container
+  .bind(TYPES.DeleteRoundRequest)
+  .to(DeleteRoundRequest)
+  .inRequestScope();
+container.bind(TYPES.CreateTaskRequest).to(CreateTaskRequest).inRequestScope();
+container.bind(TYPES.DeleteTaskRequest).to(DeleteTaskRequest).inRequestScope();
 export default container;
 export { TYPES };

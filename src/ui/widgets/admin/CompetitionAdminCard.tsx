@@ -97,37 +97,30 @@ export const CompetitionAdminCard = observer(
       <Card className="w-full max-w-sm overflow-hidden shadow-sm">
         {/* Banner */}
         <div className="relative h-36 bg-muted">
-          {banner && (
-            <Image
-              src={banner.toString()}
-              alt=""
-              className="w-full h-full object-cover"
-              width={500}
-              height={300}
-              loading="eager"
-            />
-          )}
+          <Image
+            src={banner ? banner.toString() : "/baseBannerComp.png"}
+            alt=""
+            className="w-full h-full object-cover"
+            width={500}
+            height={300}
+            loading="eager"
+          />
+
           <div className="absolute top-3 right-3">
             <Badge className={statusCfg.className}>{statusCfg.label}</Badge>
           </div>
 
           <div className="absolute -bottom-6 left-4">
             <div className="w-12 h-12 rounded-full border-2 border-background overflow-hidden bg-muted shadow-sm">
-              {avatar ? (
-                <Image
-                  src={avatar.toString()}
-                  alt={name || ""}
-                  className="w-full h-full object-cover z-20"
-                  width={128}
-                  height={128}
-                  unoptimized
-                  loading="eager"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-white/10">
-                  <Trophy size={20} className="text-white/20" />
-                </div>
-              )}
+              <Image
+                src={avatar ? avatar.toString() : "/baseAvatarComp.png"}
+                alt={name || ""}
+                className="w-full h-full object-cover z-20"
+                width={128}
+                height={128}
+                unoptimized
+                loading="eager"
+              />
             </div>
           </div>
         </div>

@@ -50,9 +50,10 @@ export const URLEnum = {
 
   // --- ROUNDS & TASKS ---
   ROUND_CREATE: `${BASE_URL}/round/create`,
-  ROUND_DELETE: `${BASE_URL}/round/delete`,
-  ROUND_PATCH: `${BASE_URL}/round/patch`,
-  TASK_CREATE: `${BASE_URL}/task/create`,
+  ROUND_DELETE: `${BASE_URL}/round`,
+  ROUND_PATCH: `${BASE_URL}/round`,
+  TASK_CREATE: `${BASE_URL}/task`,
+  TASK_DELETE: `${BASE_URL}/task`,
 
   // --- SUBMISSIONS & SCORES ---
   SUBMISSION_CREATE: `${BASE_URL}/submission/create`,

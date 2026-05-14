@@ -151,6 +151,12 @@ export function useCreateCompetition() {
         }
       }
 
+      function nullToUndefined<T>(value: null | undefined | T): T | undefined {
+        if (typeof value == "undefined") return undefined;
+        if (value === null) return undefined;
+        return value;
+      }
+
       await createCompetitionRequest.execute({
         ...data,
         description: data.desc,
@@ -158,6 +164,10 @@ export function useCreateCompetition() {
         banner: files[1].url as string,
         ultraWideBanner: files[2].url as string,
         socialMedia: files[3].url as string,
+        dateOfEnd: nullToUndefined<Date>(data.battleEnd),
+        dateOfEndRegistration: nullToUndefined<Date>(data.registrationEnd),
+        dateOfStart: nullToUndefined<Date>(data.battleStart),
+        dateOfStartRegistration: nullToUndefined<Date>(data.registrationStart),
       });
 
       router.back();

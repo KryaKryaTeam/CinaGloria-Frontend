@@ -84,7 +84,7 @@ export default class Competition {
 
     if (json.status) this.status = json.status;
     if (json.rules) this.rules = json.rules;
-    if (json.rounds) this.rounds = json.rounds;
+    if (json.rounds) this.rounds = json.rounds.map((el) => new Round(el));
   }
 
   @computed
@@ -115,5 +115,29 @@ export default class Competition {
   @action
   public removeRule(index: number) {
     this.rules.splice(index, 1);
+  }
+
+  @action
+  public addRound(round: Round) {
+    this.rounds.push(round);
+  }
+
+  @action
+  public removeRound(index: number) {
+    this.rounds.splice(index, 1);
+  }
+
+  @action
+  public removeRoundById(id: string) {
+    this.rounds = this.rounds.filter((round) => round.id !== id);
+  }
+
+  @computed get isDatesFilled(): boolean {
+    return (
+      typeof this.dateOfEnd !== "undefined" &&
+      typeof this.dateOfStart !== "undefined" &&
+      typeof this.dateOfEndRegistration !== "undefined" &&
+      typeof this.dateOfStartRegistration !== "undefined"
+    );
   }
 }

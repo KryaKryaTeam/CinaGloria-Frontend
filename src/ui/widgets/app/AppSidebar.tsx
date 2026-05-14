@@ -50,9 +50,9 @@ function AppSidebar() {
         {
           role: "all",
           name: "Browse Tournaments",
-          link: "/competitions/active",
+          link: "/competitions/",
+          app: false,
         },
-        { role: "all", name: "History", link: "/competitions/history" },
       ],
     },
     {
@@ -60,8 +60,13 @@ function AppSidebar() {
       name: "Profile",
       role: "all",
       actions: [
-        { role: "all", name: "Information", link: "/profile/information" },
-        { role: "all", name: "Settings", link: "/profile/settings" },
+        {
+          role: "all",
+          name: "Information",
+          link: "/profile/information",
+          app: true,
+        },
+        { role: "all", name: "Settings", link: "/profile/settings", app: true },
       ],
     },
     {
@@ -69,11 +74,17 @@ function AppSidebar() {
       name: "Admin panel",
       role: [RoleEnum.ADMIN],
       actions: [
-        { role: [RoleEnum.ADMIN], name: "Users", link: "/admin/users" },
+        {
+          role: [RoleEnum.ADMIN],
+          name: "Users",
+          link: "/admin/users",
+          app: true,
+        },
         {
           role: [RoleEnum.ADMIN],
           name: "Competitions",
           link: "/admin/competitions",
+          app: true,
         },
       ],
     },
@@ -82,8 +93,8 @@ function AppSidebar() {
       name: "My teams",
       role: "all",
       actions: [
-        { role: "all", name: "Browse", link: "/teams/browse" },
-        { role: "all", name: "Create new", link: "/teams/create" },
+        { role: "all", name: "Browse", link: "/teams/browse", app: true },
+        { role: "all", name: "Create new", link: "/teams/create", app: true },
       ],
     },
   ];
@@ -111,7 +122,9 @@ function AppSidebar() {
                           action.role.includes(profile.role) ? (
                           <SidebarMenuSubItem key={action.name}>
                             <SidebarMenuSubButton asChild>
-                              <Link href={"/app" + action.link}>
+                              <Link
+                                href={(action.app ? "/app" : "") + action.link}
+                              >
                                 {action.name}
                               </Link>
                             </SidebarMenuSubButton>

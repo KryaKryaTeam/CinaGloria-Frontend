@@ -33,4 +33,9 @@ export const TYPES = {
   FileStore: Symbol.for("FileStore"),
   LoadFileRequest: Symbol.for("LoadFileRequest"),
   GetFileURLRequest: Symbol.for("GetImageURLRequest"),
+  UpdateCompetitionRequest: Symbol.for("UpdateCompetitionRequest"),
+  CreateRoundRequest: Symbol.for("CreateRoundRequest"),
+  DeleteRoundRequest: Symbol.for("DeleteRoundRequest"),
+  CreateTaskRequest: Symbol.for("CreateTaskRequest"),
+  DeleteTaskRequest: Symbol.for("DeleteTaskRequest"),
 } as const;

@@ -22,6 +22,13 @@ export class UploadFileToAServerRequest extends NetworkRequest<
   authorized: boolean = true;
   method: HTTPMethod = "POST";
   withCSRF: boolean = false;
+  mockOutputData: IRequest | undefined;
+  protected showProgressInToast: boolean = true;
+  protected toastConfig: { loading: string; success: string; error: string } = {
+    error: "Error occured while was loading a file",
+    loading: "File is loading...",
+    success: "File is uploaded",
+  };
 
   constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);

@@ -1,133 +1,99 @@
-import Task from "./Task";
+import { makeObservable, observable, action, computed } from "mobx";
+import Task, { ITaskConstructor } from "./Task";
 import { Icons } from "./type";
+import { ICreateTask } from "@/core/requests/network/Task/CreateTask.request";
 
-interface RoundConstructor {
+export enum RoundStatus {
+  CREATED = "CREATED",
+  IN_PROGRESS = "IN_PROGRESS",
+  ON_JUDGING = "ON_JUDGING",
+  FINISHED = "FINISHED",
+}
+
+export interface IRoundDTO {
   id: string;
   hidden: boolean;
+  status: RoundStatus;
   name?: string;
   description?: string;
   icon?: Icons;
-  startOfRound?: Date;
-  endOfRound?: Date;
-  relatedTasks?: Task[];
-  status: RoundStatus;
+  startOfRound?: string | Date;
+  endOfRound?: string | Date;
+  taskTimeout?: string | Date;
+  relatedTasks?: ITaskConstructor[];
 }
 
-export enum RoundStatus {
-  Draft = "DRAFT",
-  Active = "ACTIVE",
-  SubmissionClosed = "SUBMISSION_CLOSED",
-  Evaluated = "EVALUATED",
+export interface IRoundConstructor extends Partial<Omit<IRoundDTO, "id">> {
+  id: string;
 }
+
 export default class Round {
   public readonly id: string;
-  private _hidden: boolean;
-  private _name: string | null;
-  private _description: string | null;
-  private _icon: Icons | null;
-  private _startOfRound: Date | null;
-  private _endOfRound: Date | null;
-  private _relatedTasks: Task[];
-  private _status: RoundStatus;
-  constructor(props: RoundConstructor) {
+
+  // Робимо всі поля observable для MobX
+  @observable public hidden: boolean;
+  @observable public name: string = "";
+  @observable public description: string = "";
+  @observable public icon: Icons | undefined;
+  @observable public startOfRound: Date | undefined;
+  @observable public endOfRound: Date | undefined;
+  @observable public taskTimeout: Date | undefined;
+  @observable public status: RoundStatus;
+  @observable public relatedTasks: Task[] = [];
+
+  constructor(props: IRoundConstructor) {
     this.id = props.id;
-    this._hidden = props.hidden;
-    this._name = props.name || null;
-    this._description = props.description || null;
-    this._icon = props.icon || null;
-    this._startOfRound = props.startOfRound || null;
-    this._endOfRound = props.endOfRound || null;
-    this._relatedTasks = props.relatedTasks || [];
-    this._status = props.status;
-  }
-  private canChangeStatusTo(newStatus: RoundStatus): boolean {
-    const validTransitions: Record<RoundStatus, RoundStatus[]> = {
-      [RoundStatus.Draft]: [RoundStatus.Active],
-      [RoundStatus.Active]: [RoundStatus.SubmissionClosed],
-      [RoundStatus.SubmissionClosed]: [RoundStatus.Evaluated],
-      [RoundStatus.Evaluated]: [],
-    };
-    return validTransitions[this._status].includes(newStatus);
-  }
-  set name(name: string) {
-    if (name.trim().length == 0 || name.trim().length > 255)
-      throw new Error("Round name must be between 1 and 255 characters.");
-    this._name = name;
-  }
-  set description(description: string) {
-    if (description.trim().length == 0 || description.trim().length > 1000)
-      throw new Error(
-        "Round description must be between 1 and 1000 characters.",
-      );
-    this._description = description;
+    this.hidden = props.hidden ?? false;
+    this.status = props.status || RoundStatus.CREATED;
+
+    // Ініціалізуємо дані через апдейтер
+    this.updateFromJson(props);
+
+    makeObservable(this);
   }
 
-  set icon(icon: Icons) {
-    this._icon = icon;
+  /**
+   * Метод для оновлення даних з сервера або форми
+   */
+  @action
+  public updateFromJson(json: Partial<IRoundDTO>) {
+    if (json.name !== undefined) this.name = json.name;
+    if (json.description !== undefined) this.description = json.description;
+    if (json.icon !== undefined) this.icon = json.icon;
+    if (json.hidden !== undefined) this.hidden = json.hidden;
+    if (json.status !== undefined) this.status = json.status;
+
+    // Мапінг дат (перетворюємо рядки в об'єкти Date)
+    if (json.startOfRound) this.startOfRound = new Date(json.startOfRound);
+    if (json.endOfRound) this.endOfRound = new Date(json.endOfRound);
+    if (json.taskTimeout) this.taskTimeout = new Date(json.taskTimeout);
+
+    // Мапінг завдань (якщо вони приходять)
+    if (json.relatedTasks)
+      this.relatedTasks = json.relatedTasks.map((task) => new Task(task));
   }
 
-  set startOfRound(date: Date) {
-    if (date < new Date()) throw new Error("Start date cannot be in the past.");
-
-    if (this._endOfRound && date.getTime() >= this._endOfRound.getTime())
-      throw new Error("Start date cannot be after end date.");
-
-    this._startOfRound = date;
+  /**
+   * Computed властивості для зручності UI
+   */
+  @computed
+  public get isLive(): boolean {
+    return this.status === RoundStatus.IN_PROGRESS;
   }
 
-  set endOfRound(date: Date) {
-    if (date < new Date()) throw new Error("End date cannot be in the past.");
-
-    if (this._endOfRound && date.getTime() >= this._endOfRound.getTime())
-      throw new Error("End date cannot be before start date.");
-    this._endOfRound = date;
+  @computed
+  public get isFinished(): boolean {
+    return this.status === RoundStatus.FINISHED;
   }
 
-  set status(status: RoundStatus) {
-    if (!this.canChangeStatusTo(status))
-      throw new Error("Invalid round status transition.");
-    this._status = status;
+  // Екшни для маніпуляції завданнями (реактивні масиви)
+  @action
+  public addNewTask(task: Task) {
+    this.relatedTasks.push(task);
   }
 
-  set hidden(hidden: boolean) {
-    this._hidden = hidden;
-  }
-
-  get name() {
-    return this._name ?? "";
-  }
-
-  get description() {
-    return this._description ?? "";
-  }
-
-  get icon(): Icons | "" {
-    return this._icon ?? "";
-  }
-
-  get startOfRound(): Date | string {
-    return this._startOfRound ?? "";
-  }
-
-  get endOfRound(): Date | string {
-    return this._endOfRound ?? "";
-  }
-
-  get relatedTasks() {
-    return this._relatedTasks;
-  }
-
-  get status() {
-    return this._status;
-  }
-
-  get hidden() {
-    return this._hidden;
-  }
-  addNewTask(task: Task) {
-    this._relatedTasks.push(task);
-  }
-  removeTask(taskId: string) {
-    this._relatedTasks = this._relatedTasks.filter((t) => t.id !== taskId);
+  @action
+  public removeTask(taskId: string) {
+    this.relatedTasks = this.relatedTasks.filter((t) => t.id !== taskId);
   }
 }
