@@ -13,6 +13,7 @@ export class ChangeAvatarRequest extends NetworkRequest<IInput, void, void> {
   authorized: boolean = true;
   method: HTTPMethod = "PATCH";
   withCSRF: boolean = false;
+  mockOutputData: void | undefined;
 
   constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);

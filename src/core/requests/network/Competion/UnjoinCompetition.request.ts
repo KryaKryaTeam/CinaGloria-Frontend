@@ -15,20 +15,15 @@ export default class UnjoinCompetitionRequest extends NetworkRequest<
   withCSRF = true;
   method: HTTPMethod = "DELETE";
   authorized = true;
-  mockOutputData?: void;
+  mockOutputData: void | undefined;
 
   constructor(@inject(TYPES.UserState) userState: UserState) {
     super(userState);
   }
 
   mapData(teamId: string): ISubRequestData {
-    const base = (URLEnum.COMPETITION as string).replace(
-      /\/competition\/?$/,
-      "",
-    );
-
     return {
-      url: new URL(`${base}/teams/${teamId}/registration`),
+      url: new URL(`none`),
       init: {
         headers: {
           "Content-Type": "application/json",

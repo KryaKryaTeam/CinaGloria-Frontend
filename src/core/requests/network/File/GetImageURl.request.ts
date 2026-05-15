@@ -10,7 +10,7 @@ export default class GetFileURLRequest extends NetworkRequest<
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
   authorized: boolean = true;
-  mockOutputData?: string | undefined;
+  mockOutputData: string | undefined;
   mapData(data: string): ISubRequestData {
     return {
       url: new URL(URLEnum.FILE + `link/${data}`),

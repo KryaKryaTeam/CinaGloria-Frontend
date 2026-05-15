@@ -22,13 +22,13 @@ type Story = StoryObj<typeof InputWithDebounce>;
 export const Default: Story = {
   args: {
     placeholder: PLACEHOLDER_TEXT,
-    debounceTimer: 600,
+    debounceMs: 600,
   },
 };
 
 export const FastDebounce: Story = {
   args: {
     placeholder: "Fast (100ms)",
-    debounceTimer: 100,
+    debounceMs: 100,
   },
 };

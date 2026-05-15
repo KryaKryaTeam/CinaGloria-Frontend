@@ -1,8 +1,6 @@
 import container, { TYPES } from "@/core/Container";
 import { CompetitionConstructor } from "@/core/domain/entity/Competion";
-import CreateCompetitionRequest, {
-  Rule,
-} from "@/core/requests/network/Competion/CreateCompetion.request";
+import CreateCompetitionRequest from "@/core/requests/network/Competion/CreateCompetion.request";
 import GetCompetionByIdRequest from "@/core/requests/network/Competion/GetCompetionById.request";
 import GetPrivateCompetitionRequest from "@/core/requests/network/Competion/GetPrivateCompetion.request";
 import GetPublicCompetitionRequest from "@/core/requests/network/Competion/GetPublicCompetion.request";
@@ -11,6 +9,7 @@ import UnjoinCompetitionRequest from "@/core/requests/network/Competion/UnjoinCo
 import AdminCompetitionStore from "@/state/AdminCompetitionStore";
 import CompetitionState from "@/state/CompetitionState";
 import { useState } from "react";
+import Rule from "@/core/requests/network/Competion/CreateCompetion.request";
 
 export type CreateCompetitionData = {
   name: string;

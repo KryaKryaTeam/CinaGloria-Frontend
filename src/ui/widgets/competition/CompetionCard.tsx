@@ -1,7 +1,4 @@
-import {
-  CompetitionPublicObject,
-  CompetitionStatus,
-} from "@/core/domain/entity/Competion";
+import { CompetitionStatus } from "@/core/domain/entity/Competion";
 import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
 import { Card, CardContent, CardFooter } from "@/ui/card";
@@ -9,10 +6,10 @@ import { Separator } from "@/ui/separator";
 import { format } from "date-fns";
 import { enGB } from "date-fns/locale";
 import { CalendarDays, Clock, Trophy } from "lucide-react";
-
 import getFirst100 from "@/infrastructure/getFirst100";
 import GoToCompetitionPageButton from "./GoToCompetitionPageButton";
 import Image from "next/image";
+import { ICompetitionInList } from "@/core/requests/network/Competion/GetPublicCompetion.request";
 
 const STATUS_CONFIG: Record<
   CompetitionStatus,
@@ -65,11 +62,11 @@ const STATUS_CONFIG: Record<
 
 const fmt = (d: Date): string => format(d, "d MMM yyyy", { locale: enGB });
 
-interface CompetitionCardProps {
-  competition: CompetitionPublicObject;
-}
-
-export function CompetitionCard({ competition }: CompetitionCardProps) {
+export function CompetitionCard({
+  competition,
+}: {
+  competition: ICompetitionInList;
+}) {
   const {
     id,
     name,
@@ -89,23 +86,23 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
   const showCTA = !isCanceled && !isArchived;
 
   const startDate =
-    dateOfStart instanceof Date ? dateOfStart : new Date(dateOfStart);
-  const endDate = dateOfEnd instanceof Date ? dateOfEnd : new Date(dateOfEnd);
+    dateOfStart instanceof Date ? dateOfStart : new Date(dateOfStart!);
+  const endDate = dateOfEnd instanceof Date ? dateOfEnd : new Date(dateOfEnd!);
   const regStartDate =
     dateOfStartRegistration instanceof Date
       ? dateOfStartRegistration
-      : new Date(dateOfStartRegistration);
+      : new Date(dateOfStartRegistration!);
   const regEndDate =
     dateOfEndRegistration instanceof Date
       ? dateOfEndRegistration
-      : new Date(dateOfEndRegistration);
+      : new Date(dateOfEndRegistration!);
 
   return (
     <Card className="w-full max-w-sm overflow-hidden shadow-sm">
       {/* Banner */}
       <div className="relative h-36 bg-muted">
         <Image
-          src={banner.toString()}
+          src={banner ? banner.toString() : "/baseBannerComp.png"}
           alt=""
           className="w-full h-full object-cover"
           loading="eager"
@@ -119,7 +116,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
         <div className="absolute -bottom-6 left-4">
           <div className="w-12 h-12 rounded-full border-2 border-background overflow-hidden bg-muted shadow-sm">
             <Image
-              src={avatar.toString()}
+              src={avatar ? avatar.toString() : "/baseAvatarComp.png"}
               alt={name}
               className="w-full h-full object-cover z-20"
               loading="eager"

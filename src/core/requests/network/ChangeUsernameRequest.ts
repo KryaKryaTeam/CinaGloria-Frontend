@@ -10,7 +10,7 @@ interface IInput {
 }
 
 export class ChangeUsernameRequest extends NetworkRequest<IInput, void, void> {
-  mockOutputData?: void | undefined;
+  mockOutputData: void | undefined;
   authorized: boolean = true;
   method: HTTPMethod = "PATCH";
   withCSRF: boolean = false;
