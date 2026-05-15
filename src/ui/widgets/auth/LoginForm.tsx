@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Button } from "@/ui/button";
 import {
   Card,
@@ -47,7 +47,9 @@ export function LoginForm() {
       <CardContent className="flex flex-col gap-6">
         <div className="flex flex-col gap-3">
           <GoogleOAuthButton />
-          <GithubOAuthButton />
+          <Suspense fallback={<div>Loading...</div>}>
+            <GithubOAuthButton />
+          </Suspense>
         </div>
 
         <div className="flex items-center gap-3">

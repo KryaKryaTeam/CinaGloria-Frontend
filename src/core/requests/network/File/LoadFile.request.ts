@@ -44,13 +44,15 @@ export default class LoadFileRequest extends NetworkRequest<
   LoadFileResponse,
   Type401
 > {
+  mockOutputData: LoadFileResponse | undefined;
   withCSRF: boolean = false;
   method: HTTPMethod = "POST";
   authorized: boolean = true;
   store: FileStore;
   relation: RelationSlotValues | null;
+
   constructor(
-    @inject(TYPES.UserState) private userState: UserState,
+    @inject(TYPES.UserState) protected userState: UserState,
     @inject(TYPES.FileStore) private fileStore: FileStore,
   ) {
     super(userState);

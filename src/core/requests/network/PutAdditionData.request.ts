@@ -49,7 +49,9 @@ export default class RequestPutAdditionData extends NetworkRequest<
   onSuccess(data: void): boolean | Promise<boolean> {
     return true;
   }
-  protected onError(error: string): void {
+
+  protected onError(error: Error): string {
     this.userState.clearUserData();
+    return "";
   }
 }

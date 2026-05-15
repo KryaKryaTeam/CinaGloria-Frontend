@@ -7,13 +7,17 @@ import { UserState } from "@/state/UserState";
 import NetworkSSRRequest from "../NetworkSSRRequst";
 import { CompetitionStatus } from "@/core/domain/entity/Competion";
 
-interface ICompetitionInList {
+export interface ICompetitionInList {
   id: string;
   status: CompetitionStatus;
   name: string;
   description: string;
   avatar: URL;
   banner: URL;
+  dateOfStart: Date;
+  dateOfEnd: Date;
+  dateOfStartRegistration: Date;
+  dateOfEndRegistration: Date;
 }
 
 export default class GetPublicCompetitionRequest extends NetworkSSRRequest<
@@ -24,7 +28,6 @@ export default class GetPublicCompetitionRequest extends NetworkSSRRequest<
   withCSRF: boolean = false;
   method: HTTPMethod = "GET";
   authorized: boolean = false;
-  
 
   mapData(data: number): ISubRequestData {
     return {
