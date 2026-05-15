@@ -16,6 +16,8 @@ import GetPrivateCompetitionRequest from "@/core/requests/network/Competion/GetP
 import AdminCompetitionStore from "../AdminCompetitionStore";
 import debugLog from "@/infrastructure/debugLog";
 import { GetUsersAdminListRequest } from "@/core/requests/network/GetUsersAdminList.request";
+import { GetTeamPageRequest } from "@/core/requests/network/Team/GetTeamPageRequest";
+import TeamState from "../TeamState";
 
 @injectable()
 export class LoadState {
@@ -71,6 +73,24 @@ export class LoadState {
           );
 
         getUsersAdminListRequest.execute({ page: 0 });
+      }),
+    },
+    teams: {
+      priority: 1,
+      scope: new LoadScope(async () => {
+        const getPageOfTeamsRequest = container.get<GetTeamPageRequest>(
+          TYPES.GetTeamPageRequest,
+        );
+        const teamState = container.get<TeamState>(TYPES.TeamState);
+
+        const teams = await getPageOfTeamsRequest.execute({
+          page: 0,
+          options: {},
+        });
+
+        teams.forEach((team) => {
+          teamState.addOrUpdateTeam(team);
+        });
       }),
     },
   };
@@ -150,6 +170,7 @@ export class LoadState {
   private async runTask(scope: LoadScope) {
     this.activeCount++;
     try {
+      console.log("Load scope!");
       await scope.refresh();
     } catch (e) {
       console.error("CRITICAL ERROR in Scope execution:", e);
