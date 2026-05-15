@@ -1,12 +1,5 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import container from "@/core/Container";
-import { TYPES } from "@/core/Container.types";
-import { RoleEnum } from "@/core/domain/entity/RoleEnum";
-import { IUserForAdminList } from "@/core/domain/entity/IUserForAdminList";
-import { GetUsersAdminListRequest } from "@/core/requests/network/GetUsersAdminList.request";
-import { UpdateUserRoleRequest } from "@/core/requests/network/UpdateUserRole.request";
 import { Search, Users, X } from "lucide-react";
 import AdminTable, { ColumnDef } from "@/ui/widgets/admin/adminTable";
 import InputWithDebounce from "@/ui/component/inputs/InputWithDebounce";
@@ -16,14 +9,26 @@ import Image from "next/image";
 import { useAdminUserList } from "@/hooks/admin/useAdminUserList.hook";
 import { observer } from "mobx-react-lite";
 import GridCard from "@/ui/component/gridCards/GridCard";
-
-const PAGE_SIZE = 20;
+import { RoleEnum } from "@/core/domain/entity/RoleEnum";
+import { IUserForAdminList } from "@/core/domain/entity/IUserForAdminList";
+import { Ref } from "react";
 
 export default observer(function Page() {
   const state = useAdminUserList();
-  const sentinelRef = usePagination<void, HTMLDivElement>(state.fetchNext, {
-    threshold: 0.1,
-  });
+
+  const {
+    ref: sentinelRef,
+    isExhausted,
+    isLoading,
+  } = usePagination(
+    async (page) => {
+      await state.fetchNext(page);
+    },
+    {
+      threshold: 0.1,
+      dependencies: [state.filter],
+    },
+  );
 
   const columns: ColumnDef<IUserForAdminList>[] = [
     {
@@ -32,7 +37,7 @@ export default observer(function Page() {
       align: "center",
       className: "w-16",
       cell: (user) => (
-        <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full overflow-hidden">
+        <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full overflow-hidden bg-black/5">
           {user.avatarUrl ? (
             <Image
               src={user.avatarUrl}
@@ -67,14 +72,14 @@ export default observer(function Page() {
             className={cn(
               "h-9 rounded-lg border px-3 py-1.5 text-sm outline-none transition-all",
               "disabled:cursor-not-allowed disabled:opacity-40",
-              "appearance-none pr-8 cursor-pointer",
+              "appearance-none pr-8 cursor-pointer bg-white",
             )}
             onChange={(e) =>
               state.changeRole(e.target.value as RoleEnum, user.id)
             }
           >
             {Object.values(RoleEnum).map((r) => (
-              <option key={r} value={r} className=" text-black">
+              <option key={r} value={r} className="text-black">
                 {r}
               </option>
             ))}
@@ -103,9 +108,9 @@ export default observer(function Page() {
         </div>
 
         <div className="relative group">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2  transition-colors pointer-events-none text-black/50" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors pointer-events-none text-black/50" />
           <InputWithDebounce
-            debounceCallback={(ev) => state.setFilter(ev)}
+            debounceCallback={(val) => state.setFilter(val)}
             debounceMs={400}
             placeholder="Search by email..."
             value={state.filter}
@@ -114,7 +119,7 @@ export default observer(function Page() {
           {state.filter && (
             <button
               onClick={() => state.setFilter("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2  transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
             >
               <X className="h-4 w-4 text-black/50" />
             </button>
@@ -128,10 +133,20 @@ export default observer(function Page() {
           data={state.users}
           emptyMessage="No users found"
         />
-        <div ref={sentinelRef} className="h-10 w-full">
-          <p className="w-full text-center font-light text-foreground">
-            Opps... users are ended
-          </p>
+
+        <div
+          ref={sentinelRef as Ref<HTMLDivElement | null>}
+          className="h-20 w-full flex items-center justify-center"
+        >
+          {isLoading && (
+            <p className="text-sm font-light text-black/40">Loading users...</p>
+          )}
+
+          {isExhausted && state.users.length > 0 && (
+            <p className="text-sm font-light text-black/30">
+              Opps... users are ended
+            </p>
+          )}
         </div>
       </GridCard>
     </div>

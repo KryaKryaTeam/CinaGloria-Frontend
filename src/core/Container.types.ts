@@ -42,4 +42,10 @@ export const TYPES = {
   PublishCompetitionRequest: Symbol.for("PublishCompetitionRequest"),
   JoinCompetitionRequest: Symbol.for("JoinCompetitionRequest"),
   UnjoinCompetitionRequest: Symbol.for("UnjoinCompetitionRequest"),
+  CreateTeamRequest: Symbol.for("CreateTeamRequest"),
+  GetTeamPageRequest: Symbol.for("GetTeamPageRequest"),
+  TeamState: Symbol.for("TeamState"),
+  GetUserProfileByIdRequest: Symbol.for("GetUserProfileByIdRequest"),
+  PatchTeamRequest: Symbol.for("PatchTeamRequest"),
+  GetUsersByEmailRequest: Symbol.for("GetUsersByEmailRequest"),
 } as const;

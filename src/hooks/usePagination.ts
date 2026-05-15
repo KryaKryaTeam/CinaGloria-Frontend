@@ -1,17 +1,37 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+/* eslint-disable react-hooks/refs */
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+
+interface UsePaginationOptions extends IntersectionObserverInit {
+  dependencies?: unknown[];
+  startPage?: number;
+}
 
 export const usePagination = <PromiseType, E extends Element>(
-  fetchFn: () => Promise<PromiseType>,
-  options: IntersectionObserverInit,
+  fetchFn: (page: number) => Promise<PromiseType>,
+  {
+    dependencies = [],
+    startPage = 1,
+    ...observerOptions
+  }: UsePaginationOptions,
 ) => {
   const ref = useRef<E>(null);
   const fetchFnRef = useRef(fetchFn);
+
+  const [page, setPage] = useState(startPage);
   const isExhausted = useRef(false);
   const isLoading = useRef(false);
 
   useLayoutEffect(() => {
     fetchFnRef.current = fetchFn;
   });
+
+  // Скидаємо все при зміні фільтрів
+  useEffect(() => {
+    setPage(0);
+    isExhausted.current = false;
+    isLoading.current = false;
+  }, dependencies);
 
   useEffect(() => {
     const element = ref.current;
@@ -21,23 +41,36 @@ export const usePagination = <PromiseType, E extends Element>(
       if (!entry.isIntersecting || isExhausted.current || isLoading.current)
         return;
 
-      isLoading.current = true; // ← блокуємо повторні запити
+      isLoading.current = true;
+
       fetchFnRef
-        .current()
-        .finally(() => {
-          isLoading.current = false;
+        .current(page)
+        .then(() => {
+          // Якщо запит успішний, ідемо на наступну сторінку
+          setPage((prev) => prev + 1);
         })
         .catch((error) => {
-          if (error?.status === 401) {
+          console.log(error);
+          if (error?.status === 404 || error?.code === 404) {
             isExhausted.current = true;
-            observer.disconnect();
+            console.log("Pagination exhausted: 404 received");
+          } else if (error?.status === 401) {
+            isExhausted.current = true;
           }
+        })
+        .finally(() => {
+          isLoading.current = false;
         });
-    }, options);
+    }, observerOptions);
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [options.root, options.threshold, options.rootMargin, options]);
+  }, [page, ...dependencies]); // Додаємо page, щоб замикання бачило актуальну сторінку
 
-  return ref;
+  return {
+    ref,
+    page,
+    isLoading: isLoading.current,
+    isExhausted: isExhausted.current,
+  };
 };

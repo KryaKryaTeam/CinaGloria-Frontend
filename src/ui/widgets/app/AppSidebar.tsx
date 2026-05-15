@@ -91,10 +91,20 @@ function AppSidebar() {
     {
       icon: <HardHat />,
       name: "My teams",
-      role: "all",
+      role: [RoleEnum.USER],
       actions: [
-        { role: "all", name: "Browse", link: "/teams/browse", app: true },
-        { role: "all", name: "Create new", link: "/teams/create", app: true },
+        {
+          role: [RoleEnum.USER],
+          name: "Browse",
+          link: "/teams/browse",
+          app: true,
+        },
+        {
+          role: [RoleEnum.USER],
+          name: "Create new",
+          link: "/teams/create",
+          app: true,
+        },
       ],
     },
   ];

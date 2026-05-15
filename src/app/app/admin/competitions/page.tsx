@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -14,10 +15,9 @@ function Page() {
   const { store, fetch, reset, page } = useCompetition({ forAdmin: true });
   const router = useRouter();
   const [initialized, setInitialized] = useState(false);
-  const paginationRef = usePagination<void, HTMLDivElement>(
-    () => fetch("all"),
-    { threshold: 0.5 },
-  );
+  const pagination = usePagination<void, HTMLDivElement>(() => fetch("all"), {
+    threshold: 0.5,
+  });
   useEffect(() => {
     debugLog(`${store.competitions}`);
   }, [store.competitions]);
@@ -60,7 +60,7 @@ function Page() {
             </div>
           ))}
 
-          <div ref={paginationRef} className="col-span-full h-4" />
+          <div ref={pagination.ref} className="col-span-full h-4" />
         </div>
       )}
     </div>

@@ -14,8 +14,8 @@ export function useAdminUserList() {
   );
 
   return {
-    async fetchNext() {
-      await request.execute({ page: store.currentPage, email: store.email });
+    async fetchNext(page: number) {
+      await request.execute({ page, email: store.email });
     },
     get filter() {
       return store.email;

@@ -14,7 +14,7 @@ const cspHeader = `
                ${process.env.NODE_ENV == "development" ? "'unsafe-eval' 'unsafe-inline'" : ""}; 
     style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style;
     frame-src https://accounts.google.com/gsi/;
-    connect-src 'self' https://accounts.google.com/gsi/ https://bots.swedka121.com/app/ wss://bots.swedka121.com/ws/;
+    connect-src 'self' https://accounts.google.com/gsi/ https://bots.swedka121.com/app/ http://localhost:4000 wss://bots.swedka121.com/ws/ ws://localhost:4001;
     img-src 'self' data: https://*.googleusercontent.com https://cinagloria-service-bucket.s3.us-east-1.amazonaws.com/ https://bots.swedka121.com/app/;
     font-src 'self' data:;
     object-src 'none';
@@ -67,34 +67,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-export class JoinCompetitionRequest extends NetworkRequest<
-  any,
-  any,
-  any,
-  string
-> {
-  method!: HTTPMethod;
-  mockOutputData?: any;
-  onSuccess(data: any) {
-    throw new Error("Method not implemented.");
-  }
-  mapData(data: any): ISubRequestData {
-    throw new Error("Method not implemented.");
-  }
-  constructor(
-    private teamId: string,
-    userState: UserState,
-  ) {
-    super(userState);
-  }
-
-  public withCSRF = true;
-  public authorized = true;
-
-  protected getSubRequestData(): ISubRequestData {
-    return {
-      method: "POST" as any as HTTPMethod,
-      url: `/teams/${this.teamId}/registration`,
-    };
-  }
-}

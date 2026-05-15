@@ -61,6 +61,12 @@ import { UpdateSettingRequest } from "./requests/network/Competion/UpdateSettitn
 import { PublishCompetitionRequest } from "./requests/network/Competion/PublishCompetition.request";
 import JoinCompetitionRequest from "@/core/requests/network/Competion/JoinCompetition.request";
 import UnjoinCompetitionRequest from "@/core/requests/network/Competion/UnjoinCompetition.request";
+import { CreateTeamRequest } from "./requests/network/Team/CreateTeamRequest";
+import { GetTeamPageRequest } from "./requests/network/Team/GetTeamPageRequest";
+import TeamState from "@/state/TeamState";
+import { GetUserProfileByIdRequest } from "./requests/network/GetUserProfileByIdRequest";
+import { PatchTeamRequest } from "./requests/network/Team/PatchTeamRequest";
+import { GetUsersByEmailRequest } from "./requests/network/GetUsersByEmailRequest";
 
 container.bind(TYPES.JWTChangeRequest).to(JWTChangeRequest).inRequestScope();
 container.bind(TYPES.GetWsTokenRequest).to(GetWsTokenRequest).inRequestScope();
@@ -159,10 +165,28 @@ container
   .bind(TYPES.PublishCompetitionRequest)
   .to(PublishCompetitionRequest)
   .inRequestScope();
+container
   .bind<JoinCompetitionRequest>(TYPES.JoinCompetitionRequest)
-  .to(JoinCompetitionRequest);
+  .to(JoinCompetitionRequest)
+  .inRequestScope();
 container
   .bind<UnjoinCompetitionRequest>(TYPES.UnjoinCompetitionRequest)
-  .to(UnjoinCompetitionRequest);
+  .to(UnjoinCompetitionRequest)
+  .inRequestScope();
+container.bind(TYPES.CreateTeamRequest).to(CreateTeamRequest).inRequestScope();
+container
+  .bind(TYPES.GetTeamPageRequest)
+  .to(GetTeamPageRequest)
+  .inRequestScope();
+container.bind(TYPES.TeamState).to(TeamState).inSingletonScope();
+container
+  .bind(TYPES.GetUserProfileByIdRequest)
+  .to(GetUserProfileByIdRequest)
+  .inRequestScope();
+container.bind(TYPES.PatchTeamRequest).to(PatchTeamRequest).inRequestScope();
+container
+  .bind(TYPES.GetUsersByEmailRequest)
+  .to(GetUsersByEmailRequest)
+  .inRequestScope();
 export default container;
 export { TYPES };

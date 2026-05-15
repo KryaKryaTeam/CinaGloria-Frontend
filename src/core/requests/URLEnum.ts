@@ -22,6 +22,7 @@ export const URLEnum = {
   ADDITION: `${BASE_URL}/user/additional`,
   CHANGE_USER_AVATAR: `${BASE_URL}/user/avatar`,
   CHANGE_USERNAME: `${BASE_URL}/user/username`,
+  USER_PUBLIC: `${BASE_URL}/user/public`,
 
   // --- ADMIN ---
   ADMIN_USER: `${BASE_URL}/user/users/`,
@@ -40,6 +41,7 @@ export const URLEnum = {
 
   // --- TEAMS ---
   CREATE_TEAM: `${BASE_URL}/teams`,
+  PATCH_TEAM: `${BASE_URL}/teams/`,
   MY_TEAMS: `${BASE_URL}/teams/me/`,
   TEAM_BY_ID: `${BASE_URL}/teams/`,
   TEAM_MEMBERS: `${BASE_URL}/teams/`,
@@ -74,6 +76,5 @@ export const URLEnum = {
   GET_FILE_LINK: `${BASE_URL}/file/link/`,
   USER: `${BASE_URL}/user/`,
   FILE: `${BASE_URL}/file/`,
-  CREATE_TEAM: `${BASE_URL}/team/create`,
 } as const;
 export default URLEnum;
